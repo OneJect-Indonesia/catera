@@ -10,4 +10,9 @@ Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
-require __DIR__.'/settings.php';
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::livewire('authorized', 'pages::authorized.index')->name('authorized.index');
+});
+
+
+require __DIR__ . '/settings.php';

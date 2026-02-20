@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('authorizeds', function (Blueprint $table) {
             $table->id();
+            $table->uuid('uuid')->index()->unique();
+            $table->enum('group', ['merah', 'biru']);
+            $table->string('quota');
+            $table->string('is_active')->default('true');
             $table->timestamps();
         });
     }
