@@ -111,7 +111,7 @@ new class extends Component {
 
         @if ($unauthorizeds->hasPages())
             <div class="border-t border-zinc-100 px-4 py-3 dark:border-zinc-800">
-                {{ $unauthorizeds->links() }}
+                {{ $unauthorizeds->links('vendor.pagination.bordered-case') }}
             </div>
         @endif
     </div>

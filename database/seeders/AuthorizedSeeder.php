@@ -12,7 +12,7 @@ class AuthorizedSeeder extends Seeder
      */
     public function run(): void
     {
-        for ($i = 0; $i < 20; $i++) {
+        for ($i = 0; $i < 100; $i++) {
             \App\Models\Authorized::create([
                 'uuid' => \Illuminate\Support\Str::uuid(),
                 'first_name' => fake()->firstName(),
