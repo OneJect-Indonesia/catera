@@ -155,6 +155,8 @@ new class extends Component {
     }
 }; ?>
 
+<x-slot name="title">Authorized</x-slot>
+
 <div class="flex h-full w-full flex-1 flex-col gap-6">
 
     {{-- Page Header --}}
@@ -188,37 +190,37 @@ new class extends Component {
             <table class="min-w-full">
                 <thead class="bg-zinc-50 dark:bg-zinc-800/60">
                     <tr>
-                        <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">UUID</th>
-                        <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">Full Name</th>
-                        <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">Group</th>
-                        <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">Quota</th>
-                        <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">Status</th>
-                        <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">Actions</th>
+                        <th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">UUID</th>
+                        <th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">Full Name</th>
+                        <th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">Group</th>
+                        <th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">Quota</th>
+                        <th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">Status</th>
+                        <th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">Actions</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-zinc-100 dark:divide-zinc-800">
                     @forelse ($authorizeds as $authorized)
-                        <tr class="transition-colors duration-150 hover:bg-zinc-50 dark:hover:bg-zinc-800/40">
-                            <td class="px-4 py-3.5">
+                        <tr class="transition-colors duration-150 hover:bg-hover/20 dark:hover:bg-hover/30">
+                            <td class="px-4 py-3.5 text-center">
                                 <span class="font-mono text-xs text-zinc-600 dark:text-zinc-400">{{ $authorized->uuid }}</span>
                             </td>
-                            <td class="px-4 py-3.5">
+                            <td class="px-4 py-3.5 text-center">
                                 <span class="text-sm font-medium text-zinc-800 dark:text-zinc-200">{{ $authorized->first_name }} {{ $authorized->last_name }}</span>
                             </td>
-                            <td class="px-4 py-3.5">
-                                <flux:badge size="sm" :color="$authorized->group === 'merah' ? 'red' : 'blue'" inset="top bottom">
+                            <td class="px-4 py-3.5 text-center">
+                                <flux:badge size="sm" :color="$authorized->group === 'merah' ? 'red' : 'blue'" inset="top bottom" class="w-20 justify-center">
                                     {{ ucfirst($authorized->group) }}
                                 </flux:badge>
                             </td>
-                            <td class="px-4 py-3.5">
+                            <td class="px-4 py-3.5 text-center">
                                 <span class="text-sm font-medium text-zinc-800 dark:text-zinc-200">{{ $authorized->quota }}</span>
                             </td>
-                            <td class="px-4 py-3.5">
-                                <flux:badge size="sm" :color="$authorized->is_active ? 'green' : 'zinc'" inset="top bottom">
+                            <td class="px-4 py-3.5 text-center">
+                                <flux:badge size="sm" :color="$authorized->is_active ? 'green' : 'zinc'" inset="top bottom" class="w-24 justify-center" :icon="$authorized->is_active ? 'check-circle' : 'x-circle'">
                                     {{ $authorized->is_active ? 'Active' : 'Inactive' }}
                                 </flux:badge>
                             </td>
-                            <td class="px-4 py-3.5">
+                            <td class="px-4 py-3.5 text-center">
                                 <flux:dropdown>
                                     <flux:button icon="ellipsis-horizontal" size="sm" variant="ghost" />
                                     <flux:menu>

@@ -52,6 +52,8 @@ new class extends Component {
     }
 }; ?>
 
+<x-slot name="title">Unauthorized</x-slot>
+
 <div class="flex h-full w-full flex-1 flex-col gap-6">
 
     {{-- Page Header --}}
@@ -78,21 +80,21 @@ new class extends Component {
             <table class="min-w-full">
                 <thead class="bg-zinc-50 dark:bg-zinc-800/60">
                     <tr>
-                        <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">UUID</th>
-                        <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">Detected At</th>
-                        <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">Actions</th>
+                        <th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">UUID</th>
+                        <th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">Detected At</th>
+                        <th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">Actions</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-zinc-100 dark:divide-zinc-800">
                     @forelse ($unauthorizeds as $unauthorized)
-                        <tr class="transition-colors duration-150 hover:bg-zinc-50 dark:hover:bg-zinc-800/40">
-                            <td class="px-4 py-3.5">
+                        <tr class="transition-colors duration-150 hover:bg-hover/20 dark:hover:bg-hover/30">
+                            <td class="px-4 py-3.5 text-center">
                                 <span class="font-mono text-xs text-zinc-600 dark:text-zinc-400">{{ $unauthorized->uuid }}</span>
                             </td>
-                            <td class="px-4 py-3.5 text-sm text-zinc-600 dark:text-zinc-400">
+                            <td class="px-4 py-3.5 text-center text-sm text-zinc-600 dark:text-zinc-400">
                                 {{ $unauthorized->created_at->format('Y-m-d H:i') }}
                             </td>
-                            <td class="px-4 py-3.5">
+                            <td class="px-4 py-3.5 text-center">
                                 <flux:button wire:click="confirmDelete({{ $unauthorized->id }})" size="sm" variant="danger" icon="trash">Delete</flux:button>
                             </td>
                         </tr>

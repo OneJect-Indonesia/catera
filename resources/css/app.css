@@ -30,6 +30,8 @@
     --color-secondary: #337166;
     --color-text-heading: #555555;
 
+    --color-hover: #50acbe;
+
     --color-accent: var(--color-primary);
     --color-accent-content: var(--color-primary);
     --color-accent-foreground: var(--color-white);
@@ -37,9 +39,12 @@
 
 @layer theme {
     .dark {
-        --color-accent: var(--color-white);
-        --color-accent-content: var(--color-white);
-        --color-accent-foreground: var(--color-neutral-800);
+        --color-accent: var(--color-primary);
+        --color-accent-content: var(--color-primary);
+        --color-accent-foreground: var(--color-white);
+
+        --color-primary: #5bc3eb;
+        --color-text-heading: #e5e5e5;
     }
 }
 
