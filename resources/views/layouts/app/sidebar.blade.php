@@ -19,20 +19,14 @@
                     <flux:sidebar.item icon="users" :href="route('authorized.index')" :current="request()->routeIs('authorized.index')" wire:navigate>
                         {{ __('Authorized') }}
                     </flux:sidebar.item>
+
+                    <flux:sidebar.item icon="user-minus" :href="route('unauthorized.index')" :current="request()->routeIs('unauthorized.index')" wire:navigate>
+                        {{ __('Unauthorized') }}
+                    </flux:sidebar.item>
                 </flux:sidebar.group>
             </flux:sidebar.nav>
 
             <flux:spacer />
-
-            <flux:sidebar.nav>
-                <flux:sidebar.item icon="folder-git-2" href="https://github.com/laravel/livewire-starter-kit" target="_blank">
-                    {{ __('Repository') }}
-                </flux:sidebar.item>
-
-                <flux:sidebar.item icon="book-open-text" href="https://laravel.com/docs/starter-kits#livewire" target="_blank">
-                    {{ __('Documentation') }}
-                </flux:sidebar.item>
-            </flux:sidebar.nav>
 
             <x-desktop-user-menu class="hidden lg:block" :name="auth()->user()->name" />
         </flux:sidebar>
@@ -96,5 +90,7 @@
         {{ $slot }}
 
         @fluxScripts
+
+        <x-ui.toast on="notify" />
     </body>
 </html>

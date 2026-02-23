@@ -12,6 +12,7 @@ Route::view('dashboard', 'dashboard')
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::livewire('authorized', 'pages::authorized.index')->name('authorized.index');
+    Route::livewire('unauthorized', 'pages::unauthorized.index')->name('unauthorized.index');
 });
 
 

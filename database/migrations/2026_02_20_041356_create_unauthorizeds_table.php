@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('unauthorizeds', function (Blueprint $table) {
             $table->id();
+            $table->uuid('uuid')->index()->unique();
             $table->timestamps();
         });
     }

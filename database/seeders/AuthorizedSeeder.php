@@ -15,6 +15,8 @@ class AuthorizedSeeder extends Seeder
         for ($i = 0; $i < 20; $i++) {
             \App\Models\Authorized::create([
                 'uuid' => \Illuminate\Support\Str::uuid(),
+                'first_name' => fake()->firstName(),
+                'last_name' => fake()->lastName(),
                 'group' => $i % 2 === 0 ? 'merah' : 'biru',
                 'quota' => rand(10, 100),
                 'is_active' => $i % 3 !== 0,

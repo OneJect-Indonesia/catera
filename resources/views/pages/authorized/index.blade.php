@@ -21,14 +21,22 @@ new class extends Component {
     public $deletingAuthorizedId = null;
     public string $deleteUuid = '';
 
+    public bool $showAddModal = false;
+    public string $addUuid = '';
+    public string $addGroup = '';
+    public string $addQuota = '';
+    public bool $addIsActive = true;
+
     public function with(): array
     {
         return [
             'authorizeds' => Authorized::query()
-                ->when($this->search, fn ($query) => $query->where(fn ($q) => $q->where('uuid', 'like', '%'.$this->search.'%')
-                    ->orWhere('group', 'like', '%'.$this->search.'%')))
+                ->when($this->search, function ($query) {
+                    $query->whereFullText(['uuid', 'group', 'first_name', 'last_name'], $this->search . ' * ', ['mode' => 'boolean']);
+                })
                 ->when($this->activeOnly, fn ($query) => $query->where('is_active', true))
-                ->paginate(5),
+                ->paginate(10),
+            'unauthorizeds' => \App\Models\Unauthorized::orderBy('created_at', 'desc')->get(),
         ];
     }
 
@@ -57,14 +65,19 @@ new class extends Component {
             'editIsActive' => 'boolean',
         ]);
 
-        $authorized = Authorized::findOrFail($this->editingAuthorizedId);
-        $authorized->update([
-            'group' => $this->editGroup,
-            'quota' => $this->editQuota,
-            'is_active' => $this->editIsActive,
-        ]);
+        try {
+            $authorized = Authorized::findOrFail($this->editingAuthorizedId);
+            $authorized->update([
+                'group' => $this->editGroup,
+                'quota' => $this->editQuota,
+                'is_active' => $this->editIsActive,
+            ]);
 
-        $this->closeEditModal();
+            $this->closeEditModal();
+            $this->dispatch('notify', message: 'Authorized record updated successfully.', variant: 'success');
+        } catch (\Exception $e) {
+            $this->dispatch('notify', message: 'Failed to update authorized record. Please try again.', variant: 'danger');
+        }
     }
 
     public function confirmDelete($id)
@@ -84,8 +97,61 @@ new class extends Component {
 
     public function destroy()
     {
-        Authorized::findOrFail($this->deletingAuthorizedId)->delete();
-        $this->closeDeleteModal();
+        try {
+            Authorized::findOrFail($this->deletingAuthorizedId)->delete();
+            $this->closeDeleteModal();
+            $this->dispatch('notify', message: 'Authorized record deleted successfully.', variant: 'success');
+        } catch (\Exception $e) {
+            $this->dispatch('notify', message: 'Failed to delete authorized record.', variant: 'danger');
+        }
+    }
+
+    public function openAddModal()
+    {
+        $this->reset(['addUuid', 'addGroup', 'addQuota']);
+        $this->addIsActive = true;
+
+        $unauthorized = \App\Models\Unauthorized::orderBy('created_at', 'desc')->first();
+        if ($unauthorized) {
+            $this->addUuid = $unauthorized->uuid;
+        }
+
+        $this->showAddModal = true;
+    }
+
+    public function closeAddModal()
+    {
+        $this->showAddModal = false;
+    }
+
+    public function store()
+    {
+        $this->validate([
+            'addUuid' => 'required|exists:unauthorizeds,uuid|unique:authorizeds,uuid',
+            'addGroup' => 'required|in:merah,biru',
+            'addQuota' => 'required|numeric',
+            'addIsActive' => 'boolean',
+        ]);
+
+        try {
+            \Illuminate\Support\Facades\DB::transaction(function () {
+                Authorized::create([
+                    'uuid' => $this->addUuid,
+                    'group' => $this->addGroup,
+                    'quota' => $this->addQuota,
+                    'is_active' => $this->addIsActive,
+                ]);
+
+                \App\Models\Unauthorized::where('uuid', $this->addUuid)->delete();
+            });
+
+            $this->closeAddModal();
+            $this->reset(['addUuid', 'addGroup', 'addQuota']);
+            $this->addIsActive = true;
+            $this->dispatch('notify', message: 'Authorized record created successfully.', variant: 'success');
+        } catch (\Exception $e) {
+            $this->dispatch('notify', message: 'Failed to create authorized record. Try again.', variant: 'danger');
+        }
     }
 }; ?>
 
@@ -96,6 +162,9 @@ new class extends Component {
         <div>
             <flux:heading size="xl" level="1">Authorized List</flux:heading>
             <flux:subheading size="lg">Manage UUID authorization data for access control.</flux:subheading>
+        </div>
+        <div>
+            <flux:button wire:click="openAddModal" variant="primary" icon="plus">Add Authorized</flux:button>
         </div>
     </div>
 
@@ -120,6 +189,7 @@ new class extends Component {
                 <thead class="bg-zinc-50 dark:bg-zinc-800/60">
                     <tr>
                         <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">UUID</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">Full Name</th>
                         <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">Group</th>
                         <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">Quota</th>
                         <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">Status</th>
@@ -131,6 +201,9 @@ new class extends Component {
                         <tr class="transition-colors duration-150 hover:bg-zinc-50 dark:hover:bg-zinc-800/40">
                             <td class="px-4 py-3.5">
                                 <span class="font-mono text-xs text-zinc-600 dark:text-zinc-400">{{ $authorized->uuid }}</span>
+                            </td>
+                            <td class="px-4 py-3.5">
+                                <span class="text-sm font-medium text-zinc-800 dark:text-zinc-200">{{ $authorized->first_name }} {{ $authorized->last_name }}</span>
                             </td>
                             <td class="px-4 py-3.5">
                                 <flux:badge size="sm" :color="$authorized->group === 'merah' ? 'red' : 'blue'" inset="top bottom">
@@ -211,6 +284,42 @@ new class extends Component {
                 <flux:button variant="primary" wire:click="update">Save Changes</flux:button>
             </div>
         </div>
+    </flux:modal>
+
+    {{-- Add Modal --}}
+    <flux:modal name="add-authorized" wire:model.live="showAddModal" variant="floating" class="md:w-120">
+        <form wire:submit="store" class="space-y-5">
+            <div class="border-b border-zinc-100 pb-4 dark:border-zinc-800">
+                <flux:heading size="lg">Add Authorized</flux:heading>
+                <flux:subheading>Authorize a new UUID from the unauthorized list.</flux:subheading>
+            </div>
+
+            <flux:select wire:model="addUuid" label="UUID" placeholder="Select unauthorized UUID...">
+                @foreach($unauthorizeds as $unauth)
+                    <option value="{{ $unauth->uuid }}">{{ $unauth->uuid }}</option>
+                @endforeach
+            </flux:select>
+
+            <flux:select wire:model="addGroup" label="Group" placeholder="Select group...">
+                <option value="merah">Merah</option>
+                <option value="biru">Biru</option>
+            </flux:select>
+
+            <flux:input wire:model="addQuota" label="Quota" type="number" />
+
+            <div class="flex items-center justify-between rounded-lg border border-zinc-200 p-3 dark:border-zinc-700">
+                <div>
+                    <p class="text-sm font-medium text-zinc-700 dark:text-zinc-300">Active Status</p>
+                    <p class="text-xs text-zinc-400">Toggle whether this UUID is active.</p>
+                </div>
+                <flux:switch wire:model="addIsActive" />
+            </div>
+
+            <div class="flex justify-end gap-2 border-t border-zinc-100 pt-4 dark:border-zinc-800">
+                <flux:button type="button" wire:click="closeAddModal">Cancel</flux:button>
+                <flux:button type="submit" variant="primary">Add Authorized</flux:button>
+            </div>
+        </form>
     </flux:modal>
 
     {{-- Delete Confirmation Modal --}}
