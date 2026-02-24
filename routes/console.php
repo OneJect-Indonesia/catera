@@ -32,13 +32,15 @@ Artisan::command('app:process-scheduled-quota', function () {
     foreach ($registereds as $registered) {
         $addQuota = $registered->add_quota;
         if ($addQuota > 0) {
-            DB::table('authorizeds')
-                ->where('uuid', $registered->authorized_uuid)
-                ->increment('quota', $addQuota);
+            DB::transaction(function () use ($registered, $addQuota) {
+                DB::table('authorizeds')
+                    ->where('uuid', $registered->authorized_uuid)
+                    ->increment('quota', $addQuota);
 
-            DB::table('registereds')
-                ->where('id', $registered->id)
-                ->update(['status' => 'success']);
+                DB::table('registereds')
+                    ->where('id', $registered->id)
+                    ->update(['status' => 'success']);
+            });
         }
     }
 
