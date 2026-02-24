@@ -294,7 +294,7 @@ new class extends Component
         <div class="space-y-5">
             <div class="border-b border-zinc-100 pb-4 dark:border-zinc-800">
                 <flux:heading size="lg">Edit Scheduled Quota</flux:heading>
-                <flux:subheading>Update the amount of quota added to this user daily.</flux:subheading>
+                <flux:subheading>Update the amount of quota scheduled to be added to this user.</flux:subheading>
             </div>
 
             {{-- UUID and Name (readonly) --}}
