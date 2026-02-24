@@ -13,6 +13,8 @@ new class extends Component {
     public bool $showEditModal = false;
     public $editingAuthorizedId = null;
     public string $editUuid = '';
+    public string $editFirstName = '';
+    public string $editLastName = '';
     public string $editGroup = '';
     public string $editQuota = '';
     public bool $editIsActive = false;
@@ -23,6 +25,8 @@ new class extends Component {
 
     public bool $showAddModal = false;
     public string $addUuid = '';
+    public string $addFirstName = '';
+    public string $addLastName = '';
     public string $addGroup = '';
     public string $addQuota = '';
     public bool $addIsActive = true;
@@ -45,6 +49,8 @@ new class extends Component {
         $authorized = Authorized::findOrFail($id);
         $this->editingAuthorizedId = $id;
         $this->editUuid = $authorized->uuid;
+        $this->editFirstName = $authorized->first_name;
+        $this->editLastName = $authorized->last_name;
         $this->editGroup = $authorized->group;
         $this->editQuota = $authorized->quota;
         $this->editIsActive = $authorized->is_active;
@@ -108,7 +114,7 @@ new class extends Component {
 
     public function openAddModal()
     {
-        $this->reset(['addUuid', 'addGroup', 'addQuota']);
+        $this->reset(['addUuid', 'addFirstName', 'addLastName', 'addGroup', 'addQuota']);
         $this->addIsActive = true;
 
         $unauthorized = \App\Models\Unauthorized::orderBy('created_at', 'desc')->first();
@@ -128,6 +134,8 @@ new class extends Component {
     {
         $this->validate([
             'addUuid' => 'required|exists:unauthorizeds,uuid|unique:authorizeds,uuid',
+            'addFirstName' => 'required|string|max:255',
+            'addLastName' => 'required|string|max:255',
             'addGroup' => 'required|in:merah,biru',
             'addQuota' => 'required|numeric',
             'addIsActive' => 'boolean',
@@ -137,6 +145,8 @@ new class extends Component {
             \Illuminate\Support\Facades\DB::transaction(function () {
                 Authorized::create([
                     'uuid' => $this->addUuid,
+                    'first_name' => $this->addFirstName,
+                    'last_name' => $this->addLastName,
                     'group' => $this->addGroup,
                     'quota' => $this->addQuota,
                     'is_active' => $this->addIsActive,
@@ -146,7 +156,7 @@ new class extends Component {
             });
 
             $this->closeAddModal();
-            $this->reset(['addUuid', 'addGroup', 'addQuota']);
+            $this->reset(['addUuid', 'addFirstName', 'addLastName', 'addGroup', 'addQuota']);
             $this->addIsActive = true;
             $this->dispatch('notify', message: 'Authorized record created successfully.', variant: 'success');
         } catch (\Exception $e) {
@@ -266,6 +276,24 @@ new class extends Component {
                 class="cursor-not-allowed opacity-70"
             />
 
+            <div class="grid grid-cols-2 gap-4">
+                <flux:input
+                    label="First Name"
+                    value="{{ $editFirstName }}"
+                    readonly
+                    disabled
+                    class="cursor-not-allowed opacity-70"
+                />
+
+                <flux:input
+                    label="Last Name"
+                    value="{{ $editLastName }}"
+                    readonly
+                    disabled
+                    class="cursor-not-allowed opacity-70"
+                />
+            </div>
+
             <flux:select wire:model="editGroup" label="Group" placeholder="Select group...">
                 <option value="merah">Merah</option>
                 <option value="biru">Biru</option>
@@ -301,6 +329,11 @@ new class extends Component {
                     <option value="{{ $unauth->uuid }}">{{ $unauth->uuid }}</option>
                 @endforeach
             </flux:select>
+
+            <div class="grid grid-cols-2 gap-4">
+                <flux:input wire:model="addFirstName" label="First Name" placeholder="John" />
+                <flux:input wire:model="addLastName" label="Last Name" placeholder="Doe" />
+            </div>
 
             <flux:select wire:model="addGroup" label="Group" placeholder="Select group...">
                 <option value="merah">Merah</option>
