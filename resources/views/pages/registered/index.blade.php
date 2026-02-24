@@ -21,6 +21,8 @@ new class extends Component
 
     public string $editAuthorizedName = '';
 
+    public int $addAddQuota = 0;
+
     public int $editAddQuota = 0;
 
     public string $editTargetDate = '';
@@ -37,9 +39,9 @@ new class extends Component
 
     public string $addAuthorizedUuid = '';
 
-    public int $addAddQuota = 1;
-
     public string $addTargetDate = '';
+
+    public string $addAuthorizedUuidSearch = '';
 
     public function mount()
     {
@@ -69,6 +71,10 @@ new class extends Component
                 ->paginate(10),
             'availableAuthorizeds' => Authorized::query()
                 ->active()
+                ->when($this->addAuthorizedUuidSearch, function ($query) {
+                    $query->whereFullText(['uuid', 'group', 'first_name', 'last_name'], $this->addAuthorizedUuidSearch.' * ', ['mode' => 'boolean']);
+                })
+                ->take(8)
                 ->get(),
         ];
     }
@@ -141,7 +147,7 @@ new class extends Component
 
     public function openAddModal()
     {
-        $this->reset(['addAuthorizedUuid']);
+        $this->reset(['addAuthorizedUuid', 'addAuthorizedUuidSearch']);
         $this->addAddQuota = 1;
         $this->addTargetDate = \Carbon\Carbon::today()->toDateString();
         $this->showAddModal = true;
@@ -150,6 +156,7 @@ new class extends Component
     public function closeAddModal()
     {
         $this->showAddModal = false;
+        $this->reset(['addAuthorizedUuidSearch']);
     }
 
     public function store()
@@ -169,7 +176,7 @@ new class extends Component
             ]);
 
             $this->closeAddModal();
-            $this->reset(['addAuthorizedUuid']);
+            $this->reset(['addAuthorizedUuid', 'addAuthorizedUuidSearch']);
             $this->addAddQuota = 1;
 
             $this->dispatch('notify', message: 'Scheduled quota setup successfully.', variant: 'success');
@@ -345,6 +352,7 @@ new class extends Component
                 label="User (UUID)"
                 placeholder="Select an authorized user..."
                 wireModel="addAuthorizedUuid"
+                searchWireModel="addAuthorizedUuidSearch"
                 :options="$availOptions"
             />
 

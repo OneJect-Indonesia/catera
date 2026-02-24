@@ -4,7 +4,8 @@
     'label' => 'Select Option',
     'placeholder' => 'Search...',
     'valueKey' => 'id',
-    'labelKey' => 'name'
+    'labelKey' => 'name',
+    'searchWireModel' => null
 ])
 
 <div
@@ -13,27 +14,85 @@
         open: false,
         search: '',
         selectedIndex: 0,
-        options: @js($options),
+        options: [],
         wireModelValue: @entangle($wireModel),
+        _cachedSelectedLabel: null,
+
+        init() {
+            this.updateOptions();
+
+            if (this.wireModelValue) {
+                const selected = this.options.find(opt => opt['{{ $valueKey }}'] == this.wireModelValue);
+                if (selected) {
+                    this._cachedSelectedLabel = selected['{{ $labelKey }}'];
+                }
+            }
+
+            const targetNode = this.$refs.optionsJson;
+            if (targetNode) {
+                const observer = new MutationObserver(() => {
+                    this.updateOptions();
+
+                    if (this.selectedIndex >= this.filteredOptions.length) {
+                        this.selectedIndex = Math.max(0, this.filteredOptions.length - 1);
+                    }
+                });
+                observer.observe(targetNode, { characterData: true, childList: true, subtree: true });
+            }
+
+            @if($searchWireModel)
+                let timeout;
+                this.$watch('search', (value) => {
+                    clearTimeout(timeout);
+                    timeout = setTimeout(() => {
+                        $wire.set('{{ $searchWireModel }}', value);
+                    }, 1000);
+                });
+            @endif
+        },
+
+        updateOptions() {
+            if (this.$refs.optionsJson) {
+                try {
+                    this.options = JSON.parse(this.$refs.optionsJson.textContent);
+                } catch (e) {
+                    this.options = [];
+                }
+            } else {
+                this.options = @js($options);
+            }
+        },
 
         get filteredOptions() {
-            if (this.search === '') {
+            @if($searchWireModel)
                 return this.options;
-            }
-            return this.options.filter(option =>
-                String(option['{{ $labelKey }}']).toLowerCase().includes(this.search.toLowerCase()) ||
-                String(option['{{ $valueKey }}']).toLowerCase().includes(this.search.toLowerCase())
-            );
+            @else
+                if (this.search === '') {
+                    return this.options;
+                }
+                return this.options.filter(option =>
+                    String(option['{{ $labelKey }}']).toLowerCase().includes(this.search.toLowerCase()) ||
+                    String(option['{{ $valueKey }}']).toLowerCase().includes(this.search.toLowerCase())
+                );
+            @endif
         },
 
         get selectedLabel() {
             const selected = this.options.find(opt => opt['{{ $valueKey }}'] == this.wireModelValue);
-            return selected ? selected['{{ $labelKey }}'] : '{{ $placeholder }}';
+            if (selected) {
+                this._cachedSelectedLabel = selected['{{ $labelKey }}'];
+                return selected['{{ $labelKey }}'];
+            }
+            if (this.wireModelValue && this._cachedSelectedLabel) {
+                return this._cachedSelectedLabel;
+            }
+            return '{{ $placeholder }}';
         },
 
         selectOption(option) {
             if (option) {
                 this.wireModelValue = option['{{ $valueKey }}'];
+                this._cachedSelectedLabel = option['{{ $labelKey }}'];
                 this.search = '';
                 this.open = false;
             }
@@ -102,6 +161,7 @@
         <flux:label>{{ $label }}</flux:label>
 
         <div class="relative">
+            <script type="application/json" x-ref="optionsJson">{!! json_encode($options) !!}</script>
             {{-- Display Button --}}
             <button
                 type="button"

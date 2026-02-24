@@ -14,6 +14,7 @@ class SearchableSelect extends Component
     public $placeholder;
     public $valueKey;
     public $labelKey;
+    public $searchWireModel;
 
     /**
      * Create a new component instance.
@@ -24,7 +25,8 @@ class SearchableSelect extends Component
         $label = 'Select Option',
         $placeholder = 'Search...',
         $valueKey = 'id',
-        $labelKey = 'name'
+        $labelKey = 'name',
+        $searchWireModel = null
     ) {
         $this->options = $options;
         $this->wireModel = $wireModel;
@@ -32,6 +34,7 @@ class SearchableSelect extends Component
         $this->placeholder = $placeholder;
         $this->valueKey = $valueKey;
         $this->labelKey = $labelKey;
+        $this->searchWireModel = $searchWireModel;
     }
 
     /**

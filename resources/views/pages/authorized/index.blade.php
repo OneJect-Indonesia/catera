@@ -48,6 +48,8 @@ new class extends Component
 
     public bool $addIsActive = true;
 
+    public string $addUuidSearch = '';
+
     public function with(): array
     {
         return [
@@ -57,7 +59,12 @@ new class extends Component
                 })
                 ->when($this->activeOnly, fn ($query) => $query->where('is_active', true))
                 ->paginate(10),
-            'unauthorizeds' => \App\Models\Unauthorized::orderBy('created_at', 'desc')->get(),
+            'unauthorizeds' => \App\Models\Unauthorized::when($this->addUuidSearch, function ($query) {
+                    return $query->where('uuid', 'like', "{$this->addUuidSearch}%");
+                })
+                ->orderBy('created_at', 'desc')
+                ->take(8)
+                ->get(),
         ];
     }
 
@@ -131,7 +138,7 @@ new class extends Component
 
     public function openAddModal()
     {
-        $this->reset(['addUuid', 'addFirstName', 'addLastName', 'addGroup', 'addQuota']);
+        $this->reset(['addUuid', 'addFirstName', 'addLastName', 'addGroup', 'addQuota', 'addUuidSearch']);
         $this->addIsActive = true;
 
         $unauthorized = \App\Models\Unauthorized::orderBy('created_at', 'desc')->first();
@@ -145,6 +152,7 @@ new class extends Component
     public function closeAddModal()
     {
         $this->showAddModal = false;
+        $this->reset(['addUuidSearch']);
     }
 
     public function store()
@@ -173,7 +181,7 @@ new class extends Component
             });
 
             $this->closeAddModal();
-            $this->reset(['addUuid', 'addFirstName', 'addLastName', 'addGroup', 'addQuota']);
+            $this->reset(['addUuid', 'addFirstName', 'addLastName', 'addGroup', 'addQuota', 'addUuidSearch']);
             $this->addIsActive = true;
             $this->dispatch('notify', message: 'Authorized record created successfully.', variant: 'success');
         } catch (\Exception $e) {
@@ -351,6 +359,7 @@ new class extends Component
                 label="UUID"
                 placeholder="Search unauthorized UUID..."
                 wireModel="addUuid"
+                searchWireModel="addUuidSearch"
                 :options="$unauthOptions"
             />
 
