@@ -23,6 +23,10 @@
                     <flux:sidebar.item icon="user-minus" :href="route('unauthorized.index')" :current="request()->routeIs('unauthorized.index')" wire:navigate>
                         {{ __('Unauthorized') }}
                     </flux:sidebar.item>
+
+                    <flux:sidebar.item icon="clock" :href="route('registereds.index')" :current="request()->routeIs('registereds.index')" wire:navigate>
+                        {{ __('Scheduled Quota') }}
+                    </flux:sidebar.item>
                 </flux:sidebar.group>
             </flux:sidebar.nav>
 

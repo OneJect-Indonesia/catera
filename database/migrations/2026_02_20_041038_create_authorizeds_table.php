@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('authorizeds', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('uuid')->index()->unique();
+            $table->uuid('uuid')->index()->unique();
             $table->string('first_name');
             $table->string('last_name');
             $table->string('group')->index();

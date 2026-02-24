@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Authorized extends Model
 {
@@ -22,4 +23,17 @@ class Authorized extends Model
     protected $casts = [
         'is_active' => 'boolean',
     ];
+
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
+    }
+
+    /**
+     * Get the registered record associated with the authorized.
+     */
+    public function registered(): HasOne
+    {
+        return $this->hasOne(Registered::class, 'authorized_uuid', 'uuid');
+    }
 }
