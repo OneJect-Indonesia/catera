@@ -13,7 +13,7 @@ Route::view('dashboard', 'dashboard')
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::livewire('authorized', 'pages::authorized.index')->name('authorized.index');
     Route::livewire('unauthorized', 'pages::unauthorized.index')->name('unauthorized.index');
+    Route::livewire('registereds', 'pages::registered.index')->name('registereds.index');
 });
 
-
-require __DIR__ . '/settings.php';
+require __DIR__.'/settings.php';

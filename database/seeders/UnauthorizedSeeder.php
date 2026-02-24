@@ -12,6 +12,6 @@ class UnauthorizedSeeder extends Seeder
      */
     public function run(): void
     {
-        \App\Models\Unauthorized::factory(100)->create();
+        \App\Models\Unauthorized::factory(2000)->create();
     }
 }

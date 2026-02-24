@@ -12,13 +12,13 @@ class AuthorizedSeeder extends Seeder
      */
     public function run(): void
     {
-        for ($i = 0; $i < 100; $i++) {
+        for ($i = 0; $i < 2000; $i++) {
             \App\Models\Authorized::create([
                 'uuid' => \Illuminate\Support\Str::uuid(),
                 'first_name' => fake()->firstName(),
                 'last_name' => fake()->lastName(),
                 'group' => $i % 2 === 0 ? 'merah' : 'biru',
-                'quota' => rand(10, 100),
+                'quota' => rand(0, 1),
                 'is_active' => $i % 3 !== 0,
             ]);
         }
