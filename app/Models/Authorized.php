@@ -9,4 +9,15 @@ class Authorized extends Model
 {
     /** @use HasFactory<\Database\Factories\AuthorizedFactory> */
     use HasFactory;
+
+    protected $fillable = [
+        'uuid',
+        'group',
+        'quota',
+        'is_active',
+    ];
+
+    protected $casts = [
+        'is_active' => 'boolean',
+    ];
 }

@@ -13,6 +13,13 @@ return new class extends Migration
     {
         Schema::create('authorizeds', function (Blueprint $table) {
             $table->id();
+            $table->uuid('uuid')->index()->unique();
+            $table->string('first_name');
+            $table->string('last_name');
+            $table->string('group')->index();
+            $table->fullText(['uuid', 'group', 'first_name', 'last_name']);
+            $table->string('quota');
+            $table->string('is_active')->default('true');
             $table->timestamps();
         });
     }
