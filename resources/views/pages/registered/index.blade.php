@@ -95,7 +95,7 @@ new class extends Component
     public function update()
     {
         $this->validate([
-            'editAddQuota' => 'required|integer|min:0',
+            'editAddQuota' => 'required|integer|min:1',
             'editTargetDate' => 'required|date',
         ]);
 
@@ -156,7 +156,7 @@ new class extends Component
     {
         $this->validate([
             'addAuthorizedUuid' => ['required', 'string', 'exists:authorizeds,uuid'],
-            'addAddQuota' => ['required', 'integer', 'min:0'],
+            'addAddQuota' => ['required', 'integer', 'min:1'],
             'addTargetDate' => ['required', 'date'],
         ]);
 
@@ -197,7 +197,7 @@ new class extends Component
     <div class="mb-4 text-sm font-medium text-center text-zinc-500 border-b border-zinc-200 dark:text-zinc-400 dark:border-zinc-700">
         <ul class="flex flex-wrap -mb-px">
             <li class="me-2">
-                <button wire:click="setTab('pending')" class="inline-block p-4 border-b-2 rounded-t-lg {{ $currentTab === 'pending' ? 'text-primary-600 border-primary-600 dark:text-primary-500 dark:border-primary-500' : 'border-transparent hover:text-zinc-600 hover:border-zinc-300 dark:hover:text-zinc-300' }}">Pending Schedule</button>
+                <button wire:click="setTab('pending')" class="inline-block p-4 border-b-2 rounded-t-lg {{ $currentTab === 'pending' ? 'text-yellow-600 border-yellow-600 dark:text-yellow-500 dark:border-yellow-500' : 'border-transparent hover:text-zinc-600 hover:border-zinc-300 dark:hover:text-zinc-300' }}">Pending Schedule</button>
             </li>
             <li class="me-2">
                 <button wire:click="setTab('success')" class="inline-block p-4 border-b-2 rounded-t-lg {{ $currentTab === 'success' ? 'text-green-600 border-green-600 dark:text-green-500 dark:border-green-500' : 'border-transparent hover:text-zinc-600 hover:border-zinc-300 dark:hover:text-zinc-300' }}" aria-current="page">Done</button>
@@ -309,13 +309,16 @@ new class extends Component
             </div>
 
             <div class="grid grid-cols-2 gap-4">
-                <flux:input wire:model="editAddQuota" label="Quota to Add" type="number" min="0" />
+                <flux:input wire:model="editAddQuota" label="Quota to Add" type="number" min="1" />
                 <flux:input wire:model="editTargetDate" label="Target Date" type="date" />
             </div>
 
             <div class="flex justify-end gap-2 border-t border-zinc-100 pt-4 dark:border-zinc-800">
                 <flux:button wire:click="closeEditModal">Cancel</flux:button>
-                <flux:button variant="primary" wire:click="update">Save Changes</flux:button>
+                <flux:button variant="primary" wire:click="update">
+                    <span wire:loading.remove wire:target="update">Save Changes</span>
+                    <span wire:loading wire:target="update">Saving...</span>
+                </flux:button>
             </div>
         </div>
     </flux:modal>
@@ -328,20 +331,34 @@ new class extends Component
                 <flux:subheading>Select an authorized user to receive additional daily quota.</flux:subheading>
             </div>
 
-            <flux:select wire:model="addAuthorizedUuid" label="User (UUID)" placeholder="Select an authorized user...">
-                @foreach($availableAuthorizeds as $auth)
-                    <option value="{{ $auth->uuid }}">{{ trim($auth->first_name . ' ' . $auth->last_name) }} - {{ ucfirst($auth->group) }}</option>
-                @endforeach
-            </flux:select>
+            @php
+                $availOptions = $availableAuthorizeds->map(function($auth) {
+                    $name = trim($auth->first_name . ' ' . $auth->last_name);
+                    $group = ucfirst($auth->group);
+                    return [
+                        'id' => $auth->uuid,
+                        'name' => "{$name} - {$group}"
+                    ];
+                })->toArray();
+            @endphp
+            <x-ui.searchable-select
+                label="User (UUID)"
+                placeholder="Select an authorized user..."
+                wireModel="addAuthorizedUuid"
+                :options="$availOptions"
+            />
 
             <div class="grid grid-cols-2 gap-4">
-                <flux:input wire:model="addAddQuota" label="Quota to Add" type="number" min="0" />
+                <flux:input wire:model="addAddQuota" label="Quota to Add" type="number" min="1" />
                 <flux:input wire:model="addTargetDate" label="Target Date" type="date" />
             </div>
 
             <div class="flex justify-end gap-2 border-t border-zinc-100 pt-4 dark:border-zinc-800">
                 <flux:button type="button" wire:click="closeAddModal">Cancel</flux:button>
-                <flux:button type="submit" variant="primary">Add Schedule</flux:button>
+                <flux:button type="submit" variant="primary">
+                    <span wire:loading.remove wire:target="store">Add Schedule</span>
+                    <span wire:loading wire:target="store">Saving...</span>
+                </flux:button>
             </div>
         </form>
     </flux:modal>

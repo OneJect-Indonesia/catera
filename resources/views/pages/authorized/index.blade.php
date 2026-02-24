@@ -4,31 +4,48 @@ use App\Models\Authorized;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-new class extends Component {
+new class extends Component
+{
     use WithPagination;
 
     public string $search = '';
+
     public bool $activeOnly = false;
 
     public bool $showEditModal = false;
+
     public $editingAuthorizedId = null;
+
     public string $editUuid = '';
+
     public string $editFirstName = '';
+
     public string $editLastName = '';
+
     public string $editGroup = '';
+
     public string $editQuota = '';
+
     public bool $editIsActive = false;
 
     public bool $showDeleteModal = false;
+
     public $deletingAuthorizedId = null;
+
     public string $deleteUuid = '';
 
     public bool $showAddModal = false;
+
     public string $addUuid = '';
+
     public string $addFirstName = '';
+
     public string $addLastName = '';
+
     public string $addGroup = '';
+
     public string $addQuota = '';
+
     public bool $addIsActive = true;
 
     public function with(): array
@@ -36,7 +53,7 @@ new class extends Component {
         return [
             'authorizeds' => Authorized::query()
                 ->when($this->search, function ($query) {
-                    $query->whereFullText(['uuid', 'group', 'first_name', 'last_name'], $this->search . ' * ', ['mode' => 'boolean']);
+                    $query->whereFullText(['uuid', 'group', 'first_name', 'last_name'], $this->search.' * ', ['mode' => 'boolean']);
                 })
                 ->when($this->activeOnly, fn ($query) => $query->where('is_active', true))
                 ->paginate(10),
@@ -311,7 +328,10 @@ new class extends Component {
 
             <div class="flex justify-end gap-2 border-t border-zinc-100 pt-4 dark:border-zinc-800">
                 <flux:button wire:click="closeEditModal">Cancel</flux:button>
-                <flux:button variant="primary" wire:click="update">Save Changes</flux:button>
+                <flux:button variant="primary" wire:click="update">
+                    <span wire:loading.remove wire:target="update">Save Changes</span>
+                    <span wire:loading wire:target="update">Saving...</span>
+                </flux:button>
             </div>
         </div>
     </flux:modal>
@@ -324,11 +344,15 @@ new class extends Component {
                 <flux:subheading>Authorize a new UUID from the unauthorized list.</flux:subheading>
             </div>
 
-            <flux:select wire:model="addUuid" label="UUID" placeholder="Select unauthorized UUID...">
-                @foreach($unauthorizeds as $unauth)
-                    <option value="{{ $unauth->uuid }}">{{ $unauth->uuid }}</option>
-                @endforeach
-            </flux:select>
+            @php
+                $unauthOptions = $unauthorizeds->map(fn($u) => ['id' => $u->uuid, 'name' => $u->uuid])->toArray();
+            @endphp
+            <x-ui.searchable-select
+                label="UUID"
+                placeholder="Search unauthorized UUID..."
+                wireModel="addUuid"
+                :options="$unauthOptions"
+            />
 
             <div class="grid grid-cols-2 gap-4">
                 <flux:input wire:model="addFirstName" label="First Name" placeholder="John" />
@@ -352,7 +376,10 @@ new class extends Component {
 
             <div class="flex justify-end gap-2 border-t border-zinc-100 pt-4 dark:border-zinc-800">
                 <flux:button type="button" wire:click="closeAddModal">Cancel</flux:button>
-                <flux:button type="submit" variant="primary">Add Authorized</flux:button>
+                <flux:button type="submit" variant="primary">
+                    <span wire:loading.remove wire:target="store">Add Authorized</span>
+                    <span wire:loading wire:target="store">Saving...</span>
+                </flux:button>
             </div>
         </form>
     </flux:modal>
