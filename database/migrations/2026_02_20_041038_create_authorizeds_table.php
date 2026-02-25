@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('last_name');
             $table->string('group')->index();
             $table->fullText(['uuid', 'group', 'first_name', 'last_name']);
-            $table->string('quota');
+            $table->integer('quota');
             $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
