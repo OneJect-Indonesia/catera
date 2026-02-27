@@ -13,6 +13,7 @@ class Authorized extends Model
 
     protected $fillable = [
         'uuid',
+        'nik',
         'first_name',
         'last_name',
         'group',

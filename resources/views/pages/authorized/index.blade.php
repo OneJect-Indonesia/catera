@@ -18,6 +18,8 @@ new class extends Component
 
     public string $editUuid = '';
 
+    public string $editNik = '';
+
     public string $editFirstName = '';
 
     public string $editLastName = '';
@@ -38,6 +40,8 @@ new class extends Component
 
     public string $addUuid = '';
 
+    public string $addNik = '';
+
     public string $addFirstName = '';
 
     public string $addLastName = '';
@@ -55,7 +59,7 @@ new class extends Component
         return [
             'authorizeds' => Authorized::query()
                 ->when($this->search, function ($query) {
-                    $query->whereFullText(['uuid', 'group', 'first_name', 'last_name'], $this->search.' * ', ['mode' => 'boolean']);
+                    $query->whereFullText(['uuid', 'nik', 'group', 'first_name', 'last_name'], $this->search.' * ', ['mode' => 'boolean']);
                 })
                 ->when($this->activeOnly, fn ($query) => $query->where('is_active', true))
                 ->paginate(10),
@@ -73,6 +77,7 @@ new class extends Component
         $authorized = Authorized::findOrFail($id);
         $this->editingAuthorizedId = $id;
         $this->editUuid = $authorized->uuid;
+        $this->editNik = $authorized->nik ?? '';
         $this->editFirstName = $authorized->first_name;
         $this->editLastName = $authorized->last_name;
         $this->editGroup = $authorized->group;
@@ -90,6 +95,7 @@ new class extends Component
     public function update()
     {
         $this->validate([
+            'editNik' => 'nullable|string|max:20',
             'editGroup' => 'required|in:merah,biru',
             'editQuota' => 'required|numeric',
             'editIsActive' => 'boolean',
@@ -98,6 +104,7 @@ new class extends Component
         try {
             $authorized = Authorized::findOrFail($this->editingAuthorizedId);
             $authorized->update([
+                'nik' => $this->editNik,
                 'group' => $this->editGroup,
                 'quota' => $this->editQuota,
                 'is_active' => $this->editIsActive,
@@ -138,7 +145,7 @@ new class extends Component
 
     public function openAddModal()
     {
-        $this->reset(['addUuid', 'addFirstName', 'addLastName', 'addGroup', 'addQuota', 'addUuidSearch']);
+        $this->reset(['addUuid', 'addNik', 'addFirstName', 'addLastName', 'addGroup', 'addQuota', 'addUuidSearch']);
         $this->addIsActive = true;
 
         $unauthorized = \App\Models\Unauthorized::orderBy('created_at', 'desc')->first();
@@ -159,8 +166,9 @@ new class extends Component
     {
         $this->validate([
             'addUuid' => 'required|exists:unauthorizeds,uuid|unique:authorizeds,uuid',
-            'addFirstName' => 'required|string|max:255',
-            'addLastName' => 'required|string|max:255',
+            'addNik' => 'nullable|string|max:20',
+            'addFirstName' => 'required|string|max:20',
+            'addLastName' => 'required|string|max:20',
             'addGroup' => 'required|in:merah,biru',
             'addQuota' => 'required|numeric',
             'addIsActive' => 'boolean',
@@ -170,6 +178,7 @@ new class extends Component
             \Illuminate\Support\Facades\DB::transaction(function () {
                 Authorized::create([
                     'uuid' => $this->addUuid,
+                    'nik' => $this->addNik,
                     'first_name' => $this->addFirstName,
                     'last_name' => $this->addLastName,
                     'group' => $this->addGroup,
@@ -181,7 +190,7 @@ new class extends Component
             });
 
             $this->closeAddModal();
-            $this->reset(['addUuid', 'addFirstName', 'addLastName', 'addGroup', 'addQuota', 'addUuidSearch']);
+            $this->reset(['addUuid', 'addNik', 'addFirstName', 'addLastName', 'addGroup', 'addQuota', 'addUuidSearch']);
             $this->addIsActive = true;
             $this->dispatch('notify', message: 'Authorized record created successfully.', variant: 'success');
         } catch (\Exception $e) {
@@ -227,6 +236,7 @@ new class extends Component
                     <tr>
                         <th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">UUID</th>
                         <th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">Full Name</th>
+                        <th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">NIK</th>
                         <th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">Group</th>
                         <th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">Quota</th>
                         <th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">Status</th>
@@ -241,6 +251,9 @@ new class extends Component
                             </td>
                             <td class="px-4 py-3.5 text-center">
                                 <span class="text-sm font-medium text-zinc-800 dark:text-zinc-200">{{ $authorized->first_name }} {{ $authorized->last_name }}</span>
+                            </td>
+                            <td class="px-4 py-3.5 text-center">
+                                <span class="text-sm font-medium text-zinc-800 dark:text-zinc-200">{{ $authorized->nik ?? '-' }}</span>
                             </td>
                             <td class="px-4 py-3.5 text-center">
                                 <flux:badge size="sm" :color="$authorized->group === 'merah' ? 'red' : 'blue'" inset="top bottom" class="w-20 justify-center">
@@ -300,6 +313,8 @@ new class extends Component
                 disabled
                 class="cursor-not-allowed opacity-70"
             />
+
+            <flux:input wire:model="editNik" label="NIK" placeholder="1234567890" />
 
             <div class="grid grid-cols-2 gap-4">
                 <flux:input
@@ -362,6 +377,8 @@ new class extends Component
                 searchWireModel="addUuidSearch"
                 :options="$unauthOptions"
             />
+
+            <flux:input wire:model="addNik" label="NIK" placeholder="1234567890" />
 
             <div class="grid grid-cols-2 gap-4">
                 <flux:input wire:model="addFirstName" label="First Name" placeholder="John" />

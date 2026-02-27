@@ -62,9 +62,9 @@ new class extends Component
                 ->where('status', $this->currentTab)
                 ->when($this->search, function ($query) {
                     $query->whereHas('authorized', function ($q) {
-                        $q->where('uuid', 'like', "%{$this->search}%")
-                            ->orWhere('first_name', 'like', "%{$this->search}%")
-                            ->orWhere('last_name', 'like', "%{$this->search}%");
+                        $q->where('uuid', 'like', "{$this->search}%")
+                            ->orWhere('first_name', 'like', "{$this->search}%")
+                            ->orWhere('last_name', 'like', "{$this->search}%");
                     });
                 })
                 ->orderBy('target_date', 'asc')
@@ -72,7 +72,7 @@ new class extends Component
             'availableAuthorizeds' => Authorized::query()
                 ->active()
                 ->when($this->addAuthorizedUuidSearch, function ($query) {
-                    $query->whereFullText(['uuid', 'group', 'first_name', 'last_name'], $this->addAuthorizedUuidSearch.' * ', ['mode' => 'boolean']);
+                    $query->whereFullText(['uuid', 'nik', 'group', 'first_name', 'last_name'], $this->addAuthorizedUuidSearch.' * ', ['mode' => 'boolean']);
                 })
                 ->take(8)
                 ->get(),
@@ -341,10 +341,10 @@ new class extends Component
             @php
                 $availOptions = $availableAuthorizeds->map(function($auth) {
                     $name = trim($auth->first_name . ' ' . $auth->last_name);
-                    $group = ucfirst($auth->group);
+                    $nik = $auth->nik ?? 'N/A';
                     return [
                         'id' => $auth->uuid,
-                        'name' => "{$name} - {$group}"
+                        'name' => "{$name} - {$nik}"
                     ];
                 })->toArray();
             @endphp
