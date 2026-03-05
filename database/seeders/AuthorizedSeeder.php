@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Authorized;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -12,15 +13,6 @@ class AuthorizedSeeder extends Seeder
      */
     public function run(): void
     {
-        for ($i = 0; $i < 2000; $i++) {
-            \App\Models\Authorized::create([
-                'uuid' => \Illuminate\Support\Str::uuid(),
-                'first_name' => fake()->firstName(),
-                'last_name' => fake()->lastName(),
-                'group' => $i % 2 === 0 ? 'merah' : 'biru',
-                'quota' => rand(0, 1),
-                'is_active' => $i % 3 !== 0,
-            ]);
-        }
+        Authorized::factory(2000)->create();
     }
 }

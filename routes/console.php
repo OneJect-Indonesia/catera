@@ -19,6 +19,14 @@ Artisan::command('app:quota-daily-reset', function () {
     $this->info('Daily reset system completed');
 })->purpose('Reset quota daily')->dailyAt('00:00')->timezone('Asia/Jakarta');
 
+Artisan::command('app:unauthorized-clearance', function () {
+    $this->info('start earase unauthorized');
+
+    DB::table('unauthorizeds')->truncate();
+
+    $this->info('earase unauthorized completed');
+})->purpose('Earase unauthorized')->monthly('00:00')->timezone('Asia/Jakarta');
+
 // * automated add quota scheduler
 Artisan::command('app:process-scheduled-quota', function () {
     $this->info('Start processing scheduled add quota');
