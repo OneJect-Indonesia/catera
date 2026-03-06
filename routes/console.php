@@ -23,4 +23,4 @@ Schedule::command(DeletUnauthorizeds::class)->monthlyOn(1, '00:04')->timezone('A
 Schedule::command(ScheduleAddQuota::class)->dailyAt('00:02')->timezone('Asia/Jakarta');
 
 // * monthly registereds clearance for succes status
-Schedule::command(ClearSuccessRegistereds::class)->quarterly(1, '00:06')->timezone('Asia/Jakarta');
+Schedule::command(ClearSuccessRegistereds::class)->monthlyOn(1, '00:06')->timezone('Asia/Jakarta');
