@@ -234,7 +234,7 @@ new class extends Component
             <table class="min-w-full">
                 <thead class="bg-zinc-50 dark:bg-zinc-800/60">
                     <tr>
-                        <th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">UUID</th>
+                        <!-- <th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">UUID</th> -->
                         <th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">Full Name</th>
                         <th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">NIK</th>
                         <th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">Group</th>
@@ -246,9 +246,9 @@ new class extends Component
                 <tbody class="divide-y divide-zinc-100 dark:divide-zinc-800">
                     @forelse ($authorizeds as $authorized)
                         <tr class="transition-colors duration-150 hover:bg-hover/20 dark:hover:bg-hover/30">
-                            <td class="px-4 py-3.5 text-center">
+                            <!-- <td class="px-4 py-3.5 text-center">
                                 <span class="font-mono text-xs text-zinc-600 dark:text-zinc-400">{{ $authorized->uuid }}</span>
-                            </td>
+                            </td> -->
                             <td class="px-4 py-3.5 text-center">
                                 <span class="text-sm font-medium text-zinc-800 dark:text-zinc-200">{{ $authorized->first_name }} {{ $authorized->last_name }}</span>
                             </td>

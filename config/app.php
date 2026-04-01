@@ -123,4 +123,6 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    'pulse_admin_email' => env('PULSE_ADMIN_EMAIL', 'test@example.com'),
+
 ];

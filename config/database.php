@@ -96,8 +96,9 @@ return [
             'charset' => env('DB_CHARSET', 'utf8'),
             'timezone' => '+07:00',
             'prefix' => '',
+            'schema' => 'catera',
             'prefix_indexes' => true,
-            'search_path' => 'public',
+            'search_path' => 'catera,public',
             'sslmode' => env('DB_SSLMODE', 'prefer'),
         ],
 
