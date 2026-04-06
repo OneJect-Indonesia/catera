@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('authorizeds', function (Blueprint $table) {
+        Schema::table('catera.authorizeds', function (Blueprint $table) {
             $table->string('nik')->after('last_name')->nullable();
             $table->dropFullText(['uuid', 'group', 'first_name', 'last_name']);
             $table->fullText(['uuid', 'nik', 'group', 'first_name', 'last_name']);
@@ -23,7 +23,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('authorizeds', function (Blueprint $table) {
+        Schema::table('catera.authorizeds', function (Blueprint $table) {
             $table->dropFullText(['uuid', 'nik', 'group', 'first_name', 'last_name']);
             $table->fullText(['uuid', 'group', 'first_name', 'last_name']);
             $table->dropColumn('nik');

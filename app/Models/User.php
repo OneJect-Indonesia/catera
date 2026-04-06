@@ -19,6 +19,8 @@ class User extends Authenticatable
      *
      * @var list<string>
      */
+    protected $table = 'portal_application.users';
+
     protected $fillable = [
         'name',
         'email',

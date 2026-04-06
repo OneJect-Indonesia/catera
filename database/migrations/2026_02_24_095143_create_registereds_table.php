@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('registereds', function (Blueprint $table) {
+        Schema::create('catera.registereds', function (Blueprint $table) {
             $table->id();
-            $table->uuid('authorized_uuid');
+            $table->string('authorized_uuid');
             $table->integer('add_quota')->default(0);
             $table->timestamps();
 
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('registereds');
+        Schema::dropIfExists('catera.registereds');
     }
 };

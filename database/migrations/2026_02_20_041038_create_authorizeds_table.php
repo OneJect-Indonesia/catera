@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('authorizeds', function (Blueprint $table) {
+        Schema::create('catera.authorizeds', function (Blueprint $table) {
             $table->id();
-            $table->uuid('uuid')->index()->unique();
+            $table->string('uuid')->index()->unique();
             $table->string('first_name');
             $table->string('last_name');
             $table->string('group')->index();
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('authorizeds');
+        Schema::dropIfExists('catera.authorizeds');
     }
 };

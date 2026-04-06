@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Registered extends Model
 {
+    protected $table = 'catera.registereds';
+
     protected $fillable = [
         'authorized_uuid',
         'add_quota',

@@ -11,6 +11,8 @@ class Authorized extends Model
     /** @use HasFactory<\Database\Factories\AuthorizedFactory> */
     use HasFactory;
 
+    protected $table = 'catera.authorizeds';
+
     protected $fillable = [
         'uuid',
         'nik',
