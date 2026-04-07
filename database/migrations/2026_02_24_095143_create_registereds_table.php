@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('registereds', function (Blueprint $table) {
             $table->id();
-            $table->uuid('authorized_uuid');
+            $table->string('authorized_uuid');
             $table->integer('add_quota')->default(0);
             $table->timestamps();
 
