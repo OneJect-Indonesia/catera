@@ -3,6 +3,8 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Authorized>
@@ -17,12 +19,10 @@ class AuthorizedFactory extends Factory
     public function definition(): array
     {
         return [
-            'uuid' => \Illuminate\Support\Str::uuid(),
-            'first_name' => fake()->firstName(),
-            'last_name' => fake()->lastName(),
-            'nik' => fake()->unique()->numerify('############'),
+            'user_id' => DB::table('portal_application.users')->inRandomOrder()->value('id'),
+            'uuid' => Str::uuid(),
             'group' => fake()->randomElement(['merah', 'biru']),
-            'quota' => rand(0, 5),
+            'quota' => rand(0, 1),
             'is_active' => fake()->randomElement([true, false]),
         ];
     }

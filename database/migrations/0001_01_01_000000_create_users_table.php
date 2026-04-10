@@ -11,15 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        //     Schema::create('catera.users', function (Blueprint $table) {
-        //         $table->id();
-        //         $table->foreignId('user_id')->constrained('portal_aplication.users');
-        //         $table->string('email')->unique();
-        //         $table->timestamp('email_verified_at')->nullable();
-        //         $table->string('password');
-        //         $table->rememberToken();
-        //         $table->timestamps();
-        //     });
+        // Schema::create('catera.users', function (Blueprint $table) {
+        //     $table->id();
+        //     $table->foreignId('user_id')->constrained('portal_application.users');
+        //     $table->string('email')->unique();
+        //     $table->timestamp('email_verified_at')->nullable();
+        //     $table->string('password');
+        //     $table->rememberToken();
+        //     $table->timestamps();
+        // });
 
         // Schema::create('catera.password_reset_tokens', function (Blueprint $table) {
         //     $table->string('email')->primary();

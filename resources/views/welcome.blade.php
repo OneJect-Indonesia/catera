@@ -271,7 +271,7 @@
             </main>
         </div> -->
 
-        <p>Welcome to our application!</p>
+        <p class="text-3xl font-extrabold text-white">Welcome to our application!</p>
         @if (Route::has('login'))
             <div class="h-14.5 hidden lg:block"></div>
         @endif

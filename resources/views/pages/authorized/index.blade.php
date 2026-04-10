@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Authorized;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -18,17 +19,16 @@ new class extends Component
 
     public string $editUuid = '';
 
-    public string $editNik = '';
-
-    public string $editFirstName = '';
-
-    public string $editLastName = '';
-
     public string $editGroup = '';
 
     public string $editQuota = '';
 
     public bool $editIsActive = false;
+
+    // Read-only display fields for the edit modal (sourced from relationship)
+    public string $editDisplayName = '';
+
+    public string $editDisplayNik = '';
 
     public bool $showDeleteModal = false;
 
@@ -40,11 +40,9 @@ new class extends Component
 
     public string $addUuid = '';
 
-    public string $addNik = '';
+    public $addUserId = null;
 
-    public string $addFirstName = '';
-
-    public string $addLastName = '';
+    public string $addUserSearch = '';
 
     public string $addGroup = '';
 
@@ -58,44 +56,65 @@ new class extends Component
     {
         return [
             'authorizeds' => Authorized::query()
+                ->with('user')
                 ->when($this->search, function ($query) {
-                    $query->whereFullText(['uuid', 'nik', 'group', 'first_name', 'last_name'], $this->search.' * ', ['mode' => 'boolean']);
+                    $query->whereHas('user', function ($q) {
+                        $q->whereRaw(
+                            "to_tsvector('simple', coalesce(first_name, '') || ' ' || coalesce(last_name, '') || ' ' || coalesce(nik::text, '')) @@ plainto_tsquery('simple', ?)",
+                            [$this->search]
+                        );
+                    })->orWhere(function ($q) {
+                        $q->whereRaw("to_tsvector('simple', coalesce(uuid, '') || ' ' || coalesce(\"group\", '')) @@ plainto_tsquery('simple', ?)", [$this->search]);
+                    });
                 })
                 ->when($this->activeOnly, fn ($query) => $query->where('is_active', true))
                 ->paginate(10),
+
             'unauthorizeds' => \App\Models\Unauthorized::when($this->addUuidSearch, function ($query) {
-                    return $query->where('uuid', 'like', "{$this->addUuidSearch}%");
-                })
+                return $query->where('uuid', 'like', "{$this->addUuidSearch}%");
+            })
                 ->orderBy('created_at', 'desc')
                 ->take(8)
                 ->get(),
+
+            'portalUsers' => DB::table('portal_application.users')
+                ->when($this->addUserSearch, function ($q) {
+                    $q->where(function ($inner) {
+                        $inner->whereRaw("LOWER(first_name || ' ' || last_name) LIKE ?", [strtolower("%{$this->addUserSearch}%")])
+                            ->orWhereRaw('LOWER(nik::text) LIKE ?', [strtolower("%{$this->addUserSearch}%")]);
+                    });
+                })
+                ->select('id', 'nik', 'first_name', 'last_name')
+                ->orderBy('first_name')
+                ->limit(8)
+                ->get()
+                ->map(fn ($u) => ['id' => $u->id, 'name' => "{$u->first_name} {$u->last_name} ({$u->nik})"])
+                ->toArray(),
         ];
     }
 
-    public function edit($id)
+    public function edit($id): void
     {
-        $authorized = Authorized::findOrFail($id);
+        $authorized = Authorized::with('user')->findOrFail($id);
         $this->editingAuthorizedId = $id;
         $this->editUuid = $authorized->uuid;
-        $this->editNik = $authorized->nik ?? '';
-        $this->editFirstName = $authorized->first_name;
-        $this->editLastName = $authorized->last_name;
         $this->editGroup = $authorized->group;
         $this->editQuota = $authorized->quota;
         $this->editIsActive = $authorized->is_active;
+        $this->editDisplayName = $authorized->user?->first_name . ' ' . $authorized->user?->last_name;
+        $this->editDisplayNik = $authorized->user?->nik ?? '-';
         $this->showEditModal = true;
     }
 
-    public function closeEditModal()
+    public function closeEditModal(): void
     {
         $this->showEditModal = false;
         $this->editingAuthorizedId = null;
     }
 
-    public function update()
+    public function update(): void
     {
         $this->validate([
-            'editNik' => 'nullable|string|max:20',
             'editGroup' => 'required|in:merah,biru',
             'editQuota' => 'required|numeric',
             'editIsActive' => 'boolean',
@@ -104,7 +123,6 @@ new class extends Component
         try {
             $authorized = Authorized::findOrFail($this->editingAuthorizedId);
             $authorized->update([
-                'nik' => $this->editNik,
                 'group' => $this->editGroup,
                 'quota' => $this->editQuota,
                 'is_active' => $this->editIsActive,
@@ -117,7 +135,7 @@ new class extends Component
         }
     }
 
-    public function confirmDelete($id)
+    public function confirmDelete($id): void
     {
         $authorized = Authorized::findOrFail($id);
         $this->deletingAuthorizedId = $id;
@@ -125,14 +143,14 @@ new class extends Component
         $this->showDeleteModal = true;
     }
 
-    public function closeDeleteModal()
+    public function closeDeleteModal(): void
     {
         $this->showDeleteModal = false;
         $this->deletingAuthorizedId = null;
         $this->deleteUuid = '';
     }
 
-    public function destroy()
+    public function destroy(): void
     {
         try {
             Authorized::findOrFail($this->deletingAuthorizedId)->delete();
@@ -143,9 +161,9 @@ new class extends Component
         }
     }
 
-    public function openAddModal()
+    public function openAddModal(): void
     {
-        $this->reset(['addUuid', 'addNik', 'addFirstName', 'addLastName', 'addGroup', 'addQuota', 'addUuidSearch']);
+        $this->reset(['addUuid', 'addUserId', 'addUserSearch', 'addGroup', 'addQuota', 'addUuidSearch']);
         $this->addIsActive = true;
 
         $unauthorized = \App\Models\Unauthorized::orderBy('created_at', 'desc')->first();
@@ -156,19 +174,17 @@ new class extends Component
         $this->showAddModal = true;
     }
 
-    public function closeAddModal()
+    public function closeAddModal(): void
     {
         $this->showAddModal = false;
-        $this->reset(['addUuidSearch']);
+        $this->reset(['addUuidSearch', 'addUserSearch', 'addUserId']);
     }
 
-    public function store()
+    public function store(): void
     {
         $this->validate([
-            'addUuid' => 'required|exists:unauthorizeds,uuid|unique:authorizeds,uuid',
-            'addNik' => 'nullable|string|max:20',
-            'addFirstName' => 'required|string|max:20',
-            'addLastName' => 'required|string|max:20',
+            'addUuid' => 'required|exists:catera.unauthorizeds,uuid|unique:catera.authorizeds,uuid',
+            'addUserId' => 'required|integer|exists:portal_application.users,id',
             'addGroup' => 'required|in:merah,biru',
             'addQuota' => 'required|numeric',
             'addIsActive' => 'boolean',
@@ -178,9 +194,7 @@ new class extends Component
             \Illuminate\Support\Facades\DB::transaction(function () {
                 Authorized::create([
                     'uuid' => $this->addUuid,
-                    'nik' => $this->addNik,
-                    'first_name' => $this->addFirstName,
-                    'last_name' => $this->addLastName,
+                    'user_id' => $this->addUserId,
                     'group' => $this->addGroup,
                     'quota' => $this->addQuota,
                     'is_active' => $this->addIsActive,
@@ -190,7 +204,7 @@ new class extends Component
             });
 
             $this->closeAddModal();
-            $this->reset(['addUuid', 'addNik', 'addFirstName', 'addLastName', 'addGroup', 'addQuota', 'addUuidSearch']);
+            $this->reset(['addUuid', 'addUserId', 'addUserSearch', 'addGroup', 'addQuota', 'addUuidSearch']);
             $this->addIsActive = true;
             $this->dispatch('notify', message: 'Authorized record created successfully.', variant: 'success');
         } catch (\Exception $e) {
@@ -219,7 +233,7 @@ new class extends Component
         <flux:input
             wire:model.live="search"
             icon="magnifying-glass"
-            placeholder="Search by UUID or Group..."
+            placeholder="Search by name, NIK or group..."
             class="w-full sm:max-w-xs"
         />
         <div class="flex items-center gap-2">
@@ -234,7 +248,6 @@ new class extends Component
             <table class="min-w-full">
                 <thead class="bg-zinc-50 dark:bg-zinc-800/60">
                     <tr>
-                        <!-- <th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">UUID</th> -->
                         <th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">Full Name</th>
                         <th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">NIK</th>
                         <th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">Group</th>
@@ -245,15 +258,12 @@ new class extends Component
                 </thead>
                 <tbody class="divide-y divide-zinc-100 dark:divide-zinc-800">
                     @forelse ($authorizeds as $authorized)
-                        <tr class="transition-colors duration-150 hover:bg-hover/20 dark:hover:bg-hover/30">
-                            <!-- <td class="px-4 py-3.5 text-center">
-                                <span class="font-mono text-xs text-zinc-600 dark:text-zinc-400">{{ $authorized->uuid }}</span>
-                            </td> -->
+                        <tr class="transition-colors duration-150 hover:bg-hover/20 dark:hover:bg-hover/30" wire:key="authorized-{{ $authorized->id }}">
                             <td class="px-4 py-3.5 text-center">
-                                <span class="text-sm font-medium text-zinc-800 dark:text-zinc-200">{{ $authorized->first_name }} {{ $authorized->last_name }}</span>
+                                <span class="text-sm font-medium text-zinc-800 dark:text-zinc-200">{{ $authorized->user?->first_name }} {{ $authorized->user?->last_name }}</span>
                             </td>
                             <td class="px-4 py-3.5 text-center">
-                                <span class="text-sm font-medium text-zinc-800 dark:text-zinc-200">{{ $authorized->nik ?? '-' }}</span>
+                                <span class="text-sm font-medium text-zinc-800 dark:text-zinc-200">{{ $authorized->user?->nik ?? '-' }}</span>
                             </td>
                             <td class="px-4 py-3.5 text-center">
                                 <flux:badge size="sm" :color="$authorized->group === 'merah' ? 'red' : 'blue'" inset="top bottom" class="w-20 justify-center">
@@ -314,20 +324,18 @@ new class extends Component
                 class="cursor-not-allowed opacity-70"
             />
 
-            <flux:input wire:model="editNik" label="NIK" placeholder="1234567890" />
-
+            {{-- User info (readonly, sourced from relationship) --}}
             <div class="grid grid-cols-2 gap-4">
                 <flux:input
-                    label="First Name"
-                    value="{{ $editFirstName }}"
+                    label="Full Name"
+                    value="{{ $editDisplayName }}"
                     readonly
                     disabled
                     class="cursor-not-allowed opacity-70"
                 />
-
                 <flux:input
-                    label="Last Name"
-                    value="{{ $editLastName }}"
+                    label="NIK"
+                    value="{{ $editDisplayNik }}"
                     readonly
                     disabled
                     class="cursor-not-allowed opacity-70"
@@ -364,7 +372,7 @@ new class extends Component
         <form wire:submit="store" class="space-y-5">
             <div class="border-b border-zinc-100 pb-4 dark:border-zinc-800">
                 <flux:heading size="lg">Add Authorized</flux:heading>
-                <flux:subheading>Authorize a new UUID from the unauthorized list.</flux:subheading>
+                <flux:subheading>Authorize a new UUID and link it to a portal user.</flux:subheading>
             </div>
 
             @php
@@ -378,12 +386,13 @@ new class extends Component
                 :options="$unauthOptions"
             />
 
-            <flux:input wire:model="addNik" label="NIK" placeholder="1234567890" />
-
-            <div class="grid grid-cols-2 gap-4">
-                <flux:input wire:model="addFirstName" label="First Name" placeholder="John" />
-                <flux:input wire:model="addLastName" label="Last Name" placeholder="Doe" />
-            </div>
+            <x-ui.searchable-select
+                label="Portal User"
+                placeholder="Search by name or NIK..."
+                wireModel="addUserId"
+                searchWireModel="addUserSearch"
+                :options="$portalUsers"
+            />
 
             <flux:select wire:model="addGroup" label="Group" placeholder="Select group...">
                 <option value="merah">Merah</option>
