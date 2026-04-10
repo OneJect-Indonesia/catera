@@ -1,5 +1,5 @@
 services:
-    laravel.test:
+    catera.app:
         build:
             context: './vendor/laravel/sail/runtimes/8.5'
             dockerfile: Dockerfile
@@ -9,8 +9,8 @@ services:
         extra_hosts:
             - 'host.docker.internal:host-gateway'
         ports:
-            - '${APP_PORT:-80}:80'
-            - '${VITE_PORT:-5173}:${VITE_PORT:-5173}'
+            - '${APP_PORT:-81}:80'
+            - '${VITE_PORT:-5174}:${VITE_PORT:-5173}'
         environment:
             WWWUSER: '${WWWUSER}'
             LARAVEL_SAIL: 1
@@ -21,49 +21,51 @@ services:
             - '.:/var/www/html'
         networks:
             - sail
-        depends_on:
-            - pgsql
-    pgsql:
-        image: 'postgres:18-alpine'
-        ports:
-            - '${FORWARD_DB_PORT:-5432}:5432'
-        environment:
-            PGPASSWORD: '${DB_PASSWORD:-secret}'
-            POSTGRES_DB: '${DB_DATABASE}'
-            POSTGRES_USER: '${DB_USERNAME}'
-            POSTGRES_PASSWORD: '${DB_PASSWORD:-secret}'
-        volumes:
-            - 'sail-pgsql:/var/lib/postgresql'
-            - './vendor/laravel/sail/database/pgsql/create-testing-database.sql:/docker-entrypoint-initdb.d/10-create-testing-database.sql'
-        networks:
-            - sail
-        healthcheck:
-            test:
-                - CMD
-                - pg_isready
-                - '-q'
-                - '-d'
-                - '${DB_DATABASE}'
-                - '-U'
-                - '${DB_USERNAME}'
-            retries: 3
-            timeout: 5s
+            - shared_network
+        depends_on: []
+    # pgsql:
+    #     image: 'postgres:18-alpine'
+    #     ports:
+    #         - '${FORWARD_DB_PORT:-5432}:5432'
+    #     environment:
+    #         PGPASSWORD: '${DB_PASSWORD:-secret}'
+    #         POSTGRES_DB: '${DB_DATABASE}'
+    #         POSTGRES_USER: '${DB_USERNAME}'
+    #         POSTGRES_PASSWORD: '${DB_PASSWORD:-secret}'
+    #     volumes:
+    #         - 'sail-pgsql:/var/lib/postgresql'
+    #         - './vendor/laravel/sail/database/pgsql/create-testing-database.sql:/docker-entrypoint-initdb.d/10-create-testing-database.sql'
+    #     networks:
+    #         - sail
+    #     healthcheck:
+    #         test:
+    #             - CMD
+    #             - pg_isready
+    #             - '-q'
+    #             - '-d'
+    #             - '${DB_DATABASE}'
+    #             - '-U'
+    #             - '${DB_USERNAME}'
+    #         retries: 3
+    #         timeout: 5s
 
-    pgadmin:
-        image: 'dpage/pgadmin4'
-        ports:
-            - '${PGADMIN_PORT:-5050}:80'
-        environment:
-            PGADMIN_DEFAULT_EMAIL: '${PGADMIN_EMAIL:-admin@catera.com}'
-            PGADMIN_DEFAULT_PASSWORD: '${PGADMIN_PASSWORD:-admin}'
-        networks:
-            - sail
-        depends_on:
-            - pgsql
+    # pgadmin:
+    #     image: 'dpage/pgadmin4'
+    #     ports:
+    #         - '${PGADMIN_PORT:-5050}:80'
+    #     environment:
+    #         PGADMIN_DEFAULT_EMAIL: '${PGADMIN_EMAIL:-admin@catera.com}'
+    #         PGADMIN_DEFAULT_PASSWORD: '${PGADMIN_PASSWORD:-admin}'
+    #     networks:
+    #         - sail
+    #     depends_on:
+    #         - pgsql
 
 networks:
     sail:
         driver: bridge
+    shared_network:
+        external: true
 volumes:
     sail-pgsql:
         driver: local
