@@ -13,7 +13,7 @@
                 :initials="auth()->user()->initials()"
             />
             <div class="grid flex-1 text-start text-sm leading-tight">
-                <flux:heading class="truncate">{{ auth()->user()->name }}</flux:heading>
+                <flux:heading class="truncate">{{ auth()->user()->first_name }} {{ auth()->user()->last_name}}</flux:heading>
                 <flux:text class="truncate">{{ auth()->user()->email }}</flux:text>
             </div>
         </div>
@@ -22,11 +22,12 @@
             <flux:menu.item :href="route('profile.edit')" icon="cog" wire:navigate>
                 {{ __('Settings') }}
             </flux:menu.item>
-            <form method="POST" action="{{ route('logout') }}" class="w-full">
+            <form method="POST" action="{{ route('logout.app') }}" class="w-full">
                 @csrf
                 <flux:menu.item
                     as="button"
                     type="submit"
+                    variant="danger"
                     icon="arrow-right-start-on-rectangle"
                     class="w-full cursor-pointer"
                     data-test="logout-button"

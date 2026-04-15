@@ -12,6 +12,7 @@ Route::view('dashboard', 'dashboard')
     ->name('dashboard');
 
 Route::get('/sso/verify', [SsoController::class, 'verify'])->name('sso.verify');
+Route::post('/logout', [SsoController::class, 'destroy'])->name('logout.app');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::livewire('authorized', 'pages::authorized.index')->name('authorized.index');
