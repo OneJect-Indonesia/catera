@@ -3,15 +3,15 @@
 ])
 
 @if($sidebar)
-    <flux:sidebar.brand {{ $attributes }}>
-        <x-slot name="logo" class="flex items-center justify-center">
-            <img src="{{ asset('Oneject_logo.webp') }}" alt="Oneject Logo" class="w-fit h-16 object-contain" />
+    <flux:sidebar.brand name="Catera Dashboard" {{ $attributes }}>
+        <x-slot name="logo" class="flex aspect-square size-8 items-center justify-center rounded-md bg-accent-content text-accent-foreground">
+            <img src="{{ asset('Oneject_Logo.webp') }}" alt="Catera Admin Dashboard" class="w-full h-full" />
         </x-slot>
     </flux:sidebar.brand>
 @else
-    <flux:brand {{ $attributes }}>
-        <x-slot name="logo" class="flex items-center justify-center">
-            <img src="{{ asset('Oneject_logo.webp') }}" alt="Oneject Logo" class="w-fit h-16 object-contain" />
+    <flux:brand name="Catera Dashboard" {{ $attributes }}>
+        <x-slot name="logo" class="flex aspect-square size-8 items-center justify-center rounded-md bg-accent-content text-accent-foreground">
+            <img src="{{ asset('Oneject_Logo.webp') }}" alt="Catera Admin Dashboard" class="w-full h-full" />
         </x-slot>
     </flux:brand>
 @endif

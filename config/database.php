@@ -98,7 +98,7 @@ return [
             'prefix' => '',
             'schema' => 'catera',
             'prefix_indexes' => true,
-            'search_path' => 'catera,public',
+            'search_path' => 'catera,portal_application,public',
             'sslmode' => env('DB_SSLMODE', 'prefer'),
         ],
 
@@ -152,7 +152,7 @@ return [
 
         'options' => [
             'cluster' => env('REDIS_CLUSTER', 'redis'),
-            'prefix' => env('REDIS_PREFIX', Str::slug((string) env('APP_NAME', 'laravel')) . '-database-'),
+            'prefix' => env('REDIS_PREFIX', Str::slug((string) env('APP_NAME', 'laravel')).'-database-'),
             'persistent' => env('REDIS_PERSISTENT', false),
         ],
 

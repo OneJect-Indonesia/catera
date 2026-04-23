@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class UnauthorizedSeeder extends Seeder
@@ -12,6 +11,6 @@ class UnauthorizedSeeder extends Seeder
      */
     public function run(): void
     {
-        \App\Models\Unauthorized::factory(2000)->create();
+        \App\Models\Unauthorized::factory(50)->create();
     }
 }
