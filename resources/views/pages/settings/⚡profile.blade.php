@@ -20,7 +20,7 @@ new class extends Component {
      */
     public function mount(): void
     {
-        $this->name = Auth::user()->name;
+        $this->name = Auth::user()->first_name . ' ' . Auth::user()->last_name;
         $this->email = Auth::user()->email;
     }
 
@@ -81,12 +81,12 @@ new class extends Component {
 
     <flux:heading class="sr-only">{{ __('Profile Settings') }}</flux:heading>
 
-    <x-pages::settings.layout :heading="__('Profile')" :subheading="__('Update your name and email address')">
+    <x-pages::settings.layout :heading="__('Profile')" :subheading="__('View your name and email address')">
         <form wire:submit="updateProfileInformation" class="my-6 w-full space-y-6">
-            <flux:input wire:model="name" :label="__('Name')" type="text" required autofocus autocomplete="name" />
+            <flux:input wire:model="name" :label="__('Name')" type="text" required autofocus autocomplete="name" disabled />
 
             <div>
-                <flux:input wire:model="email" :label="__('Email')" type="email" required autocomplete="email" />
+                <flux:input wire:model="email" :label="__('Email')" type="email" required autocomplete="email" disabled />
 
                 @if ($this->hasUnverifiedEmail)
                     <div>
@@ -107,7 +107,7 @@ new class extends Component {
                 @endif
             </div>
 
-            <div class="flex items-center gap-4">
+            {{-- <div class="flex items-center gap-4">
                 <div class="flex items-center justify-end">
                     <flux:button variant="primary" type="submit" class="w-full" data-test="update-profile-button">
                         {{ __('Save') }}
@@ -117,11 +117,11 @@ new class extends Component {
                 <x-action-message class="me-3" on="profile-updated">
                     {{ __('Saved.') }}
                 </x-action-message>
-            </div>
+            </div> --}}
         </form>
 
-        @if ($this->showDeleteUser)
+        {{-- @if ($this->showDeleteUser)
             <livewire:pages::settings.delete-user-form />
-        @endif
+        @endif --}}
     </x-pages::settings.layout>
 </section>

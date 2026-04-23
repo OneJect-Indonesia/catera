@@ -13,12 +13,11 @@ return new class extends Migration
     {
         Schema::create('catera.authorizeds', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained('portal_application.users')->index();
             $table->string('uuid')->index()->unique();
-            $table->string('first_name');
-            $table->string('last_name');
-            $table->string('group')->index();
-            $table->fullText(['uuid', 'group', 'first_name', 'last_name']);
+            $table->string('group');
             $table->integer('quota');
+            $table->fullText(['uuid', 'group']);
             $table->boolean('is_active')->default(true);
             $table->timestamps();
         });

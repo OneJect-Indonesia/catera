@@ -32,7 +32,7 @@
 
             <flux:spacer />
 
-            <x-desktop-user-menu class="hidden lg:block" :name="auth()->user()->name" />
+            <x-desktop-user-menu class="hidden lg:block" :name="auth()->user()->first_name" />
         </flux:sidebar>
 
 
@@ -75,7 +75,7 @@
 
                     <flux:menu.separator />
 
-                    <form method="POST" action="{{ route('logout') }}" class="w-full">
+                    <form method="POST" action="{{ route('logout.app') }}" class="w-full">
                         @csrf
                         <flux:menu.item
                             as="button"

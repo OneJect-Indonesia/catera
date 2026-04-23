@@ -35,4 +35,8 @@ return [
         ],
     ],
 
+    'sso' => [
+        'portal_url' => env('SSO_PORTAL_URL', 'http://localhost:43711'),
+    ],
+
 ];
