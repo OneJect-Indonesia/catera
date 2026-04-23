@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('registereds', function (Blueprint $table) {
+        Schema::table('catera.registereds', function (Blueprint $table) {
             $table->date('target_date')->after('add_quota')->nullable();
             $table->string('status')->after('target_date')->default('pending');
         });
@@ -22,7 +22,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('registereds', function (Blueprint $table) {
+        Schema::table('catera.registereds', function (Blueprint $table) {
             $table->dropColumn(['target_date', 'status']);
         });
     }

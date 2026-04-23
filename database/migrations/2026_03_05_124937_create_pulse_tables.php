@@ -15,7 +15,7 @@ return new class extends PulseMigration
             return;
         }
 
-        Schema::create('pulse_values', function (Blueprint $table) {
+        Schema::create('catera.pulse_values', function (Blueprint $table) {
             $table->id();
             $table->unsignedInteger('timestamp');
             $table->string('type');
@@ -32,7 +32,7 @@ return new class extends PulseMigration
             $table->unique(['type', 'key_hash']); // For data integrity and upserts...
         });
 
-        Schema::create('pulse_entries', function (Blueprint $table) {
+        Schema::create('catera.pulse_entries', function (Blueprint $table) {
             $table->id();
             $table->unsignedInteger('timestamp');
             $table->string('type');
@@ -50,7 +50,7 @@ return new class extends PulseMigration
             $table->index(['timestamp', 'type', 'key_hash', 'value']); // For aggregate queries...
         });
 
-        Schema::create('pulse_aggregates', function (Blueprint $table) {
+        Schema::create('catera.pulse_aggregates', function (Blueprint $table) {
             $table->id();
             $table->unsignedInteger('bucket');
             $table->unsignedMediumInteger('period');
@@ -77,8 +77,8 @@ return new class extends PulseMigration
      */
     public function down(): void
     {
-        Schema::dropIfExists('pulse_values');
-        Schema::dropIfExists('pulse_entries');
-        Schema::dropIfExists('pulse_aggregates');
+        Schema::dropIfExists('catera.pulse_values');
+        Schema::dropIfExists('catera.pulse_entries');
+        Schema::dropIfExists('catera.pulse_aggregates');
     }
 };
