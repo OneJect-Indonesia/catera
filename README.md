@@ -2,7 +2,7 @@
     <img src="https://laravel.com/img/logomark.min.svg" alt="Laravel Logo" width="100">
     <h1 align="center">Lunch Management System (Catera)</h1>
     <p align="center">
-        A modern enterprise application for managing employee lunch quotas, authorization lists, and scheduled quota updates via headless or monolithic integration. Built with Laravel 11.
+        A modern enterprise application for managing employee lunch quotas, built with Laravel 12, Livewire 4, and Flux UI.
     </p>
 </div>
 
@@ -10,157 +10,108 @@
 
 ## 📖 Deskripsi Proyek
 
-**Catera (Lunch Management System)** dirancang khusus untuk mengelola akses kantin atau fasilitas makan siang berbasis UUID (misal: ID Card RFID/NFC). Sistem memisahkan entri mesin atau pengguna ke dalam dua kelompok: `Unauthorized` (belum dikenali) dan `Authorized` (sudah didaftarkan). Administrator dapat dengan mudah mengatur kelompok, kuota dasar, serta menjadwalkan penambahan kuota di tanggal tertentu menggunakan fitur _Scheduled Added Quota (Registered)_.
+**Catera (Lunch Management System)** adalah platform manajemen akses kantin berbasis UUID (RFID/NFC). Sistem ini memudahkan pengelolaan data kartu karyawan yang terdeteksi, pemisahan antara data resmi (`Authorized`) dan data anonim (`Unauthorized`), serta fitur penjadwalan penambahan kuota secara otomatis.
 
-Menerapkan best-practices optimasi sistem seperti:
-
-- **Lazy Loading & Debounce** pada input ribuan UUID untuk meringankan _load_ tabel backend.
-- **Full-Text B-Tree Native Database Indexing** guna mendukung eksekusi kueri ultra-cepat.
-- **Cron-Job Scheduler** Laravel murni tanpa supervisor tambahan untuk mengOtomatisasi Reset & Registrasi harian.
+Fitur Utama:
+- **Authorized & Unauthorized Tracking**: Memantau kartu yang sudah terdaftar maupun yang belum dikenal.
+- **Scheduled Quota (Registered)**: Penjadwalan penambahan kuota makan otomatis pada tanggal tertentu.
+- **Modern UI**: Antarmuka bersih dengan nuansa medis profesional menggunakan Flux UI dan Tailwind CSS v4.
+- **Docker Ready**: Pengembangan yang konsisten dan mudah menggunakan Laravel Sail.
 
 ---
 
-## ⚙️ Mekanisme Alur Kerja Sistem
+## 🏗️ Struktur Database Utama
 
-Sistem beroperasi berdasarkan status UUID yang terdeteksi, dengan penjadwalan (_background process_) yang akan otomatis mengeksekusi penambahan kuota atau reset harian.
+Berikut adalah gambaran singkat entitas utama dalam sistem:
 
-```mermaid
-sequenceDiagram
-    autonumber
-    actor Employee as Karyawan (UUID)
-    participant Reader as RFID/Scanner
-    participant DB_U as Unauthorized DB
-    participant DB_A as Authorized DB
-    participant DB_R as Registered DB (Schedule)
-    participant Cron as Cron (Server Scheduler)
+| Tabel | Deskripsi |
+|-------|-----------|
+| **Users** | Akun administrator untuk mengelola sistem. |
+| **Authorizeds** | Data karyawan yang sudah resmi terdaftar (UUID, Nama, Grup, Kuota saat ini). |
+| **Unauthorizeds** | Log UUID kartu yang pernah melakukan tapping namun belum didaftarkan ke sistem. |
+| **Registereds** | Daftar antrean (penjadwalan) penambahan kuota yang akan dieksekusi oleh sistem pada tanggal yang ditentukan. |
 
-    %% Alur Unregistered
-    Employee->>Reader: Tap ID Card (Pertama kali)
-    Reader->>DB_U: Kirim Data UUID anonim
-    Note over DB_U: Disimpan sebagai<br/>"Unauthorized"
+---
 
-    %% Alur Otorisasi Admin
-    actor Admin
-    Admin->>DB_U: Lihat UUID Pending
-    Admin->>DB_A: Pindah & Daftarkan (First Name, Group, Quota)
-    Note over DB_A: Status menjadi "Authorized"
+## ⚙️ Persyaratan Sistem
 
-    %% Alur Penjadwalan Tambahan Kuota
-    Admin->>DB_R: Buat Jadwal Tambah Kuota (Target Date)
-    Note over DB_R: Status: "Pending Schedule"
+- **Docker Desktop** (Sangat disarankan)
+- **Node.js & NPM** (Untuk kompilasi aset frontend)
+- **Composer** (Opsional, jika ingin menjalankan diluar Docker)
 
-    %% Cronjob harian
-    loop Setiap Hari Jam 00:00 (Midnight)
-        Cron->>Cron: php artisan schedule:run
-        Cron->>DB_R: Cek Target Date == Hari Ini & Pending
-        DB_R-->>DB_A: Tambahkan `add_quota` ke `quota` utama
-        Note over DB_R: Ubah status menjadi "Success"
-        Cron->>DB_A: (Opsional) Daily Quota Reset Command
-    end
+---
 
-    %% Alur Penggunaan Berhasil
-    Employee->>Reader: Tap ID Card (Makan Siang)
-    Reader->>DB_A: Validasi UUID
-    DB_A-->>Reader: Sukses! Kuota - 1
+## 🚀 Panduan Instalasi (Development dengan Docker Sail)
+
+Project ini dikembangkan menggunakan **Laravel Sail**, sehingga Anda tidak perlu menginstal PHP atau PostgreSQL secara lokal di komputer Anda.
+
+### 1. Persiapan Awal
+Kloning repositori dan masuk ke folder project:
+```bash
+git clone <url-repo-anda> catera
+cd catera
 ```
 
+### 2. Konfigurasi Environment
+Salin file `.env.example` menjadi `.env`:
+```bash
+cp .env.example .env
+```
+
+### 3. Instalasi Dependensi
+Jalankan composer melalui Docker (atau lokal jika tersedia) untuk mengunduh Laravel Sail:
+```bash
+docker run --rm \
+    -u "$(id -u):$(id -g)" \
+    -v "$(pwd):/var/www/html" \
+    -w /var/www/html \
+    laravelsail/php84-composer:latest \
+    composer install --ignore-platform-reqs
+```
+
+### 4. Menjalankan Docker (Sail)
+Nyalakan kontainer Docker:
+```bash
+./vendor/bin/sail up -d
+```
+
+### 5. Inisialisasi Aplikasi
+Setelah kontainer berjalan, lakukan setup database dan key:
+```bash
+./vendor/bin/sail artisan key:generate
+./vendor/bin/sail artisan migrate --seed
+```
+
+### 6. Setup Frontend
+Install dan jalankan aset frontend (bisa dilakukan di host atau via Sail):
+```bash
+./vendor/bin/sail npm install
+./vendor/bin/sail npm run build # atau npm run dev
+```
+
+Aplikasi sekarang dapat diakses di: **http://localhost:81** (Sesuai `APP_PORT` di `.env`).
+
 ---
 
-## 💻 Persyaratan Sistem
+## 🐳 Penggunaan Laravel Sail
 
-Sebelum melakukan instalasi, pastikan server Anda telah memenuhi persyaratan berikut:
+Sangat penting untuk diingat bahwa setiap perintah Laravel/Artisan **WAJIB** dijalankan melalui Sail:
 
-- **PHP** >= 8.2
-- **Composer** v2.x
-- **MySQL** >= 8.0 (atau PostgreSQL >= 13) dengan dukungan Full-Text Search.
-- **Node.js** >= 18 & NPM (untuk aset frontend/Livewire/FluxUI)
-- Akses terminal Linux atau sistem berbasis Unix (untuk Cron Job).
+- **Migrasi Database**: `./vendor/bin/sail artisan migrate`
+- **Menjalankan Test**: `./vendor/bin/sail artisan test`
+- **Tinker**: `./vendor/bin/sail artisan tinker`
+- **Node Commands**: `./vendor/bin/sail npm run build`
 
----
-
-## 🚀 Panduan Instalasi (Development / Local)
-
-1. **Kloning Repositori**
-
-    ```bash
-    git clone <url-repo-anda> catera
-    cd catera
-    ```
-
-2. **Install Dependensi Backend (PHP)**
-
-    ```bash
-    composer install
-    ```
-
-3. **Install Dependensi Frontend (Node.js)**
-
-    ```bash
-    npm install
-    npm run build
-    ```
-
-4. **Konfigurasi Environment**
-
-    ```bash
-    cp .env.example .env
-    php artisan key:generate
-    ```
-
-    _Buka file `.env` dan atur koneksi `DB_DATABASE`, `DB_USERNAME`, dan `DB_PASSWORD` sesuai dengan server lokal Anda._
-
-5. **Jalankan Migrasi & Seeder**
-   Sistem butuh struktur tabel untuk Authorized/Unauthorized:
-
-    ```bash
-    php artisan migrate --seed
-    ```
-
-    _(Opsional: Jalankan seeder khusus dummy data jika tersedia)._
-
-6. **Jalankan Development Server**
-    ```bash
-    php artisan serve
-    ```
+> **Tips**: Anda bisa membuat alias `alias sail='[ -f sail ] && sh sail || sh vendor/bin/sail'` di `.bashrc` atau `.zshrc` Anda agar cukup mengetik `sail artisan ...`.
 
 ---
 
 ## ⏳ Menjalankan Scheduler
 
-Terdapat dua opsi untuk menjalankan _scheduler_ sistem yang mengatur penambahan kuota harian dan reset otomatis:
-
-### Opsi 1: Menjalankan Scheduler Secara Lokal / Terminal (Development)
-
-Saat proses pengembangan atau testing, Anda bisa menjalankan _scheduler daemon_ yang disertakan di Laravel 11. Cukup jalankan perintah ini dari terminal Anda dan biarkan ia tetap berjalan (_listen_ setiap menit):
-
+Sistem ini bergantung pada Scheduler untuk memproses penambahan kuota otomatis. Di lingkungan lokal, Anda bisa menjalankan:
 ```bash
-php artisan schedule:work
+./vendor/bin/sail artisan schedule:work
 ```
-
-### Opsi 2: Instalasi via Cron Job (Server Production)
-
-Pada lingkungan Production, jadwal (_background process_) dieksekusi oleh Server _cron daemon_ sehingga Anda tidak perlu membiarkan terminal terbuka terus-menerus.
-
-1. Login ke server anda via SSH.
-2. Buka editor Cron dengan mengeksekusi perintah berikut:
-    ```bash
-    crontab -e
-    ```
-3. Tambahkan baris kode ini di paling bawah (pastikan mengubah `/path/to/catera` dengan alamat instalasi asli atau absolute path Laravel di server Anda):
-    ```bash
-    * * * * * cd /path/to/catera && php artisan schedule:run >> /dev/null 2>&1
-    ```
-4. Simpan dan Keluar. Cron akan memanggil instruksi Laravel setiap 1 menit.
-
----
-
-## 🎨 Teknologi & Libraries Pendukung
-
-- **Framework**: Laravel 11.x
-- **UI & Frontend reactivity**: Livewire v3 + Alpine.js
-- **Komponen UI library**: Flux UI Free (Tailwind CSS based)
-- **Database**: Eloquent ORM + Native Database level validation
-- **Diagrams**: Mermaid JS
 
 ---
 
