@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="dark">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
         @include('partials.head')
     </head>
-    <body class="min-h-screen bg-white dark:bg-zinc-800">
-        <flux:sidebar sticky collapsible="mobile" class="border-e border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900">
+    <body class="min-h-screen bg-background">
+        <flux:sidebar sticky collapsible="mobile" class="dark border-e border-zinc-700 bg-zinc-800 text-zinc-200">
             <flux:sidebar.header>
                 <x-app-logo :sidebar="true" href="{{ route('dashboard') }}" wire:navigate />
                 <flux:sidebar.collapse class="lg:hidden" />
@@ -12,25 +12,27 @@
 
             <flux:sidebar.nav>
                 <flux:sidebar.group :heading="__('Platform')" class="grid">
-                    <flux:sidebar.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
+                    <flux:sidebar.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate color="primary">
                         {{ __('Dashboard') }}
+                    </flux:sidebar.item>
+
+                    <flux:sidebar.item icon="users" :href="route('authorized.index')" :current="request()->routeIs('authorized.index')" wire:navigate color="primary">
+                        {{ __('Authorized') }}
+                    </flux:sidebar.item>
+
+                    <flux:sidebar.item icon="user-minus" :href="route('unauthorized.index')" :current="request()->routeIs('unauthorized.index')" wire:navigate color="primary">
+                        {{ __('Unauthorized') }}
+                    </flux:sidebar.item>
+
+                    <flux:sidebar.item icon="clock" :href="route('registereds.index')" :current="request()->routeIs('registereds.index')" wire:navigate color="primary">
+                        {{ __('Scheduled Quota') }}
                     </flux:sidebar.item>
                 </flux:sidebar.group>
             </flux:sidebar.nav>
 
             <flux:spacer />
 
-            <flux:sidebar.nav>
-                <flux:sidebar.item icon="folder-git-2" href="https://github.com/laravel/livewire-starter-kit" target="_blank">
-                    {{ __('Repository') }}
-                </flux:sidebar.item>
-
-                <flux:sidebar.item icon="book-open-text" href="https://laravel.com/docs/starter-kits#livewire" target="_blank">
-                    {{ __('Documentation') }}
-                </flux:sidebar.item>
-            </flux:sidebar.nav>
-
-            <x-desktop-user-menu class="hidden lg:block" :name="auth()->user()->name" />
+            <x-desktop-user-menu class="hidden lg:block" :name="auth()->user()->first_name" />
         </flux:sidebar>
 
 
@@ -73,7 +75,7 @@
 
                     <flux:menu.separator />
 
-                    <form method="POST" action="{{ route('logout') }}" class="w-full">
+                    <form method="POST" action="{{ route('logout.app') }}" class="w-full">
                         @csrf
                         <flux:menu.item
                             as="button"
@@ -92,5 +94,7 @@
         {{ $slot }}
 
         @fluxScripts
+
+        <x-ui.toast on="notify" />
     </body>
 </html>

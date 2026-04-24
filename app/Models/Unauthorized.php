@@ -9,4 +9,8 @@ class Unauthorized extends Model
 {
     /** @use HasFactory<\Database\Factories\UnauthorizedFactory> */
     use HasFactory;
+
+    protected $table = 'catera.unauthorizeds';
+
+    protected $fillable = ['uuid'];
 }
