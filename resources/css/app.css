@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700&family=Noto+Sans:wght@300;400;500;700&display=swap');
 @import "tailwindcss";
 @import "../../vendor/livewire/flux/dist/flux.css";
 
@@ -9,28 +10,31 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-    --font-sans:
-        "Instrument Sans", ui-sans-serif, system-ui, sans-serif,
-        "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
-        "Noto Color Emoji";
+    --font-sans: "Noto Sans", ui-sans-serif, system-ui, sans-serif;
+    --font-heading: "Figtree", sans-serif;
 
-    --color-zinc-50: #fafafa;
-    --color-zinc-100: #f5f5f5;
-    --color-zinc-200: #e5e5e5;
-    --color-zinc-300: #d4d4d4;
-    --color-zinc-400: #a3a3a3;
-    --color-zinc-500: #737373;
-    --color-zinc-600: #525252;
-    --color-zinc-700: #404040;
-    --color-zinc-800: #262626;
-    --color-zinc-900: #171717;
-    --color-zinc-950: #0a0a0a;
+    /* Medical Zinc Palette (Light) - Clean & Whitish */
+    --color-zinc-50: #f8fafc;
+    --color-zinc-100: #f1f5f9;
+    --color-zinc-200: #e2e8f0;
+    --color-zinc-300: #cbd5e1;
+    --color-zinc-400: #94a3b8;
+    --color-zinc-500: #64748b;
+    --color-zinc-600: #475569;
+    --color-zinc-700: #334155;
+    --color-zinc-800: #1e293b;
+    --color-zinc-900: #0f172a;
+    --color-zinc-950: #020617;
 
-    --color-primary: #5bc3eb;
-    --color-secondary: #337166;
-    --color-text-heading: #555555;
+    --color-primary: #06b6d4; /* Vibrant Cyan */
+    --color-secondary: #0ea5e9; /* Sky Blue */
+    --color-cta: #10b981; /* Emerald */
+    
+    --color-background: var(--color-zinc-50);
+    --color-text-heading: #0f172a;
+    --color-text-body: #334155;
 
-    --color-hover: #50acbe;
+    --color-hover: #0891b2;
 
     --color-accent: var(--color-primary);
     --color-accent-content: var(--color-primary);
@@ -39,34 +43,51 @@
 
 @layer theme {
     .dark {
+        /* Medical Zinc Palette (Dark) - Cohesive Medical Blue */
+        --color-zinc-50: #cffafe;
+        --color-zinc-100: #a5f3fc;
+        --color-zinc-200: #67e8f9;
+        --color-zinc-300: #22d3ee;
+        --color-zinc-400: #06b6d4;
+        --color-zinc-500: #0891b2;
+        --color-zinc-600: #0e7490;
+        --color-zinc-700: #155e75; /* Cyan 800 */
+        --color-zinc-800: #164e63; /* Cyan 900 - Lighter Medical Blue for Sidebar */
+        --color-zinc-900: #0e3746; /* Custom Dark Medical Blue */
+        --color-zinc-950: #082430; /* Deep Cohesive Medical Blue for Background */
+
+        --color-background: var(--color-zinc-950);
+        --color-text-heading: #ecfeff;
+        --color-text-body: #a5f3fc;
+        
+        --color-primary: #06b6d4;
+        --color-secondary: #0ea5e9;
+        
         --color-accent: var(--color-primary);
         --color-accent-content: var(--color-primary);
         --color-accent-foreground: var(--color-white);
-
-        --color-primary: #5bc3eb;
-        --color-text-heading: #e5e5e5;
     }
 }
 
 @layer base {
-    body,
-    h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    h6,
-    [data-flux-heading],
-    p,
-    span {
-        color: var(--color-text-heading);
+    body {
+        background-color: var(--color-background);
+        color: var(--color-text-body);
+        font-family: var(--font-sans);
     }
-    *,
-    ::after,
-    ::before,
-    ::backdrop,
-    ::file-selector-button {
-        border-color: var(--color-gray-200, currentColor);
+
+    h1, h2, h3, h4, h5, h6, [data-flux-heading] {
+        color: var(--color-text-heading);
+        font-family: var(--font-heading);
+        font-weight: 600;
+    }
+
+    *, ::after, ::before, ::backdrop, ::file-selector-button {
+        border-color: var(--color-zinc-200, currentColor);
+    }
+
+    .dark *, .dark ::after, .dark ::before, .dark ::backdrop, .dark ::file-selector-button {
+        border-color: var(--color-zinc-800, currentColor);
     }
 }
 

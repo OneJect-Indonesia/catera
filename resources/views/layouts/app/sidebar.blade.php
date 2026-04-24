@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="dark">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
         @include('partials.head')
     </head>
-    <body class="min-h-screen bg-white dark:bg-zinc-800">
-        <flux:sidebar sticky collapsible="mobile" class="border-e border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900">
+    <body class="min-h-screen bg-background">
+        <flux:sidebar sticky collapsible="mobile" class="dark border-e border-zinc-700 bg-zinc-800 text-zinc-200">
             <flux:sidebar.header>
                 <x-app-logo :sidebar="true" href="{{ route('dashboard') }}" wire:navigate />
                 <flux:sidebar.collapse class="lg:hidden" />
@@ -12,19 +12,19 @@
 
             <flux:sidebar.nav>
                 <flux:sidebar.group :heading="__('Platform')" class="grid">
-                    <flux:sidebar.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
+                    <flux:sidebar.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate color="primary">
                         {{ __('Dashboard') }}
                     </flux:sidebar.item>
 
-                    <flux:sidebar.item icon="users" :href="route('authorized.index')" :current="request()->routeIs('authorized.index')" wire:navigate>
+                    <flux:sidebar.item icon="users" :href="route('authorized.index')" :current="request()->routeIs('authorized.index')" wire:navigate color="primary">
                         {{ __('Authorized') }}
                     </flux:sidebar.item>
 
-                    <flux:sidebar.item icon="user-minus" :href="route('unauthorized.index')" :current="request()->routeIs('unauthorized.index')" wire:navigate>
+                    <flux:sidebar.item icon="user-minus" :href="route('unauthorized.index')" :current="request()->routeIs('unauthorized.index')" wire:navigate color="primary">
                         {{ __('Unauthorized') }}
                     </flux:sidebar.item>
 
-                    <flux:sidebar.item icon="clock" :href="route('registereds.index')" :current="request()->routeIs('registereds.index')" wire:navigate>
+                    <flux:sidebar.item icon="clock" :href="route('registereds.index')" :current="request()->routeIs('registereds.index')" wire:navigate color="primary">
                         {{ __('Scheduled Quota') }}
                     </flux:sidebar.item>
                 </flux:sidebar.group>
