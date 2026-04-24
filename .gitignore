@@ -5,6 +5,7 @@
 /public/storage
 /storage/*.key
 /storage/pail
+/.agent
 /vendor
 .env
 .env.backup
@@ -21,3 +22,7 @@ yarn-error.log
 /.nova
 /.vscode
 /.zed
+/.agents
+/.claude
+/.codex
+/.cursor

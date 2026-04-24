@@ -1,4 +1,0 @@
-[mcp_servers.laravel-boost]
-command = "php"
-args = ["artisan", "boost:mcp"]
-cwd = "/mnt/DataPribadi/kuliah/intern/oneject/projects/lunch-management/Catera"
