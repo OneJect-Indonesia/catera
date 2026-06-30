@@ -114,5 +114,3 @@ Sistem ini bergantung pada Scheduler untuk memproses penambahan kuota otomatis. 
 ```
 
 ---
-
-_Dibuat untuk Manajemen Praktis di Lingkungan F&B / Catera - Enterprise._
