@@ -1,5 +1,7 @@
 <?php
 
+beforeEach(fn () => $this->markTestSkipped('Feature disabled for SSO configuration'));
+
 use App\Models\User;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Support\Facades\Event;

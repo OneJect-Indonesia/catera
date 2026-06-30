@@ -1,7 +1,11 @@
 <?php
 
+use App\Http\Requests\StoreAuthorizedRequest;
+use App\Http\Requests\UpdateAuthorizedRequest;
 use App\Models\Authorized;
-use Illuminate\Support\Facades\DB;
+use App\Models\User;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Gate;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -15,7 +19,7 @@ new class extends Component
 
     public bool $showEditModal = false;
 
-    public $editingAuthorizedId = null;
+    public ?int $editingAuthorizedId = null;
 
     public string $editUuid = '';
 
@@ -32,15 +36,13 @@ new class extends Component
 
     public bool $showDeleteModal = false;
 
-    public $deletingAuthorizedId = null;
+    public ?int $deletingAuthorizedId = null;
 
     public string $deleteUuid = '';
 
     public bool $showAddModal = false;
 
-    public string $addUuid = '';
-
-    public $addUserId = null;
+    public ?int $addUserId = null;
 
     public string $addUserSearch = '';
 
@@ -50,38 +52,48 @@ new class extends Component
 
     public bool $addIsActive = true;
 
+    public string $addUuid = '';
+
     public string $addUuidSearch = '';
 
     public function with(): array
     {
+        Gate::authorize('viewAny', Authorized::class);
+
         return [
             'authorizeds' => Authorized::query()
                 ->with('user')
                 ->when($this->search, function ($query) {
-                    $query->whereHas('user', function ($q) {
-                        $q->whereRaw(
-                            "to_tsvector('simple', coalesce(first_name, '') || ' ' || coalesce(last_name, '') || ' ' || coalesce(nik::text, '')) @@ plainto_tsquery('simple', ?)",
-                            [$this->search]
-                        );
-                    })->orWhere(function ($q) {
-                        $q->whereRaw("to_tsvector('simple', coalesce(uuid, '') || ' ' || coalesce(\"group\", '')) @@ plainto_tsquery('simple', ?)", [$this->search]);
+                    $query->where(function ($q) {
+                        $q->where('uuid', 'ilike', $this->search . '%')
+                          ->orWhere('group', 'ilike', $this->search . '%')
+                          ->orWhereHas('user', function ($userQuery) {
+                              $userQuery->where('first_name', 'ilike', $this->search . '%')
+                                        ->orWhere('last_name', 'ilike', $this->search . '%')
+                                        ->orWhere('nik', 'ilike', $this->search . '%');
+                          });
                     });
                 })
                 ->when($this->activeOnly, fn ($query) => $query->where('is_active', true))
                 ->paginate(10),
 
-            'unauthorizeds' => \App\Models\Unauthorized::when($this->addUuidSearch, function ($query) {
-                return $query->where('uuid', 'like', "{$this->addUuidSearch}%");
-            })
-                ->orderBy('created_at', 'desc')
-                ->take(8)
-                ->get(),
+            'portalUsers' => $this->showAddModal ? $this->getPortalUsers() : [],
+        ];
+    }
 
-            'portalUsers' => DB::table('portal_application.users')
-                ->when($this->addUserSearch, function ($q) {
-                    $q->where(function ($inner) {
-                        $inner->whereRaw("LOWER(first_name || ' ' || last_name) LIKE ?", [strtolower("%{$this->addUserSearch}%")])
-                            ->orWhereRaw('LOWER(nik::text) LIKE ?', [strtolower("%{$this->addUserSearch}%")]);
+    protected function getPortalUsers(): array
+    {
+        $cacheKey = 'portal_users_search_' . md5($this->addUserSearch);
+
+        return Cache::remember($cacheKey, 300, function () {
+            $searchTerm = str_replace(['%', '_'], ['\\%', '\\_'], $this->addUserSearch);
+
+            return User::query()
+                ->when($this->addUserSearch, function ($q) use ($searchTerm) {
+                    $q->where(function ($inner) use ($searchTerm) {
+                        $inner->where('first_name', 'ilike', "{$searchTerm}%")
+                            ->orWhere('last_name', 'ilike', "{$searchTerm}%")
+                            ->orWhere('nik', 'ilike', "{$searchTerm}%");
                     });
                 })
                 ->select('id', 'nik', 'first_name', 'last_name')
@@ -89,13 +101,16 @@ new class extends Component
                 ->limit(8)
                 ->get()
                 ->map(fn ($u) => ['id' => $u->id, 'name' => "{$u->first_name} {$u->last_name} ({$u->nik})"])
-                ->toArray(),
-        ];
+                ->toArray();
+        });
     }
 
     public function edit($id): void
     {
         $authorized = Authorized::with('user')->findOrFail($id);
+
+        Gate::authorize('update', $authorized);
+
         $this->editingAuthorizedId = $id;
         $this->editUuid = $authorized->uuid;
         $this->editGroup = $authorized->group;
@@ -114,14 +129,13 @@ new class extends Component
 
     public function update(): void
     {
-        $this->validate([
-            'editGroup' => 'required|in:merah,biru',
-            'editQuota' => 'required|numeric',
-            'editIsActive' => 'boolean',
-        ]);
+        $authorized = Authorized::findOrFail($this->editingAuthorizedId);
+
+        Gate::authorize('update', $authorized);
+
+        $this->validate((new UpdateAuthorizedRequest())->rules());
 
         try {
-            $authorized = Authorized::findOrFail($this->editingAuthorizedId);
             $authorized->update([
                 'group' => $this->editGroup,
                 'quota' => $this->editQuota,
@@ -131,6 +145,10 @@ new class extends Component
             $this->closeEditModal();
             $this->dispatch('notify', message: 'Authorized record updated successfully.', variant: 'success');
         } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Failed to update authorized record', [
+                'error' => $e->getMessage(),
+                'authorized_id' => $this->editingAuthorizedId,
+            ]);
             $this->dispatch('notify', message: 'Failed to update authorized record. Please try again.', variant: 'danger');
         }
     }
@@ -138,6 +156,9 @@ new class extends Component
     public function confirmDelete($id): void
     {
         $authorized = Authorized::findOrFail($id);
+
+        Gate::authorize('delete', $authorized);
+
         $this->deletingAuthorizedId = $id;
         $this->deleteUuid = $authorized->uuid;
         $this->showDeleteModal = true;
@@ -153,23 +174,28 @@ new class extends Component
     public function destroy(): void
     {
         try {
-            Authorized::findOrFail($this->deletingAuthorizedId)->delete();
+            $authorized = Authorized::findOrFail($this->deletingAuthorizedId);
+
+            Gate::authorize('delete', $authorized);
+
+            $authorized->delete();
             $this->closeDeleteModal();
             $this->dispatch('notify', message: 'Authorized record deleted successfully.', variant: 'success');
         } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Failed to delete authorized record', [
+                'error' => $e->getMessage(),
+                'authorized_id' => $this->deletingAuthorizedId,
+            ]);
             $this->dispatch('notify', message: 'Failed to delete authorized record.', variant: 'danger');
         }
     }
 
     public function openAddModal(): void
     {
+        Gate::authorize('create', Authorized::class);
+
         $this->reset(['addUuid', 'addUserId', 'addUserSearch', 'addGroup', 'addQuota', 'addUuidSearch']);
         $this->addIsActive = true;
-
-        $unauthorized = \App\Models\Unauthorized::orderBy('created_at', 'desc')->first();
-        if ($unauthorized) {
-            $this->addUuid = $unauthorized->uuid;
-        }
 
         $this->showAddModal = true;
     }
@@ -180,15 +206,12 @@ new class extends Component
         $this->reset(['addUuidSearch', 'addUserSearch', 'addUserId']);
     }
 
+
     public function store(): void
     {
-        $this->validate([
-            'addUuid' => 'required|exists:catera.unauthorizeds,uuid|unique:catera.authorizeds,uuid',
-            'addUserId' => 'required|integer|exists:portal_application.users,id',
-            'addGroup' => 'required|in:merah,biru',
-            'addQuota' => 'required|numeric',
-            'addIsActive' => 'boolean',
-        ]);
+        Gate::authorize('create', Authorized::class);
+
+        $this->validate((new StoreAuthorizedRequest())->rules());
 
         try {
             \Illuminate\Support\Facades\DB::transaction(function () {
@@ -199,15 +222,17 @@ new class extends Component
                     'quota' => $this->addQuota,
                     'is_active' => $this->addIsActive,
                 ]);
-
-                \App\Models\Unauthorized::where('uuid', $this->addUuid)->delete();
             });
 
             $this->closeAddModal();
-            $this->reset(['addUuid', 'addUserId', 'addUserSearch', 'addGroup', 'addQuota', 'addUuidSearch']);
+            $this->reset(['addUuid', 'addUserId', 'addUserSearch', 'addGroup', 'addQuota']);
             $this->addIsActive = true;
             $this->dispatch('notify', message: 'Authorized record created successfully.', variant: 'success');
         } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Failed to create authorized record', [
+                'error' => $e->getMessage(),
+                'uuid' => $this->addUuid,
+            ]);
             $this->dispatch('notify', message: 'Failed to create authorized record. Try again.', variant: 'danger');
         }
     }
@@ -223,15 +248,17 @@ new class extends Component
             <flux:heading size="xl" level="1">Authorized List</flux:heading>
             <flux:subheading size="lg">Manage UUID authorization data for access control.</flux:subheading>
         </div>
-        <div>
-            <flux:button wire:click="openAddModal" variant="primary" icon="plus">Add Authorized</flux:button>
-        </div>
+        @can('create', App\Models\Authorized::class)
+            <div>
+                <flux:button wire:click="openAddModal" variant="primary" icon="plus">Add Authorized</flux:button>
+            </div>
+        @endcan
     </div>
 
     {{-- Filters --}}
     <div class="flex flex-col gap-3 rounded-xl border border-zinc-200 bg-white p-4 dark:border-zinc-700 dark:bg-zinc-900 sm:flex-row sm:items-center sm:justify-between">
         <flux:input
-            wire:model.live="search"
+            wire:model.live.debounce.500ms="search"
             icon="magnifying-glass"
             placeholder="Search by name, NIK or group..."
             class="w-full sm:max-w-xs"
@@ -253,7 +280,9 @@ new class extends Component
                         <th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">Group</th>
                         <th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">Quota</th>
                         <th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">Status</th>
-                        <th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">Actions</th>
+                        @if(auth()->user()->hasAnyPermission(['catera:authorized:update', 'catera:authorized:delete']))
+                            <th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">Actions</th>
+                        @endif
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-zinc-100 dark:divide-zinc-800">
@@ -278,16 +307,26 @@ new class extends Component
                                     {{ $authorized->is_active ? 'Active' : 'Inactive' }}
                                 </flux:badge>
                             </td>
-                            <td class="px-4 py-3.5 text-center">
-                                <flux:dropdown>
-                                    <flux:button icon="ellipsis-horizontal" size="sm" variant="ghost" />
-                                    <flux:menu>
-                                        <flux:menu.item wire:click="edit({{ $authorized->id }})" icon="pencil">Edit</flux:menu.item>
-                                        <flux:menu.separator />
-                                        <flux:menu.item wire:click="confirmDelete({{ $authorized->id }})" icon="trash" variant="danger">Delete</flux:menu.item>
-                                    </flux:menu>
-                                </flux:dropdown>
-                            </td>
+                            @if(auth()->user()->can('update', $authorized) || auth()->user()->can('delete', $authorized))
+                                <td class="px-4 py-3.5 text-center">
+                                    <flux:dropdown>
+                                        <flux:button icon="ellipsis-horizontal" size="sm" variant="ghost" />
+                                        <flux:menu>
+                                            @can('update', $authorized)
+                                                <flux:menu.item wire:click="edit({{ $authorized->id }})" icon="pencil">Edit</flux:menu.item>
+                                            @endcan
+
+                                            @if(auth()->user()->can('update', $authorized) && auth()->user()->can('delete', $authorized))
+                                                <flux:menu.separator />
+                                            @endif
+
+                                            @can('delete', $authorized)
+                                                <flux:menu.item wire:click="confirmDelete({{ $authorized->id }})" icon="trash" variant="danger">Delete</flux:menu.item>
+                                            @endcan
+                                        </flux:menu>
+                                    </flux:dropdown>
+                                </td>
+                            @endif
                         </tr>
                     @empty
                         <tr>
@@ -342,10 +381,10 @@ new class extends Component
                 />
             </div>
 
-            <flux:select wire:model="editGroup" label="Group" placeholder="Select group...">
-                <option value="merah">Merah</option>
-                <option value="biru">Biru</option>
-            </flux:select>
+            <flux:radio.group wire:model="editGroup" label="Group" variant="cards" class="flex">
+                <flux:radio value="merah" label="Merah" description="Group Merah" />
+                <flux:radio value="biru" label="Biru" description="Group Biru" />
+            </flux:radio.group>
 
             <flux:input wire:model="editQuota" label="Quota" type="number" />
 
@@ -375,15 +414,11 @@ new class extends Component
                 <flux:subheading>Authorize a new UUID and link it to a portal user.</flux:subheading>
             </div>
 
-            @php
-                $unauthOptions = $unauthorizeds->map(fn($u) => ['id' => $u->uuid, 'name' => $u->uuid])->toArray();
-            @endphp
-            <x-ui.searchable-select
+            <flux:input
+                wire:model="addUuid"
                 label="UUID"
-                placeholder="Search unauthorized UUID..."
-                wireModel="addUuid"
-                searchWireModel="addUuidSearch"
-                :options="$unauthOptions"
+                placeholder="Tap RFID card to auto-fill..."
+                id="addUuid"
             />
 
             <x-ui.searchable-select
@@ -394,10 +429,10 @@ new class extends Component
                 :options="$portalUsers"
             />
 
-            <flux:select wire:model="addGroup" label="Group" placeholder="Select group...">
-                <option value="merah">Merah</option>
-                <option value="biru">Biru</option>
-            </flux:select>
+            <flux:radio.group wire:model="addGroup" label="Group" variant="cards" class="flex">
+                <flux:radio value="merah" label="Merah" description="Group Merah" />
+                <flux:radio value="biru" label="Biru" description="Group Biru" />
+            </flux:radio.group>
 
             <flux:input wire:model="addQuota" label="Quota" type="number" />
 

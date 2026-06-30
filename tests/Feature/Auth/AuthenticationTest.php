@@ -4,6 +4,7 @@ use App\Models\User;
 use Laravel\Fortify\Features;
 
 test('login screen can be rendered', function () {
+    $this->markTestSkipped('Local login screen not used (SSO managed)');
     $response = $this->get(route('login'));
 
     $response->assertOk();
@@ -61,9 +62,9 @@ test('users with two factor enabled are redirected to two factor challenge', fun
 test('users can logout', function () {
     $user = User::factory()->create();
 
-    $response = $this->actingAs($user)->post(route('logout'));
+    $response = $this->actingAs($user)->post(route('logout.app'));
 
-    $response->assertRedirect(route('home'));
+    $response->assertRedirect(config('services.sso.portal_url'));
 
     $this->assertGuest();
 });

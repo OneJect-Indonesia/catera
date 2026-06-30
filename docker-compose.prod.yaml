@@ -1,0 +1,78 @@
+services:
+    catera_nginx:
+        image: catera_nginx:latest
+        container_name: catera_nginx_server
+        build:
+            context: './nginx'
+            dockerfile: Dockerfile
+            network: 'host'
+        restart: always
+        ports:
+            - "8080:80"
+            - "8443:443"
+        volumes:
+            - catera_storage:/var/www/html/storage
+        environment:
+            - SERVER_NAME=${SERVER_NAME:-192.104.220.248}
+        networks:
+            - catera_network
+            - shared_network
+        depends_on:
+            - catera_server
+
+    catera_server:
+        image: catera_backend:latest
+        container_name: catera_prod_server
+        build:
+            context: './'
+            dockerfile: Dockerfile.php
+            network: 'host'
+        restart: always
+        volumes:
+            - catera_storage:/var/www/html/storage
+        env_file:
+            - .env.production
+        networks:
+            - catera_network
+            - shared_network
+
+    catera_queue:
+        image: catera_backend:latest
+        container_name: catera_queue_server
+        restart: always
+        command: php artisan queue:work --sleep=3 --tries=3 --max-time=3600
+        volumes:
+            - catera_storage:/var/www/html/storage
+        env_file:
+            - .env.production
+        networks:
+            - catera_network
+            - shared_network
+        depends_on:
+            - catera_server
+
+    catera_scheduler:
+        image: catera_backend:latest
+        container_name: catera_scheduler_server
+        restart: always
+        command: sh -c "while true; do php artisan schedule:run --verbose --no-interaction & sleep 60; done"
+        volumes:
+            - catera_storage:/var/www/html/storage
+        env_file:
+            - .env.production
+        networks:
+            - catera_network
+            - shared_network
+        depends_on:
+            - catera_server
+
+networks:
+    catera_network:
+        driver: bridge
+    shared_network:
+        external: true
+        name: portal_shared_network
+
+volumes:
+    catera_storage:
+        driver: local

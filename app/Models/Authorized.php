@@ -29,7 +29,7 @@ class Authorized extends Model
         ];
     }
 
-    public function scopeActive($query)
+    public function scopeActive(\Illuminate\Database\Eloquent\Builder $query): \Illuminate\Database\Eloquent\Builder
     {
         return $query->where('is_active', true);
     }
@@ -43,10 +43,15 @@ class Authorized extends Model
     }
 
     /**
-     * Get the registered record associated with the authorized.
+     * Get the quota schedule record associated with the authorized.
      */
-    public function registered(): HasOne
+    public function quotaSchedule(): HasOne
     {
-        return $this->hasOne(Registered::class, 'authorized_uuid', 'uuid');
+        return $this->hasOne(QuotaSchedule::class, 'authorized_uuid', 'uuid');
     }
+
+    // public static function getGloballySearchableAttributes(): array
+    // {
+    //     return ['uuid', 'group', 'user.first_name', 'user.last_name'];
+    // }
 }

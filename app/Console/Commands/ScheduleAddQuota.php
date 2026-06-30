@@ -2,56 +2,55 @@
 
 namespace App\Console\Commands;
 
+use App\Models\QuotaSchedule;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class ScheduleAddQuota extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
     protected $signature = 'app:schedule-add-quota';
 
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
     protected $description = 'process scheduled add quota for selected user';
 
-    /**
-     * Execute the console command.
-     */
-    public function handle()
+    public function handle(): int
     {
         $this->info('Start processing scheduled add quota for selected user');
 
-        $registereds = DB::table('registereds')
+        $processed = 0;
+        $failed = 0;
+
+        QuotaSchedule::query()
             ->where('status', 'pending')
             ->whereNotNull('target_date')
-            ->where('target_date', '<=', \Carbon\Carbon::today()->toDateString())
-            ->get();
+            ->where('target_date', '<=', now()->toDateString())
+            ->with('authorized')
+            ->lazy()
+            ->each(function (QuotaSchedule $schedule) use (&$processed, &$failed) {
+                try {
+                    if (! $schedule->authorized || ! $schedule->authorized->is_active) {
+                        $schedule->update(['status' => 'failed']);
 
-        foreach ($registereds as $registered) {
-            $addQuota = $registered->add_quota;
-            if ($addQuota > 0) {
-                DB::transaction(function () use ($registered, $addQuota) {
-                    DB::table('authorizeds')
-                        ->where('uuid', $registered->authorized_uuid)
-                        ->increment('quota', $addQuota);
+                        return;
+                    }
 
-                    DB::table('registereds')
-                        ->where('id', $registered->id)
-                        ->update([
-                            'status' => 'success',
-                            'updated_at' => now()
-                        ]);
-                });
-            }
-        }
+                    $schedule->authorized->increment('quota', $schedule->add_quota);
+                    $schedule->update(['status' => 'success']);
 
-        $this->info('Scheduled add quota for selected user completed');
+                    $processed++;
+                } catch (\Exception $e) {
+                    $schedule->update(['status' => 'failed']);
+
+                    Log::error('Failed to process scheduled add quota', [
+                        'quota_schedule_id' => $schedule->id,
+                        'error' => $e->getMessage(),
+                    ]);
+
+                    $failed++;
+                }
+            });
+
+        $this->info("Scheduled add quota completed. Processed: {$processed}, Failed: {$failed}");
+
+        return self::SUCCESS;
     }
 }

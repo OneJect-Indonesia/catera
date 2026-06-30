@@ -39,4 +39,8 @@ return [
         'portal_url' => env('SSO_PORTAL_URL', 'http://localhost:43711'),
     ],
 
+    'webhook' => [
+        'secret' => env('WEBHOOK_SECRET', 'secret1234567890'),
+    ],
+
 ];

@@ -1,5 +1,7 @@
 <?php
 
+beforeEach(fn () => $this->markTestSkipped('Feature disabled for SSO configuration'));
+
 test('registration screen can be rendered', function () {
     $response = $this->get(route('register'));
 

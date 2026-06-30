@@ -2,7 +2,11 @@
 
 namespace App\Providers;
 
+use App\Models\Authorized;
+use App\Models\QuotaSchedule;
 use App\Models\User;
+use App\Policies\AuthorizedPolicy;
+use App\Policies\QuotaSchedulePolicy;
 use Carbon\CarbonImmutable;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Date;
@@ -29,8 +33,11 @@ class AppServiceProvider extends ServiceProvider
         $this->configureDefaults();
         Paginator::useTailwind();
 
+        Gate::policy(Authorized::class, AuthorizedPolicy::class);
+        Gate::policy(QuotaSchedule::class, QuotaSchedulePolicy::class);
+
         Gate::define('viewPulse', function (User $user) {
-            return $user->email === config('app.pulse_admin_email', env('PULSE_ADMIN_EMAIL'));
+            return $user->email === config('app.pulse_admin_email');
         });
     }
 
@@ -46,13 +53,13 @@ class AppServiceProvider extends ServiceProvider
         );
 
         Password::defaults(
-            fn(): ?Password => app()->isProduction()
+            fn (): ?Password => app()->isProduction()
                 ? Password::min(12)
-                ->mixedCase()
-                ->letters()
-                ->numbers()
-                ->symbols()
-                ->uncompromised()
+                    ->mixedCase()
+                    ->letters()
+                    ->numbers()
+                    ->symbols()
+                    ->uncompromised()
                 : null
         );
     }

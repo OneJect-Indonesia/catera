@@ -13,7 +13,7 @@ return new class extends Migration
     {
         // Schema::create('catera.users', function (Blueprint $table) {
         //     $table->id();
-        //     $table->foreignId('user_id')->constrained('portal_application.users');
+        //     $table->foreignId('user_id')->constrained('portal_application.md_users');
         //     $table->string('email')->unique();
         //     $table->timestamp('email_verified_at')->nullable();
         //     $table->string('password');
@@ -29,7 +29,7 @@ return new class extends Migration
 
         Schema::create('catera.sessions', function (Blueprint $table) {
             $table->string('id')->primary();
-            $table->foreignId('user_id')->constrained('portal_application.users')->nullable()->index();
+            $table->foreignId('user_id')->constrained('portal_application.md_users')->nullable()->index();
             $table->string('ip_address', 45)->nullable();
             $table->text('user_agent')->nullable();
             $table->longText('payload');

@@ -9,11 +9,17 @@ use Illuminate\View\Component;
 class SearchableSelect extends Component
 {
     public $options;
+
     public $wireModel;
+
     public $label;
+
     public $placeholder;
+
     public $valueKey;
+
     public $labelKey;
+
     public $searchWireModel;
 
     /**

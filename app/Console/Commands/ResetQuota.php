@@ -30,11 +30,11 @@ class ResetQuota extends Command
 
         DB::transaction(function () {
             DB::table('authorizeds')->update([
-                'quota' => DB::raw("CASE
+                'quota' => DB::raw('CASE
                     WHEN is_active = true THEN 1
                     ELSE 0
-                END"),
-                'updated_at' => now()
+                END'),
+                'updated_at' => now(),
             ]);
         });
 

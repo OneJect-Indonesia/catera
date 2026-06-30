@@ -2,13 +2,18 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Str;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    protected $table = 'portal_application.users';
+    use HasFactory, HasRoles;
+
+    protected $table = 'portal_application.md_users';
 
     protected $fillable = [
         'nik',
@@ -16,6 +21,9 @@ class User extends Authenticatable
         'last_name',
         'department_id',
         'status',
+        'name',
+        'email',
+        'password',
     ];
 
     protected $hidden = [
@@ -32,6 +40,24 @@ class User extends Authenticatable
         return [
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Get/Set the user's full name.
+     */
+    protected function name(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => trim($this->first_name.' '.$this->last_name),
+            set: function ($value) {
+                $parts = explode(' ', $value, 2);
+
+                return [
+                    'first_name' => $parts[0] ?? '',
+                    'last_name' => $parts[1] ?? '',
+                ];
+            }
+        );
     }
 
     /**

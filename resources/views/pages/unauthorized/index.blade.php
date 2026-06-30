@@ -1,6 +1,8 @@
 <?php
 
 use App\Models\Unauthorized;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -15,10 +17,12 @@ new class extends Component {
 
     public function with(): array
     {
+        Gate::authorize('viewAny', Unauthorized::class);
+
         return [
             'unauthorizeds' => Unauthorized::query()
                 ->when($this->search, function ($query) {
-                    $query->where('uuid', 'like', '%' . $this->search . '%');
+                    $query->where('uuid', 'ilike', '%' . $this->search . '%');
                 })
                 ->orderBy('created_at', 'desc')
                 ->paginate(10),
@@ -28,6 +32,9 @@ new class extends Component {
     public function confirmDelete($id)
     {
         $unauthorized = Unauthorized::findOrFail($id);
+
+        Gate::authorize('delete', $unauthorized);
+
         $this->deletingUnauthorizedId = $id;
         $this->deleteUuid = $unauthorized->uuid;
         $this->showDeleteModal = true;
@@ -43,10 +50,18 @@ new class extends Component {
     public function destroy()
     {
         try {
-            Unauthorized::findOrFail($this->deletingUnauthorizedId)->delete();
+            $unauthorized = Unauthorized::findOrFail($this->deletingUnauthorizedId);
+
+            Gate::authorize('delete', $unauthorized);
+
+            $unauthorized->delete();
             $this->closeDeleteModal();
             $this->dispatch('notify', message: 'Unauthorized record deleted successfully.', variant: 'success');
         } catch (\Exception $e) {
+            Log::error('Failed to delete unauthorized record', [
+                'error' => $e->getMessage(),
+                'unauthorized_id' => $this->deletingUnauthorizedId,
+            ]);
             $this->dispatch('notify', message: 'Failed to delete unauthorized record.', variant: 'danger');
         }
     }
@@ -82,7 +97,9 @@ new class extends Component {
                     <tr>
                         <th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">UUID</th>
                         <th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">Detected At</th>
-                        <th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">Actions</th>
+                        @if (auth()->user()?->hasPermissionTo('catera:unauthorized:delete'))
+                            <th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">Actions</th>
+                        @endif
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-zinc-100 dark:divide-zinc-800">
@@ -94,9 +111,11 @@ new class extends Component {
                             <td class="px-4 py-3.5 text-center text-sm text-zinc-600 dark:text-zinc-400">
                                 {{ $unauthorized->created_at->format('Y-m-d H:i') }}
                             </td>
-                            <td class="px-4 py-3.5 text-center">
-                                <flux:button wire:click="confirmDelete({{ $unauthorized->id }})" size="sm" variant="danger" icon="trash">Delete</flux:button>
-                            </td>
+                            @can('delete', $unauthorized)
+                                <td class="px-4 py-3.5 text-center">
+                                    <flux:button wire:click="confirmDelete({{ $unauthorized->id }})" size="sm" variant="danger" icon="trash">Delete</flux:button>
+                                </td>
+                            @endcan
                         </tr>
                     @empty
                         <tr>

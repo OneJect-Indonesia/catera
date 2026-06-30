@@ -19,7 +19,7 @@ class AuthorizedFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id' => DB::table('portal_application.users')->inRandomOrder()->value('id'),
+            'user_id' => DB::table('portal_application.md_users')->inRandomOrder()->value('id'),
             'uuid' => Str::uuid(),
             'group' => fake()->randomElement(['merah', 'biru']),
             'quota' => rand(0, 1),

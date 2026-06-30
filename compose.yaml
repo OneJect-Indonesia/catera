@@ -22,11 +22,11 @@ services:
         networks:
             - sail
             - shared_network
-        depends_on: []
+        # depends_on: []
 
 networks:
     sail:
         driver: bridge
     shared_network:
         external: true
-        name: management_portal_backend_shared_network
+        name: portal_shared_network

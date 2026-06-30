@@ -22,6 +22,14 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
+            'nik' => fake()->unique()->numerify('##########'),
+            'first_name' => fake()->firstName(),
+            'last_name' => fake()->lastName(),
+            'email' => fake()->unique()->safeEmail(),
+            'password' => static::$password ??= bcrypt('password'),
+            'status' => 'active',
+            'department_id' => 1,
+            'email_verified_at' => now(),
         ];
     }
 
