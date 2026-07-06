@@ -206,7 +206,7 @@ test('livewire prevents duplicate schedule for same user and date', function () 
         ->set('addAddQuota', 3)
         ->set('addTargetDate', now()->toDateString())
         ->call('store')
-        ->assertDispatched('notify', message: 'A schedule already exists for this user on the selected date.', variant: 'danger');
+        ->assertDispatched('notify', message: 'Failed to schedule quota. See details in modal.', variant: 'danger');
 
     expect(QuotaSchedule::count())->toBe(1);
 });
@@ -238,7 +238,7 @@ test('livewire allows schedule creation if previous schedule failed', function (
         ->set('addAddQuota', 3)
         ->set('addTargetDate', now()->toDateString())
         ->call('store')
-        ->assertDispatched('notify', message: 'Scheduled quota setup successfully.', variant: 'success');
+        ->assertDispatched('notify', message: 'All scheduled quotas setup successfully.', variant: 'success');
 
     expect(QuotaSchedule::count())->toBe(2);
 });
@@ -270,7 +270,7 @@ test('livewire allows schedule creation for different dates', function () {
         ->set('addAddQuota', 3)
         ->set('addTargetDate', now()->addDay()->toDateString())
         ->call('store')
-        ->assertDispatched('notify', message: 'Scheduled quota setup successfully.', variant: 'success');
+        ->assertDispatched('notify', message: 'All scheduled quotas setup successfully.', variant: 'success');
 
     expect(QuotaSchedule::count())->toBe(2);
 });

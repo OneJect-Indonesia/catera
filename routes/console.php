@@ -1,6 +1,7 @@
 <?php
 
 use App\Console\Commands\ClearSuccessQuotaSchedules;
+use App\Console\Commands\ExportWeeklyAccessLogs;
 use App\Console\Commands\ResetQuota;
 use App\Console\Commands\ScheduleAddQuota;
 use Illuminate\Foundation\Inspiring;
@@ -10,6 +11,10 @@ use Illuminate\Support\Facades\Schedule;
 Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');
+
+// * weekly access logs export (Mondays at 00:00)
+Schedule::command(ExportWeeklyAccessLogs::class)->dailyAt('13:45')->timezone('Asia/Jakarta')->withoutOverlapping();
+// Schedule::command(ExportWeeklyAccessLogs::class)->weeklyOn(1, '00:00')->timezone('Asia/Jakarta')->withoutOverlapping();
 
 // * daily quota reset scheduler
 Schedule::command(ResetQuota::class)->dailyAt('00:00')->timezone('Asia/Jakarta')->withoutOverlapping();

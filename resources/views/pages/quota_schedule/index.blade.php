@@ -39,9 +39,17 @@ new class extends Component
 
     public string $deleteAuthorizedUuid = '';
 
+    public string $deleteAuthorizedName = '';
+
     public bool $showAddModal = false;
 
     public string $addAuthorizedUuid = '';
+
+    public array $addSelectedUuids = [];
+
+    public array $addSelectedUsers = [];
+
+    public array $addSkippedUsers = [];
 
     public string $addTargetDate = '';
 
@@ -165,12 +173,13 @@ new class extends Component
 
     public function confirmDelete($id): void
     {
-        $quotaSchedule = QuotaSchedule::with('authorized')->findOrFail($id);
+        $quotaSchedule = QuotaSchedule::with('authorized.user')->findOrFail($id);
 
         Gate::authorize('delete', $quotaSchedule);
 
         $this->deletingQuotaScheduleId = $id;
         $this->deleteAuthorizedUuid = $quotaSchedule->authorized->uuid ?? 'Unknown';
+        $this->deleteAuthorizedName = trim(($quotaSchedule->authorized->user->first_name ?? '').' '.($quotaSchedule->authorized->user->last_name ?? ''));
         $this->showDeleteModal = true;
     }
 
@@ -179,6 +188,7 @@ new class extends Component
         $this->showDeleteModal = false;
         $this->deletingQuotaScheduleId = null;
         $this->deleteAuthorizedUuid = '';
+        $this->deleteAuthorizedName = '';
     }
 
     public function destroy(): void
@@ -204,7 +214,7 @@ new class extends Component
     {
         Gate::authorize('create', QuotaSchedule::class);
 
-        $this->reset(['addAuthorizedUuid', 'addAuthorizedUuidSearch']);
+        $this->reset(['addAuthorizedUuid', 'addAuthorizedUuidSearch', 'addSelectedUuids', 'addSelectedUsers', 'addSkippedUsers']);
         $this->addAddQuota = 1;
         $this->addTargetDate = \Carbon\Carbon::today()->toDateString();
         $this->showAddModal = true;
@@ -213,7 +223,34 @@ new class extends Component
     public function closeAddModal(): void
     {
         $this->showAddModal = false;
-        $this->reset(['addAuthorizedUuidSearch']);
+        $this->reset(['addAuthorizedUuidSearch', 'addSelectedUuids', 'addSelectedUsers', 'addSkippedUsers']);
+    }
+
+    public function updatedAddAuthorizedUuid($value): void
+    {
+        if ($value) {
+            $authorized = Authorized::with('user')->where('uuid', $value)->first();
+            if ($authorized) {
+                $name = trim(($authorized->user->first_name ?? '').' '.($authorized->user->last_name ?? ''));
+                $nik = $authorized->user->nik ?? 'N/A';
+
+                if (!in_array($value, $this->addSelectedUuids)) {
+                    $this->addSelectedUuids[] = $value;
+                    $this->addSelectedUsers[] = [
+                        'uuid' => $value,
+                        'name' => "{$name} ({$nik})",
+                    ];
+                }
+            }
+            $this->addAuthorizedUuid = '';
+            $this->addAuthorizedUuidSearch = '';
+        }
+    }
+
+    public function removeSelectedUser($uuid): void
+    {
+        $this->addSelectedUuids = array_values(array_diff($this->addSelectedUuids, [$uuid]));
+        $this->addSelectedUsers = array_values(array_filter($this->addSelectedUsers, fn($u) => $u['uuid'] !== $uuid));
     }
 
     public function store(): void
@@ -221,42 +258,72 @@ new class extends Component
         Gate::authorize('create', QuotaSchedule::class);
 
         $this->validate([
-            'addAuthorizedUuid' => ['required', 'string', 'exists:authorizeds,uuid'],
+            'addSelectedUuids' => ['required', 'array', 'min:1'],
+            'addSelectedUuids.*' => ['required', 'string', 'exists:authorizeds,uuid'],
             'addAddQuota' => ['required', 'integer', 'min:1'],
             'addTargetDate' => ['required', 'date', 'after_or_equal:today'],
+        ], [
+            'addSelectedUuids.required' => 'Please select at least one user.',
         ]);
 
-        $hasDuplicate = QuotaSchedule::query()
-            ->where('authorized_uuid', $this->addAuthorizedUuid)
-            ->where('target_date', $this->addTargetDate)
-            ->where('status', '!=', 'failed')
-            ->exists();
+        $this->addSkippedUsers = [];
+        $insertedCount = 0;
 
-        if ($hasDuplicate) {
-            $this->dispatch('notify', message: 'A schedule already exists for this user on the selected date.', variant: 'danger');
+        foreach ($this->addSelectedUuids as $uuid) {
+            $authorized = Authorized::with('user')->where('uuid', $uuid)->first();
+            $name = $authorized ? trim(($authorized->user->first_name ?? '').' '.($authorized->user->last_name ?? '')) : 'Unknown';
+            $nik = $authorized ? ($authorized->user->nik ?? 'N/A') : 'N/A';
 
-            return;
+            $hasDuplicate = QuotaSchedule::query()
+                ->where('authorized_uuid', $uuid)
+                ->where('target_date', $this->addTargetDate)
+                ->where('status', '!=', 'failed')
+                ->exists();
+
+            if ($hasDuplicate) {
+                $this->addSkippedUsers[] = "{$name} ({$nik})";
+                continue;
+            }
+
+            try {
+                QuotaSchedule::create([
+                    'authorized_uuid' => $uuid,
+                    'add_quota' => $this->addAddQuota,
+                    'target_date' => $this->addTargetDate,
+                    'status' => 'pending',
+                ]);
+                $insertedCount++;
+            } catch (\Exception $e) {
+                Log::error('Failed to add scheduled quota', [
+                    'error' => $e->getMessage(),
+                    'uuid' => $uuid,
+                ]);
+                $this->addSkippedUsers[] = "{$name} ({$nik}) [Failed]";
+            }
         }
 
-        try {
-            QuotaSchedule::create([
-                'authorized_uuid' => $this->addAuthorizedUuid,
-                'add_quota' => $this->addAddQuota,
-                'target_date' => $this->addTargetDate,
-                'status' => 'pending',
-            ]);
+        if (count($this->addSkippedUsers) > 0) {
+            $this->addSelectedUuids = array_values(array_filter($this->addSelectedUuids, function($uuid) {
+                $authorized = Authorized::with('user')->where('uuid', $uuid)->first();
+                $name = $authorized ? trim(($authorized->user->first_name ?? '').' '.($authorized->user->last_name ?? '')) : 'Unknown';
+                $nik = $authorized ? ($authorized->user->nik ?? 'N/A') : 'N/A';
+                return in_array("{$name} ({$nik})", $this->addSkippedUsers) || in_array("{$name} ({$nik}) [Failed]", $this->addSkippedUsers);
+            }));
 
+            $this->addSelectedUsers = array_values(array_filter($this->addSelectedUsers, function($user) {
+                return in_array($user['uuid'], $this->addSelectedUuids);
+            }));
+
+            if ($insertedCount > 0) {
+                $this->dispatch('notify', message: "Successfully scheduled quota for {$insertedCount} user(s). Some were skipped due to duplicates/errors.", variant: 'warning');
+            } else {
+                $this->dispatch('notify', message: 'Failed to schedule quota. See details in modal.', variant: 'danger');
+            }
+        } else {
             $this->closeAddModal();
-            $this->reset(['addAuthorizedUuid', 'addAuthorizedUuidSearch']);
+            $this->reset(['addSelectedUuids', 'addSelectedUsers', 'addAuthorizedUuid', 'addAuthorizedUuidSearch']);
             $this->addAddQuota = 1;
-
-            $this->dispatch('notify', message: 'Scheduled quota setup successfully.', variant: 'success');
-        } catch (\Exception $e) {
-            Log::error('Failed to add scheduled quota', [
-                'error' => $e->getMessage(),
-                'uuid' => $this->addAuthorizedUuid,
-            ]);
-            $this->dispatch('notify', message: 'Failed to add scheduled quota. Try again.', variant: 'danger');
+            $this->dispatch('notify', message: 'All scheduled quotas setup successfully.', variant: 'success');
         }
     }
 }; ?>
@@ -443,8 +510,25 @@ new class extends Component
         <form wire:submit="store" class="space-y-5">
             <div class="border-b border-zinc-100 pb-4 dark:border-zinc-800">
                 <flux:heading size="lg">Create Quota Schedule</flux:heading>
-                <flux:subheading>Select an authorized user to receive additional daily quota.</flux:subheading>
+                <flux:subheading>Select authorized users to receive additional daily quota.</flux:subheading>
             </div>
+
+            @if(count($addSkippedUsers) > 0)
+                <div class="rounded-lg bg-red-50 p-4 dark:bg-red-900/20 border border-red-200 dark:border-red-800">
+                    <div class="flex items-start gap-3">
+                        <flux:icon name="exclamation-triangle" class="size-5 text-red-500 dark:text-red-400 mt-0.5 shrink-0" />
+                        <div>
+                            <p class="text-sm font-medium text-red-800 dark:text-red-300">Some users were skipped</p>
+                            <p class="text-xs text-red-600 dark:text-red-400 mt-1">The following users already have a schedule for this date or failed to insert:</p>
+                            <ul class="mt-2 space-y-1">
+                                @foreach($addSkippedUsers as $skipped)
+                                    <li class="text-xs text-red-700 dark:text-red-300">- {{ $skipped }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            @endif
 
             @php
                 $availOptions = $availableAuthorizeds->map(function($auth) {
@@ -457,12 +541,29 @@ new class extends Component
                 })->toArray();
             @endphp
             <x-ui.searchable-select
-                label="User (UUID)"
-                placeholder="Select an authorized user..."
+                label="Add Users"
+                placeholder="Search and select users..."
                 wireModel="addAuthorizedUuid"
                 searchWireModel="addAuthorizedUuidSearch"
                 :options="$availOptions"
             />
+
+            @if(count($addSelectedUsers) > 0)
+                <div class="space-y-2">
+                    <label class="text-sm font-medium text-zinc-700 dark:text-zinc-300">Selected Users ({{ count($addSelectedUsers) }})</label>
+                    <div class="flex flex-wrap gap-2">
+                        @foreach($addSelectedUsers as $user)
+                            <span class="inline-flex items-center gap-1.5 rounded-md bg-primary-100 px-2.5 py-1 text-xs font-medium text-primary-700 dark:bg-primary-900/30 dark:text-primary-300">
+                                {{ $user['name'] }}
+                                <button type="button" wire:click="removeSelectedUser('{{ $user['uuid'] }}')" class="group relative -mr-1 h-4 w-4 rounded-sm hover:bg-primary-200 dark:hover:bg-primary-800 flex items-center justify-center">
+                                    <span class="sr-only">Remove</span>
+                                    <flux:icon name="x-mark" class="h-3 w-3 text-primary-400 group-hover:text-primary-600 dark:group-hover:text-primary-200" />
+                                </button>
+                            </span>
+                        @endforeach
+                    </div>
+                </div>
+            @endif
 
             <div class="grid grid-cols-2 gap-4">
                 <flux:input wire:model="addAddQuota" label="Quota to Add" type="number" min="1" />
@@ -471,8 +572,8 @@ new class extends Component
 
             <div class="flex justify-end gap-2 border-t border-zinc-100 pt-4 dark:border-zinc-800">
                 <flux:button type="button" wire:click="closeAddModal">Cancel</flux:button>
-                <flux:button type="submit" variant="primary">
-                    <span wire:loading.remove wire:target="store">Add Schedule</span>
+                <flux:button type="submit" variant="primary" :disabled="count($addSelectedUuids) === 0">
+                    <span wire:loading.remove wire:target="store">Add Schedule ({{ count($addSelectedUuids) }} user(s))</span>
                     <span wire:loading wire:target="store">Saving...</span>
                 </flux:button>
             </div>
@@ -492,10 +593,10 @@ new class extends Component
                 </div>
             </div>
 
-            @if($deleteAuthorizedUuid)
+            @if($deleteAuthorizedName)
             <div class="rounded-lg bg-zinc-50 p-3 dark:bg-zinc-800">
                 <p class="text-xs text-zinc-500 dark:text-zinc-400">Removing quota addition schedule for:</p>
-                <p class="mt-1 font-mono text-xs text-zinc-700 dark:text-zinc-300">{{ $deleteAuthorizedUuid }}</p>
+                <p class="mt-1 text-sm font-medium text-zinc-700 dark:text-zinc-300">{{ $deleteAuthorizedName }}</p>
             </div>
             @endif
 

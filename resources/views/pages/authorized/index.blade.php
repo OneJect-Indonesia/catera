@@ -38,7 +38,7 @@ new class extends Component
 
     public ?int $deletingAuthorizedId = null;
 
-    public string $deleteUuid = '';
+    public string $deleteName = '';
 
     public bool $showAddModal = false;
 
@@ -155,12 +155,12 @@ new class extends Component
 
     public function confirmDelete($id): void
     {
-        $authorized = Authorized::findOrFail($id);
+        $authorized = Authorized::with('user')->findOrFail($id);
 
         Gate::authorize('delete', $authorized);
 
         $this->deletingAuthorizedId = $id;
-        $this->deleteUuid = $authorized->uuid;
+        $this->deleteName = trim(($authorized->user->first_name ?? '').' '.($authorized->user->last_name ?? ''));
         $this->showDeleteModal = true;
     }
 
@@ -168,7 +168,7 @@ new class extends Component
     {
         $this->showDeleteModal = false;
         $this->deletingAuthorizedId = null;
-        $this->deleteUuid = '';
+        $this->deleteName = '';
     }
 
     public function destroy(): void
@@ -467,10 +467,10 @@ new class extends Component
                 </div>
             </div>
 
-            @if($deleteUuid)
+            @if($deleteName)
             <div class="rounded-lg bg-zinc-50 p-3 dark:bg-zinc-800">
                 <p class="text-xs text-zinc-500 dark:text-zinc-400">You are about to delete:</p>
-                <p class="mt-1 font-mono text-xs text-zinc-700 dark:text-zinc-300">{{ $deleteUuid }}</p>
+                <p class="mt-1 text-sm font-medium text-zinc-700 dark:text-zinc-300">{{ $deleteName }}</p>
             </div>
             @endif
 

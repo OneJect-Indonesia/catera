@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ExportController;
 use App\Http\Controllers\SsoController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -15,6 +16,10 @@ Route::prefix('catera')->group(function () {
         Route::livewire('authorized', 'pages::authorized.index')->name('authorized.index');
         Route::livewire('quota-schedules', 'pages::quota_schedule.index')->name('quota_schedules.index');
         Route::livewire('access-logs', 'pages::access_logs.index')->name('access_logs.index');
+
+        Route::get('/exports/{filename}', [ExportController::class, 'download'])
+            ->name('exports.download')
+            ->middleware('signed');
     });
 
     require __DIR__.'/settings.php';
