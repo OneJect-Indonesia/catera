@@ -2,11 +2,9 @@
 
 namespace App\Console\Commands;
 
-use App\Mail\WeeklyAccessLogExportMail;
 use App\Models\AccessLog;
 use App\Models\User;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
 
@@ -75,12 +73,14 @@ class ExportWeeklyAccessLogs extends Command
             ['filename' => $filename]
         );
 
-        $users = User::whereHas('permissions', function ($query) {
-            $query->where('name', 'catera:access_logs:view_any');
-        })->get();
+        // $users = User::whereHas('permissions', function ($query) {
+        //     $query->where('name', 'catera:access_logs:view_any');
+        // })->get();
+
+        $users = User::permission('catera:access_logs:view_any')->get();
 
         foreach ($users as $user) {
-            Mail::to($user->email)->send(new WeeklyAccessLogExportMail($downloadUrl));
+            \App\Jobs\SendWeeklyAccessLogExportEmail::dispatch($user, $downloadUrl);
         }
 
         $this->info("Exported {$logs->count()} records to {$path}.");

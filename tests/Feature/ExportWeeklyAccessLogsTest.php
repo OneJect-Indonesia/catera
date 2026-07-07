@@ -1,15 +1,16 @@
 <?php
 
+use App\Jobs\SendWeeklyAccessLogExportEmail;
 use App\Models\AccessLog;
 use App\Models\Authorized;
 use App\Models\User;
-use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Models\Permission;
 
 beforeEach(function () {
     Storage::fake('local');
-    Mail::fake();
+    Queue::fake();
     Permission::findOrCreate('catera:access_logs:view_any', 'web');
 });
 
@@ -53,7 +54,7 @@ test('it exports weekly access logs and sends email to authorized users', functi
     expect($csvContent)->toContain('12345678');
     expect($csvContent)->toContain('merah');
 
-    Mail::assertSent(\App\Mail\WeeklyAccessLogExportMail::class, function ($mail) use ($admin) {
-        return $mail->hasTo($admin->email) && str_contains($mail->downloadUrl, '/exports/');
+    Queue::assertPushed(SendWeeklyAccessLogExportEmail::class, function ($job) use ($admin) {
+        return $job->user->id === $admin->id && str_contains($job->downloadUrl, '/exports/');
     });
 });
