@@ -13,12 +13,44 @@ new class extends Component
     public string $filterStatus = '';
     public string $startDate = '';
     public string $endDate = '';
+    public string $tempFilterGroup = '';
+    public string $tempFilterStatus = '';
+    public string $tempStartDate = '';
+    public string $tempEndDate = '';
+    public bool $showFilterModal = false;
 
     public function updated($property): void
     {
-        if (in_array($property, ['search', 'filterGroup', 'filterStatus', 'startDate', 'endDate'])) {
+        if ($property === 'search') {
             $this->resetPage();
         }
+    }
+
+    public function openFilterModal(): void
+    {
+        $this->tempFilterGroup = $this->filterGroup;
+        $this->tempFilterStatus = $this->filterStatus;
+        $this->tempStartDate = $this->startDate;
+        $this->tempEndDate = $this->endDate;
+        $this->showFilterModal = true;
+    }
+
+    public function applyFilters(): void
+    {
+        $this->filterGroup = $this->tempFilterGroup;
+        $this->filterStatus = $this->tempFilterStatus;
+        $this->startDate = $this->tempStartDate;
+        $this->endDate = $this->tempEndDate;
+        $this->resetPage();
+        $this->showFilterModal = false;
+    }
+
+    public function resetFilters(): void
+    {
+        $this->reset(['filterGroup', 'filterStatus', 'startDate', 'endDate',
+                      'tempFilterGroup', 'tempFilterStatus', 'tempStartDate', 'tempEndDate']);
+        $this->resetPage();
+        $this->showFilterModal = false;
     }
 
     public function with(): array
@@ -64,51 +96,19 @@ new class extends Component
     </div>
 
     {{-- Filters --}}
-    <div class="flex flex-col gap-3 rounded-xl border border-zinc-200 bg-white p-4 dark:border-zinc-700 dark:bg-zinc-900" x-data="{ showFilters: false }">
-        <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <flux:input
-                wire:model.live="search"
-                icon="magnifying-glass"
-                placeholder="Search by UUID, group, status, or user..."
-                class="w-full sm:max-w-xs"
-            />
-            @php
-                $activeFilterCount = collect([$filterGroup, $filterStatus, $startDate, $endDate])->filter()->count();
-            @endphp
-            <flux:button @click="showFilters = !showFilters" icon="funnel" :variant="$activeFilterCount > 0 ? 'primary' : 'filled'">
-                Filter @if($activeFilterCount > 0) ({{ $activeFilterCount }}) @endif
-            </flux:button>
-        </div>
-
-        <div x-show="showFilters" x-transition class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-4 border-t border-zinc-100 pt-4 dark:border-zinc-800">
-            {{-- Group Filter --}}
-            <flux:select wire:model.live="filterGroup" label="Group" placeholder="All Groups">
-                <flux:select.option value="">All Groups</flux:select.option>
-                <flux:select.option value="merah">Merah</flux:select.option>
-                <flux:select.option value="biru">Biru</flux:select.option>
-            </flux:select>
-
-            {{-- Status Filter --}}
-            <flux:select wire:model.live="filterStatus" label="Status" placeholder="All Statuses">
-                <flux:select.option value="">All Statuses</flux:select.option>
-                <flux:select.option value="authorized">Authorized</flux:select.option>
-                <flux:select.option value="wrong group">Wrong Group</flux:select.option>
-                <flux:select.option value="no quota">No Quota</flux:select.option>
-                <flux:select.option value="inactive">Inactive</flux:select.option>
-                <flux:select.option value="not registered">Not Registered</flux:select.option>
-            </flux:select>
-
-            {{-- Start Date --}}
-            <flux:input type="date" wire:model.live="startDate" label="Start Date" />
-
-            {{-- End Date --}}
-            <flux:input type="date" wire:model.live="endDate" label="End Date" />
-
-            {{-- Reset Button --}}
-            <div class="col-span-1 sm:col-span-4 flex justify-end gap-2 mt-2">
-                <flux:button size="sm" wire:click="$set('filterGroup', ''); $set('filterStatus', ''); $set('startDate', ''); $set('endDate', '');" variant="ghost">Reset Filters</flux:button>
-            </div>
-        </div>
+    <div class="flex flex-col gap-3 rounded-xl border border-zinc-200 bg-white p-4 dark:border-zinc-700 dark:bg-zinc-900 sm:flex-row sm:items-center sm:justify-between">
+        <flux:input
+            wire:model.live="search"
+            icon="magnifying-glass"
+            placeholder="Search by UUID, group, status, or user..."
+            class="w-full sm:max-w-xs"
+        />
+        @php
+            $activeFilterCount = collect([$filterGroup, $filterStatus, $startDate, $endDate])->filter()->count();
+        @endphp
+        <flux:button wire:click="openFilterModal" icon="funnel" :variant="$activeFilterCount > 0 ? 'primary' : 'filled'">
+            Filters
+        </flux:button>
     </div>
 
     {{-- Table Card --}}
@@ -177,5 +177,39 @@ new class extends Component
             </div>
         @endif
     </div>
+
+    {{-- Filter Modal --}}
+    <flux:modal name="access-logs-filters" wire:model.live="showFilterModal" variant="floating" class="md:w-120">
+        <div class="space-y-5">
+            <div class="border-b border-zinc-100 pb-4 dark:border-zinc-800">
+                <flux:heading size="lg">Filters</flux:heading>
+                <flux:subheading>Refine access log results.</flux:subheading>
+            </div>
+
+            <flux:select wire:model="tempFilterGroup" label="Group" placeholder="All Groups">
+                <flux:select.option value="">All Groups</flux:select.option>
+                <flux:select.option value="merah">Merah</flux:select.option>
+                <flux:select.option value="biru">Biru</flux:select.option>
+            </flux:select>
+
+            <flux:select wire:model="tempFilterStatus" label="Status" placeholder="All Statuses">
+                <flux:select.option value="">All Statuses</flux:select.option>
+                <flux:select.option value="authorized">Authorized</flux:select.option>
+                <flux:select.option value="wrong group">Wrong Group</flux:select.option>
+                <flux:select.option value="no quota">No Quota</flux:select.option>
+                <flux:select.option value="inactive">Inactive</flux:select.option>
+                <flux:select.option value="not registered">Not Registered</flux:select.option>
+            </flux:select>
+
+            <flux:input type="date" wire:model="tempStartDate" label="Start Date" />
+
+            <flux:input type="date" wire:model="tempEndDate" label="End Date" />
+
+            <div class="flex justify-between gap-2 border-t border-zinc-100 pt-4 dark:border-zinc-800">
+                <flux:button wire:click="resetFilters" variant="ghost">Reset</flux:button>
+                <flux:button variant="primary" wire:click="applyFilters">Apply Filters</flux:button>
+            </div>
+        </div>
+    </flux:modal>
 
 </div>

@@ -14,7 +14,7 @@ Route::prefix('catera')->group(function () {
     Route::middleware(['auth', 'verified'])->group(function () {
         Route::livewire('dashboard', 'pages::dashboard.index')->name('dashboard');
         Route::livewire('authorized', 'pages::authorized.index')->name('authorized.index');
-        Route::livewire('groups', 'pages::groups')->name('groups.index');
+        Route::livewire('groups', 'pages::group.index')->name('groups.index');
         Route::livewire('quota-schedules', 'pages::quota_schedule.index')->name('quota_schedules.index');
         Route::livewire('access-logs', 'pages::access_logs.index')->name('access_logs.index');
 

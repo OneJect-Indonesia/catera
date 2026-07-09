@@ -33,7 +33,7 @@ test('can view lists and paginate groups', function () {
 
     MdGroup::create(['nama_group' => 'group_xyz', 'short_description' => 'XYZ']);
 
-    Livewire::test('pages::groups')
+    Livewire::test('pages::group.index')
         ->assertOk()
         ->assertViewHas('groups', function ($groups) {
             return $groups->count() >= 1;
@@ -45,7 +45,7 @@ test('can create group', function () {
     $user->givePermissionTo(['catera:md_group:view_any', 'catera:md_group:create']);
     $this->actingAs($user);
 
-    Livewire::test('pages::groups')
+    Livewire::test('pages::group.index')
         ->call('openAddModal')
         ->set('addNamaGroup', 'hijau')
         ->set('addShortDescription', 'Group Hijau')
@@ -66,7 +66,7 @@ test('can update group', function () {
 
     $group = MdGroup::create(['nama_group' => 'kuning', 'short_description' => 'Kuning']);
 
-    Livewire::test('pages::groups')
+    Livewire::test('pages::group.index')
         ->call('edit', $group->id)
         ->set('editNamaGroup', 'kuning_updated')
         ->set('editShortDescription', 'Kuning Updated')
@@ -86,7 +86,7 @@ test('can delete group', function () {
 
     $group = MdGroup::create(['nama_group' => 'ungu', 'short_description' => 'Ungu']);
 
-    Livewire::test('pages::groups')
+    Livewire::test('pages::group.index')
         ->call('confirmDelete', $group->id)
         ->call('destroy')
         ->assertSet('showDeleteModal', false);

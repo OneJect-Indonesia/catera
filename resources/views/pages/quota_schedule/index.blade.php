@@ -14,6 +14,9 @@ new class extends Component
     public string $search = '';
     public string $startDate = '';
     public string $endDate = '';
+    public string $tempStartDate = '';
+    public string $tempEndDate = '';
+    public bool $showFilterModal = false;
 
     public string $currentTab = 'pending';
 
@@ -68,16 +71,36 @@ new class extends Component
 
     public function updated($property): void
     {
-        if (in_array($property, ['startDate', 'endDate'])) {
-            $this->validate([
-                'startDate' => 'nullable|date_format:Y-m-d',
-                'endDate' => 'nullable|date_format:Y-m-d',
-            ]);
-        }
-
-        if (in_array($property, ['search', 'startDate', 'endDate'])) {
+        if ($property === 'search') {
             $this->resetPage();
         }
+    }
+
+    public function openFilterModal(): void
+    {
+        $this->tempStartDate = $this->startDate;
+        $this->tempEndDate = $this->endDate;
+        $this->showFilterModal = true;
+    }
+
+    public function applyFilters(): void
+    {
+        $this->validate([
+            'tempStartDate' => 'nullable|date_format:Y-m-d',
+            'tempEndDate' => 'nullable|date_format:Y-m-d',
+        ]);
+
+        $this->startDate = $this->tempStartDate;
+        $this->endDate = $this->tempEndDate;
+        $this->resetPage();
+        $this->showFilterModal = false;
+    }
+
+    public function resetFilters(): void
+    {
+        $this->reset(['startDate', 'endDate', 'tempStartDate', 'tempEndDate']);
+        $this->resetPage();
+        $this->showFilterModal = false;
     }
 
     public function with(): array
@@ -357,34 +380,19 @@ new class extends Component
     </div>
 
     {{-- Filters --}}
-    <div class="flex flex-col gap-3 rounded-xl border border-zinc-200 bg-white p-4 dark:border-zinc-700 dark:bg-zinc-900" x-data="{ showFilters: false }">
-        <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <flux:input
-                wire:model.live.debounce.300ms="search"
-                icon="magnifying-glass"
-                placeholder="Search by User..."
-                class="w-full sm:max-w-xs"
-            />
-            @php
-                $activeFilterCount = collect([$startDate, $endDate])->filter()->count();
-            @endphp
-            <flux:button @click="showFilters = !showFilters" icon="funnel" :variant="$activeFilterCount > 0 ? 'primary' : 'filled'">
-                Filter @if($activeFilterCount > 0) ({{ $activeFilterCount }}) @endif
-            </flux:button>
-        </div>
-
-        <div x-show="showFilters" x-transition class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 border-t border-zinc-100 pt-4 dark:border-zinc-800">
-            {{-- Start Date --}}
-            <flux:input type="date" wire:model.live="startDate" label="Start Date" />
-
-            {{-- End Date --}}
-            <flux:input type="date" wire:model.live="endDate" label="End Date" />
-
-            {{-- Reset Button --}}
-            <div class="col-span-1 sm:col-span-2 flex justify-end gap-2 mt-2">
-                <flux:button size="sm" wire:click="$set('startDate', ''); $set('endDate', '');" variant="ghost">Reset Filters</flux:button>
-            </div>
-        </div>
+    <div class="flex flex-col gap-3 rounded-xl border border-zinc-200 bg-white p-4 dark:border-zinc-700 dark:bg-zinc-900 sm:flex-row sm:items-center sm:justify-between">
+        <flux:input
+            wire:model.live.debounce.300ms="search"
+            icon="magnifying-glass"
+            placeholder="Search by User..."
+            class="w-full sm:max-w-xs"
+        />
+        @php
+            $activeFilterCount = collect([$startDate, $endDate])->filter()->count();
+        @endphp
+        <flux:button wire:click="openFilterModal" icon="funnel" :variant="$activeFilterCount > 0 ? 'primary' : 'filled'">
+            Filters
+        </flux:button>
     </div>
 
     {{-- Table Card --}}
@@ -603,6 +611,25 @@ new class extends Component
             <div class="flex justify-end gap-2">
                 <flux:button wire:click="closeDeleteModal">Cancel</flux:button>
                 <flux:button variant="danger" wire:click="destroy">Remove Schedule</flux:button>
+            </div>
+        </div>
+    </flux:modal>
+
+    {{-- Filter Modal --}}
+    <flux:modal name="quota-schedule-filters" wire:model.live="showFilterModal" variant="floating" class="md:w-120">
+        <div class="space-y-5">
+            <div class="border-b border-zinc-100 pb-4 dark:border-zinc-800">
+                <flux:heading size="lg">Filters</flux:heading>
+                <flux:subheading>Refine your search results by date range.</flux:subheading>
+            </div>
+
+            <flux:input type="date" wire:model="tempStartDate" label="Start Date" />
+
+            <flux:input type="date" wire:model="tempEndDate" label="End Date" />
+
+            <div class="flex justify-between gap-2 border-t border-zinc-100 pt-4 dark:border-zinc-800">
+                <flux:button wire:click="resetFilters" variant="ghost">Reset</flux:button>
+                <flux:button variant="primary" wire:click="applyFilters">Apply Filters</flux:button>
             </div>
         </div>
     </flux:modal>

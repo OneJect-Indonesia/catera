@@ -20,6 +20,12 @@ new class extends Component
 
     public bool $activeOnly = false;
 
+    public string $tempFilterGroup = '';
+
+    public bool $tempActiveOnly = false;
+
+    public bool $showFilterModal = false;
+
     public bool $showEditModal = false;
 
     public ?int $editingAuthorizedId = null;
@@ -57,15 +63,31 @@ new class extends Component
 
     public function updated($property): void
     {
-        if (in_array($property, ['search', 'filterGroup', 'activeOnly'])) {
+        if ($property === 'search') {
             $this->resetPage();
         }
     }
 
+    public function openFilterModal(): void
+    {
+        $this->tempFilterGroup = $this->filterGroup;
+        $this->tempActiveOnly = $this->activeOnly;
+        $this->showFilterModal = true;
+    }
+
+    public function applyFilters(): void
+    {
+        $this->filterGroup = $this->tempFilterGroup;
+        $this->activeOnly = $this->tempActiveOnly;
+        $this->resetPage();
+        $this->showFilterModal = false;
+    }
+
     public function resetFilters(): void
     {
-        $this->reset(['filterGroup', 'activeOnly']);
+        $this->reset(['filterGroup', 'activeOnly', 'tempFilterGroup', 'tempActiveOnly']);
         $this->resetPage();
+        $this->showFilterModal = false;
     }
 
     public function with(): array
@@ -273,44 +295,19 @@ new class extends Component
     </div>
 
     {{-- Filters --}}
-    <div class="flex flex-col gap-3 rounded-xl border border-zinc-200 bg-white p-4 dark:border-zinc-700 dark:bg-zinc-900" x-data="{ showFilters: false }">
-        <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <flux:input
-                wire:model.live.debounce.500ms="search"
-                icon="magnifying-glass"
-                placeholder="Search by name, NIK..."
-                class="w-full sm:max-w-xs"
-            />
-            @php
-                $activeFilterCount = collect([$filterGroup, $activeOnly])->filter(fn ($v) => $v !== '' && $v !== false)->count();
-            @endphp
-            <flux:button @click="showFilters = !showFilters" icon="funnel" :variant="$activeFilterCount > 0 ? 'primary' : 'filled'">
-                Filter @if($activeFilterCount > 0) ({{ $activeFilterCount }}) @endif
-            </flux:button>
-        </div>
-
-        <div x-show="showFilters" x-transition class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 border-t border-zinc-100 pt-4 dark:border-zinc-800">
-            {{-- Group Filter --}}
-            <flux:select wire:model.live="filterGroup" label="Group" placeholder="All Groups">
-                <flux:select.option value="">All Groups</flux:select.option>
-                @foreach($groups as $group)
-                    <flux:select.option value="{{ $group->id }}">{{ ucfirst($group->nama_group) }}</flux:select.option>
-                @endforeach
-            </flux:select>
-
-            {{-- Status Filter --}}
-            <div class="flex flex-col gap-2">
-                <label class="text-sm font-medium text-zinc-700 dark:text-zinc-300">Show active only</label>
-                <div class="flex items-center h-10">
-                    <flux:switch wire:model.live="activeOnly" />
-                </div>
-            </div>
-
-            {{-- Reset Button --}}
-            <div class="col-span-1 sm:col-span-2 flex justify-end gap-2 mt-2">
-                <flux:button size="sm" wire:click="resetFilters" variant="ghost">Reset Filters</flux:button>
-            </div>
-        </div>
+    <div class="flex flex-col gap-3 rounded-xl border border-zinc-200 bg-white p-4 dark:border-zinc-700 dark:bg-zinc-900 sm:flex-row sm:items-center sm:justify-between">
+        <flux:input
+            wire:model.live.debounce.500ms="search"
+            icon="magnifying-glass"
+            placeholder="Search by name, NIK..."
+            class="w-full sm:max-w-xs"
+        />
+        @php
+            $activeFilterCount = collect([$filterGroup, $activeOnly])->filter(fn ($v) => $v !== '' && $v !== false)->count();
+        @endphp
+        <flux:button wire:click="openFilterModal" icon="funnel" :variant="$activeFilterCount > 0 ? 'primary' : 'filled'">
+            Filters
+        </flux:button>
     </div>
 
     {{-- Table Card --}}
@@ -565,6 +562,36 @@ new class extends Component
             <div class="flex justify-end gap-2">
                 <flux:button wire:click="closeDeleteModal">Cancel</flux:button>
                 <flux:button variant="danger" wire:click="destroy">Delete</flux:button>
+            </div>
+        </div>
+    </flux:modal>
+
+    {{-- Filter Modal --}}
+    <flux:modal name="authorized-filters" wire:model.live="showFilterModal" variant="floating" class="md:w-120">
+        <div class="space-y-5">
+            <div class="border-b border-zinc-100 pb-4 dark:border-zinc-800">
+                <flux:heading size="lg">Filters</flux:heading>
+                <flux:subheading>Refine the authorized list.</flux:subheading>
+            </div>
+
+            <flux:select wire:model="tempFilterGroup" label="Group" placeholder="All Groups">
+                <flux:select.option value="">All Groups</flux:select.option>
+                @foreach($groups as $group)
+                    <flux:select.option value="{{ $group->id }}">{{ ucfirst($group->nama_group) }}</flux:select.option>
+                @endforeach
+            </flux:select>
+
+            <div class="flex items-center justify-between rounded-lg border border-zinc-200 p-4 dark:border-zinc-700">
+                <div>
+                    <p class="text-sm font-medium text-zinc-700 dark:text-zinc-300">Active users only</p>
+                    <p class="text-xs text-zinc-500 dark:text-zinc-400">Show only users with active status</p>
+                </div>
+                <flux:switch wire:model="tempActiveOnly" />
+            </div>
+
+            <div class="flex justify-between gap-2 border-t border-zinc-100 pt-4 dark:border-zinc-800">
+                <flux:button wire:click="resetFilters" variant="ghost">Reset</flux:button>
+                <flux:button variant="primary" wire:click="applyFilters">Apply Filters</flux:button>
             </div>
         </div>
     </flux:modal>
