@@ -24,6 +24,7 @@ class StoreMdGroupRequest extends FormRequest
         return [
             'addNamaGroup' => 'required|string|max:255|unique:md_groups,nama_group',
             'addShortDescription' => 'nullable|string|max:500',
+            'addColor' => 'nullable|string|max:50',
         ];
     }
 }

@@ -16,6 +16,8 @@ new class extends Component
 
     public string $search = '';
 
+    public string $filterGroup = '';
+
     public bool $activeOnly = false;
 
     public bool $showEditModal = false;
@@ -53,6 +55,19 @@ new class extends Component
 
     public string $addUuidSearch = '';
 
+    public function updated($property): void
+    {
+        if (in_array($property, ['search', 'filterGroup', 'activeOnly'])) {
+            $this->resetPage();
+        }
+    }
+
+    public function resetFilters(): void
+    {
+        $this->reset(['filterGroup', 'activeOnly']);
+        $this->resetPage();
+    }
+
     public function with(): array
     {
         Gate::authorize('viewAny', Authorized::class);
@@ -72,6 +87,9 @@ new class extends Component
                                         ->orWhere('nik', 'ilike', $this->search . '%');
                           });
                     });
+                })
+                ->when($this->filterGroup, function ($query) {
+                    $query->where('group_id', $this->filterGroup);
                 })
                 ->when($this->activeOnly, function ($query) {
                     $query->whereHas('user', function ($q) {
@@ -255,16 +273,43 @@ new class extends Component
     </div>
 
     {{-- Filters --}}
-    <div class="flex flex-col gap-3 rounded-xl border border-zinc-200 bg-white p-4 dark:border-zinc-700 dark:bg-zinc-900 sm:flex-row sm:items-center sm:justify-between">
-        <flux:input
-            wire:model.live.debounce.500ms="search"
-            icon="magnifying-glass"
-            placeholder="Search by name, NIK or group..."
-            class="w-full sm:max-w-xs"
-        />
-        <div class="flex items-center gap-2">
-            <span class="text-sm text-zinc-500 dark:text-zinc-400">Show active only</span>
-            <flux:switch wire:model.live="activeOnly" />
+    <div class="flex flex-col gap-3 rounded-xl border border-zinc-200 bg-white p-4 dark:border-zinc-700 dark:bg-zinc-900" x-data="{ showFilters: false }">
+        <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <flux:input
+                wire:model.live.debounce.500ms="search"
+                icon="magnifying-glass"
+                placeholder="Search by name, NIK..."
+                class="w-full sm:max-w-xs"
+            />
+            @php
+                $activeFilterCount = collect([$filterGroup, $activeOnly])->filter(fn ($v) => $v !== '' && $v !== false)->count();
+            @endphp
+            <flux:button @click="showFilters = !showFilters" icon="funnel" :variant="$activeFilterCount > 0 ? 'primary' : 'filled'">
+                Filter @if($activeFilterCount > 0) ({{ $activeFilterCount }}) @endif
+            </flux:button>
+        </div>
+
+        <div x-show="showFilters" x-transition class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 border-t border-zinc-100 pt-4 dark:border-zinc-800">
+            {{-- Group Filter --}}
+            <flux:select wire:model.live="filterGroup" label="Group" placeholder="All Groups">
+                <flux:select.option value="">All Groups</flux:select.option>
+                @foreach($groups as $group)
+                    <flux:select.option value="{{ $group->id }}">{{ ucfirst($group->nama_group) }}</flux:select.option>
+                @endforeach
+            </flux:select>
+
+            {{-- Status Filter --}}
+            <div class="flex flex-col gap-2">
+                <label class="text-sm font-medium text-zinc-700 dark:text-zinc-300">Show active only</label>
+                <div class="flex items-center h-10">
+                    <flux:switch wire:model.live="activeOnly" />
+                </div>
+            </div>
+
+            {{-- Reset Button --}}
+            <div class="col-span-1 sm:col-span-2 flex justify-end gap-2 mt-2">
+                <flux:button size="sm" wire:click="resetFilters" variant="ghost">Reset Filters</flux:button>
+            </div>
         </div>
     </div>
 
@@ -293,8 +338,8 @@ new class extends Component
                             <td class="px-4 py-3.5 text-center">
                                 <span class="text-sm font-medium text-zinc-800 dark:text-zinc-200">{{ $authorized->user?->nik ?? '-' }}</span>
                             </td>
-                            <td class="px-4 py-3.5 text-center">
-                                <flux:badge size="sm" :color="($authorized->mdGroup?->nama_group === 'merah') ? 'red' : 'blue'" inset="top bottom" class="w-20 justify-center">
+                             <td class="px-4 py-3.5 text-center">
+                                <flux:badge size="sm" :color="$authorized->mdGroup?->color ?? 'zinc'" inset="top bottom" class="w-20 justify-center">
                                     {{ ucfirst($authorized->mdGroup?->nama_group ?? '-') }}
                                 </flux:badge>
                             </td>
@@ -380,11 +425,40 @@ new class extends Component
                 />
             </div>
 
-            <flux:select wire:model="editGroupId" label="Group">
-                @foreach($groups as $group)
-                    <flux:select.option value="{{ $group->id }}">{{ ucfirst($group->nama_group) }}</flux:select.option>
-                @endforeach
-            </flux:select>
+            <flux:radio.group wire:model="editGroupId" label="Group">
+                <div class="grid grid-cols-3 gap-1.5">
+                    @foreach($groups as $group)
+                        @php
+                            $color = $group->color ?? 'zinc';
+                            $colorClasses = [
+                                'zinc' => 'bg-zinc-500/30 border-zinc-600/30 dark:bg-zinc-600/30 dark:border-zinc-500/30',
+                                'red' => 'bg-red-500/30 border-red-600/30 dark:bg-red-600/30 dark:border-red-500/30',
+                                'blue' => 'bg-blue-500/30 border-blue-600/30 dark:bg-blue-600/30 dark:border-blue-500/30',
+                                'green' => 'bg-green-500/30 border-green-600/30 dark:bg-green-600/30 dark:border-green-500/30',
+                                'yellow' => 'bg-yellow-500/30 border-yellow-600/30 dark:bg-yellow-600/30 dark:border-yellow-500/30',
+                                'orange' => 'bg-orange-500/30 border-orange-600/30 dark:bg-orange-600/30 dark:border-orange-500/30',
+                                'purple' => 'bg-purple-500/30 border-purple-600/30 dark:bg-purple-600/30 dark:border-purple-500/30',
+                                'pink' => 'bg-pink-500/30 border-pink-600/30 dark:bg-pink-600/30 dark:border-pink-500/30',
+                                'indigo' => 'bg-indigo-500/30 border-indigo-600/ dark:bg-indigo-600/ dark:border-indigo-500/',
+                            ];
+                            $cardClass = $colorClasses[$color] ?? $colorClasses['zinc'];
+                            $textClass = $color === 'yellow' ? 'text-zinc-900 dark:text-white' : 'text-black';
+                            $descClass = $color === 'yellow' ? 'text-zinc-700 dark:text-zinc-100/90' : 'text-black/90';
+                        @endphp
+                        <label class="relative flex flex-col justify-start items-start rounded-xl border p-4 shadow-sm hover:opacity-90 transition-opacity cursor-pointer {{ $cardClass }}">
+                            <div class="flex items-start gap-3 w-full">
+                                <flux:radio value="{{ $group->id }}" class="mt-1 shrink-0" />
+                                <div class="flex flex-col text-left">
+                                    <span class="text-sm font-semibold {{ $textClass }}">{{ ucfirst($group->nama_group) }}</span>
+                                    @if($group->short_description)
+                                        <span class="mt-1 text-xs {{ $descClass }}">{{ $group->short_description }}</span>
+                                    @endif
+                                </div>
+                            </div>
+                        </label>
+                    @endforeach
+                </div>
+            </flux:radio.group>
 
             <flux:input wire:model="editQuota" label="Quota" type="number" />
 
@@ -421,11 +495,40 @@ new class extends Component
                 :options="$portalUsers"
             />
 
-            <flux:select wire:model="addGroupId" label="Group" placeholder="Select a group...">
-                @foreach($groups as $group)
-                    <flux:select.option value="{{ $group->id }}">{{ ucfirst($group->nama_group) }}</flux:select.option>
-                @endforeach
-            </flux:select>
+            <flux:radio.group wire:model="addGroupId" label="Group">
+                <div class="grid grid-cols-3 gap-1.5">
+                    @foreach($groups as $group)
+                        @php
+                            $color = $group->color ?? 'zinc';
+                            $colorClasses = [
+                                'zinc' => 'bg-zinc-500/30 border-zinc-600/30 dark:bg-zinc-600/30 dark:border-zinc-500/30',
+                                'red' => 'bg-red-500/30 border-red-600/30 dark:bg-red-600/30 dark:border-red-500/30',
+                                'blue' => 'bg-blue-500/30 border-blue-600/30 dark:bg-blue-600/30 dark:border-blue-500/30',
+                                'green' => 'bg-green-500/30 border-green-600/30 dark:bg-green-600/30 dark:border-green-500/30',
+                                'yellow' => 'bg-yellow-500/30 border-yellow-600/30 dark:bg-yellow-600/30 dark:border-yellow-500/30',
+                                'orange' => 'bg-orange-500/30 border-orange-600/30 dark:bg-orange-600/30 dark:border-orange-500/30',
+                                'purple' => 'bg-purple-500/30 border-purple-600/30 dark:bg-purple-600/30 dark:border-purple-500/30',
+                                'pink' => 'bg-pink-500/30 border-pink-600/30 dark:bg-pink-600/30 dark:border-pink-500/30',
+                                'indigo' => 'bg-indigo-500/30 border-indigo-600/30 dark:bg-indigo-600/30 dark:border-indigo-500/30',
+                            ];
+                            $cardClass = $colorClasses[$color] ?? $colorClasses['zinc'];
+                            $textClass = $color === 'yellow' ? 'text-zinc-900 dark:text-white' : 'text-black';
+                            $descClass = $color === 'yellow' ? 'text-zinc-700 dark:text-zinc-100/90' : 'text-black/90';
+                        @endphp
+                        <label class="relative flex flex-col justify-start items-start rounded-xl border p-4 shadow-sm hover:opacity-90 transition-opacity cursor-pointer {{ $cardClass }}">
+                            <div class="flex items-start gap-3 w-full">
+                                <flux:radio value="{{ $group->id }}" class="mt-1 shrink-0" />
+                                <div class="flex flex-col text-left">
+                                    <span class="text-sm font-semibold {{ $textClass }}">{{ ucfirst($group->nama_group) }}</span>
+                                    @if($group->short_description)
+                                        <span class="mt-1 text-xs {{ $descClass }}">{{ $group->short_description }}</span>
+                                    @endif
+                                </div>
+                            </div>
+                        </label>
+                    @endforeach
+                </div>
+            </flux:radio.group>
 
             <flux:input wire:model="addQuota" label="Quota" type="number" />
 

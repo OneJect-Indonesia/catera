@@ -34,10 +34,10 @@ class AuthorizedSeeder extends Seeder
             $groupId = $groups[$groupName] ?? null;
 
             // Also update portal user's status to active/inactive since we dropped is_active column from authorizeds
-            $isActive = strtolower($row[5]) === 'true';
-            \Illuminate\Support\Facades\DB::table('portal_application.md_users')
-                ->where('id', (int) $row[2])
-                ->update(['status' => $isActive ? 'active' : 'inactive']);
+            // $isActive = strtolower($row[5]) === 'true';
+            // \Illuminate\Support\Facades\DB::table('portal_application.md_users')
+            //     ->where('id', (int) $row[2])
+            //     ->update(['status' => $isActive ? 'active' : 'inactive']);
 
             // Directly run updateOrInsert to avoid duplicate UUID unique constraints or bulk issues in Postgres
             \Illuminate\Support\Facades\DB::table('catera.authorizeds')->updateOrInsert(

@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('nama_group')->unique();
             $table->string('short_description')->nullable();
+            $table->string('color')->default('zinc');
             $table->timestamps();
         });
     }

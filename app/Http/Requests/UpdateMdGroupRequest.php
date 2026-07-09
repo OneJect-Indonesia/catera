@@ -24,6 +24,7 @@ class UpdateMdGroupRequest extends FormRequest
         return [
             'editNamaGroup' => 'required|string|max:255|unique:md_groups,nama_group,'.$this->editingGroupId,
             'editShortDescription' => 'nullable|string|max:500',
+            'editColor' => 'nullable|string|max:50',
         ];
     }
 }

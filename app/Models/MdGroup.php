@@ -15,6 +15,7 @@ class MdGroup extends Model
     protected $fillable = [
         'nama_group',
         'short_description',
+        'color',
     ];
 
     public function authorizeds(): \Illuminate\Database\Eloquent\Relations\HasMany

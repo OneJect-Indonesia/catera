@@ -21,6 +21,8 @@ new class extends Component
 
     public string $editShortDescription = '';
 
+    public string $editColor = 'zinc';
+
     public bool $showDeleteModal = false;
 
     public ?int $deletingGroupId = null;
@@ -32,6 +34,8 @@ new class extends Component
     public string $addNamaGroup = '';
 
     public string $addShortDescription = '';
+
+    public string $addColor = 'zinc';
 
     public function with(): array
     {
@@ -56,6 +60,7 @@ new class extends Component
         $this->editingGroupId = $id;
         $this->editNamaGroup = $group->nama_group;
         $this->editShortDescription = $group->short_description ?? '';
+        $this->editColor = $group->color ?? 'zinc';
         $this->showEditModal = true;
     }
 
@@ -77,6 +82,7 @@ new class extends Component
             $group->update([
                 'nama_group' => $this->editNamaGroup,
                 'short_description' => $this->editShortDescription,
+                'color' => $this->editColor,
             ]);
 
             $this->closeEditModal();
@@ -131,14 +137,14 @@ new class extends Component
     {
         Gate::authorize('create', MdGroup::class);
 
-        $this->reset(['addNamaGroup', 'addShortDescription']);
+        $this->reset(['addNamaGroup', 'addShortDescription', 'addColor']);
         $this->showAddModal = true;
     }
 
     public function closeAddModal(): void
     {
         $this->showAddModal = false;
-        $this->reset(['addNamaGroup', 'addShortDescription']);
+        $this->reset(['addNamaGroup', 'addShortDescription', 'addColor']);
     }
 
     public function store(): void
@@ -152,6 +158,7 @@ new class extends Component
                 MdGroup::create([
                     'nama_group' => $this->addNamaGroup,
                     'short_description' => $this->addShortDescription,
+                    'color' => $this->addColor,
                 ]);
             });
 
@@ -202,6 +209,7 @@ new class extends Component
                     <tr>
                         <th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">Group Name</th>
                         <th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">Short Description</th>
+                        <th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">Color</th>
                         @if(auth()->user()->hasAnyPermission(['catera:md_group:update', 'catera:md_group:delete']))
                             <th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">Actions</th>
                         @endif
@@ -215,6 +223,11 @@ new class extends Component
                             </td>
                             <td class="px-4 py-3.5 text-center">
                                 <span class="text-sm font-medium text-zinc-800 dark:text-zinc-200">{{ $group->short_description ?? '-' }}</span>
+                            </td>
+                            <td class="px-4 py-3.5 text-center">
+                                <flux:badge size="sm" :color="$group->color ?? 'zinc'" inset="top bottom" class="w-20 justify-center">
+                                    {{ ucfirst($group->color ?? 'zinc') }}
+                                </flux:badge>
                             </td>
                             @if(auth()->user()->can('update', $group) || auth()->user()->can('delete', $group))
                                 <td class="px-4 py-3.5 text-center">
@@ -267,6 +280,18 @@ new class extends Component
 
             <flux:input wire:model="editShortDescription" label="Short Description" />
 
+            <flux:select wire:model="editColor" label="Badge Color">
+                <flux:select.option value="zinc">Zinc (Gray)</flux:select.option>
+                <flux:select.option value="red">Red</flux:select.option>
+                <flux:select.option value="blue">Blue</flux:select.option>
+                <flux:select.option value="green">Green</flux:select.option>
+                <flux:select.option value="yellow">Yellow</flux:select.option>
+                <flux:select.option value="orange">Orange</flux:select.option>
+                <flux:select.option value="purple">Purple</flux:select.option>
+                <flux:select.option value="pink">Pink</flux:select.option>
+                <flux:select.option value="indigo">Indigo</flux:select.option>
+            </flux:select>
+
             <div class="flex justify-end gap-2 border-t border-zinc-100 pt-4 dark:border-zinc-800">
                 <flux:button wire:click="closeEditModal">Cancel</flux:button>
                 <flux:button variant="primary" wire:click="update">
@@ -288,6 +313,18 @@ new class extends Component
             <flux:input wire:model="addNamaGroup" label="Group Name" placeholder="e.g. merah, biru, etc." />
 
             <flux:input wire:model="addShortDescription" label="Short Description" placeholder="e.g. Group Merah" />
+
+            <flux:select wire:model="addColor" label="Badge Color" placeholder="Select a color...">
+                <flux:select.option value="zinc">Zinc (Gray)</flux:select.option>
+                <flux:select.option value="red">Red</flux:select.option>
+                <flux:select.option value="blue">Blue</flux:select.option>
+                <flux:select.option value="green">Green</flux:select.option>
+                <flux:select.option value="yellow">Yellow</flux:select.option>
+                <flux:select.option value="orange">Orange</flux:select.option>
+                <flux:select.option value="purple">Purple</flux:select.option>
+                <flux:select.option value="pink">Pink</flux:select.option>
+                <flux:select.option value="indigo">Indigo</flux:select.option>
+            </flux:select>
 
             <div class="flex justify-end gap-2 border-t border-zinc-100 pt-4 dark:border-zinc-800">
                 <flux:button type="button" wire:click="closeAddModal">Cancel</flux:button>
