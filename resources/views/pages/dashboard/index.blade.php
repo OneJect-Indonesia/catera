@@ -65,7 +65,10 @@ new class extends Component {
 
         this.$watch('$wire.stats', value => {
             if (this.groupChartInstance) {
-                this.groupChartInstance.updateSeries([value.merah_count, value.biru_count]);
+                this.groupChartInstance.updateOptions({
+                    labels: value.group_labels
+                });
+                this.groupChartInstance.updateSeries(value.group_series);
             }
             if (this.statusChartInstance) {
                 this.statusChartInstance.updateSeries([{
@@ -100,9 +103,9 @@ new class extends Component {
                 fontFamily: 'inherit',
                 animations: { enabled: true, easing: 'easeinout', speed: 800 }
             },
-            series: [this.stats.merah_count, this.stats.biru_count],
-            labels: ['Merah', 'Biru'],
-            colors: ['#EF4444', '#3B82F6'],
+            series: this.stats.group_series || [],
+            labels: this.stats.group_labels || [],
+            colors: ['#EF4444', '#3B82F6', '#10B981', '#F59E0B', '#6366F1', '#EC4899'],
             legend: { position: 'bottom', fontSize: '14px' },
             dataLabels: { enabled: true, dropShadow: { enabled: false } },
             plotOptions: {
@@ -319,18 +322,44 @@ new class extends Component {
     </div>
 
     {{-- Trends Section --}}
-    <flux:card class="flex flex-col gap-4">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-zinc-100 pb-4 dark:border-zinc-800 gap-4">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <flux:card class="lg:col-span-2 flex flex-col gap-4">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-zinc-100 pb-4 dark:border-zinc-800 gap-4">
+                <div>
+                    <flux:heading size="lg">Quota Addition History</flux:heading>
+                    <flux:subheading>Tracking the volume of quota additions over time.</flux:subheading>
+                </div>
+                <div class="flex items-center gap-2">
+                    <flux:input type="date" wire:model.live="startDate" size="sm" class="w-36" />
+                    <span class="text-zinc-400 text-sm">to</span>
+                    <flux:input type="date" wire:model.live="endDate" size="sm" class="w-36" />
+                </div>
+            </div>
+            <div class="h-80 w-full" x-ref="trendChart" wire:ignore></div>
+        </flux:card>
+
+        <flux:card class="flex flex-col gap-4">
             <div>
-                <flux:heading size="lg">Quota Addition History</flux:heading>
-                <flux:subheading>Tracking the volume of quota additions over time.</flux:subheading>
+                <flux:heading size="lg">Groups Statistics</flux:heading>
+                <flux:subheading>List of groups, descriptions, and totals.</flux:subheading>
             </div>
-            <div class="flex items-center gap-2">
-                <flux:input type="date" wire:model.live="startDate" size="sm" class="w-36" />
-                <span class="text-zinc-400 text-sm">to</span>
-                <flux:input type="date" wire:model.live="endDate" size="sm" class="w-36" />
+            <div class="flex-1 overflow-y-auto space-y-4">
+                <div class="flex items-center justify-between p-3 rounded-lg bg-zinc-50 dark:bg-zinc-800">
+                    <span class="text-sm font-semibold">Total Groups</span>
+                    <flux:badge size="sm" color="blue" class="font-bold">{{ count($stats['groups_info']) }}</flux:badge>
+                </div>
+                <div class="divide-y divide-zinc-100 dark:divide-zinc-800">
+                    @foreach($stats['groups_info'] as $g)
+                        <div class="py-3 flex flex-col gap-1">
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm font-bold text-zinc-800 dark:text-zinc-200">{{ ucfirst($g['nama_group']) }}</span>
+                                <flux:badge size="sm" color="green">{{ $g['authorizeds_count'] }} members</flux:badge>
+                            </div>
+                            <span class="text-xs text-zinc-400">{{ $g['short_description'] }}</span>
+                        </div>
+                    @endforeach
+                </div>
             </div>
-        </div>
-        <div class="h-80 w-full" x-ref="trendChart" wire:ignore></div>
-    </flux:card>
+        </flux:card>
+    </div>
 </div>

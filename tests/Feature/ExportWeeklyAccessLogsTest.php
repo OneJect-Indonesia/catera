@@ -25,18 +25,18 @@ test('it exports weekly access logs and sends email to authorized users', functi
         'nik' => '12345678',
     ]);
 
+    $group = \App\Models\MdGroup::firstOrCreate(['nama_group' => 'merah']);
     $authorized = Authorized::create([
         'user_id' => $user->id,
         'uuid' => 'test-uuid-1',
-        'group' => 'merah',
+        'group_id' => $group->id,
         'quota' => 5,
-        'is_active' => true,
     ]);
 
     AccessLog::create([
         'authorizeds_id' => $authorized->id,
         'uuid' => $authorized->uuid,
-        'group' => $authorized->group,
+        'group' => 'merah',
         'status' => 'authorized',
         'scanned_at' => now()->subDays(2),
     ]);

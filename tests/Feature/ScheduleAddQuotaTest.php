@@ -8,13 +8,13 @@ use Illuminate\Support\Str;
 use Livewire\Livewire;
 
 test('schedule add quota command processes pending schedules for today', function () {
-    $user = User::factory()->create();
+    $user = User::factory()->create(['status' => 'active']);
+    $group = \App\Models\MdGroup::firstOrCreate(['nama_group' => 'merah']);
     $authorized = Authorized::create([
         'user_id' => $user->id,
         'uuid' => (string) Str::uuid(),
-        'group' => 'merah',
+        'group_id' => $group->id,
         'quota' => 1,
-        'is_active' => true,
     ]);
 
     QuotaSchedule::create([
@@ -34,13 +34,13 @@ test('schedule add quota command processes pending schedules for today', functio
 });
 
 test('schedule add quota command processes pending schedules from past dates', function () {
-    $user = User::factory()->create();
+    $user = User::factory()->create(['status' => 'active']);
+    $group = \App\Models\MdGroup::firstOrCreate(['nama_group' => 'merah']);
     $authorized = Authorized::create([
         'user_id' => $user->id,
         'uuid' => (string) Str::uuid(),
-        'group' => 'merah',
+        'group_id' => $group->id,
         'quota' => 1,
-        'is_active' => true,
     ]);
 
     QuotaSchedule::create([
@@ -60,13 +60,13 @@ test('schedule add quota command processes pending schedules from past dates', f
 });
 
 test('schedule add quota command does not process future schedules', function () {
-    $user = User::factory()->create();
+    $user = User::factory()->create(['status' => 'active']);
+    $group = \App\Models\MdGroup::firstOrCreate(['nama_group' => 'merah']);
     $authorized = Authorized::create([
         'user_id' => $user->id,
         'uuid' => (string) Str::uuid(),
-        'group' => 'merah',
+        'group_id' => $group->id,
         'quota' => 1,
-        'is_active' => true,
     ]);
 
     QuotaSchedule::create([
@@ -86,13 +86,13 @@ test('schedule add quota command does not process future schedules', function ()
 });
 
 test('schedule add quota command sets status to failed for inactive users', function () {
-    $user = User::factory()->create();
+    $user = User::factory()->create(['status' => 'inactive']);
+    $group = \App\Models\MdGroup::firstOrCreate(['nama_group' => 'merah']);
     $authorized = Authorized::create([
         'user_id' => $user->id,
         'uuid' => (string) Str::uuid(),
-        'group' => 'merah',
+        'group_id' => $group->id,
         'quota' => 1,
-        'is_active' => false,
     ]);
 
     QuotaSchedule::create([
@@ -112,13 +112,13 @@ test('schedule add quota command sets status to failed for inactive users', func
 });
 
 test('schedule add quota command does not process already successful schedules', function () {
-    $user = User::factory()->create();
+    $user = User::factory()->create(['status' => 'active']);
+    $group = \App\Models\MdGroup::firstOrCreate(['nama_group' => 'merah']);
     $authorized = Authorized::create([
         'user_id' => $user->id,
         'uuid' => (string) Str::uuid(),
-        'group' => 'merah',
+        'group_id' => $group->id,
         'quota' => 5,
-        'is_active' => true,
     ]);
 
     QuotaSchedule::create([
@@ -135,22 +135,23 @@ test('schedule add quota command does not process already successful schedules',
 });
 
 test('schedule add quota command processes multiple schedules', function () {
-    $user1 = User::factory()->create();
+    $user1 = User::factory()->create(['status' => 'active']);
+    $user2 = User::factory()->create(['status' => 'active']);
+    $groupMerah = \App\Models\MdGroup::firstOrCreate(['nama_group' => 'merah']);
+    $groupBiru = \App\Models\MdGroup::firstOrCreate(['nama_group' => 'biru']);
+
     $authorized1 = Authorized::create([
         'user_id' => $user1->id,
         'uuid' => (string) Str::uuid(),
-        'group' => 'merah',
+        'group_id' => $groupMerah->id,
         'quota' => 1,
-        'is_active' => true,
     ]);
 
-    $user2 = User::factory()->create();
     $authorized2 = Authorized::create([
         'user_id' => $user2->id,
         'uuid' => (string) Str::uuid(),
-        'group' => 'biru',
+        'group_id' => $groupBiru->id,
         'quota' => 1,
-        'is_active' => true,
     ]);
 
     QuotaSchedule::create([
@@ -182,16 +183,16 @@ test('schedule add quota command processes multiple schedules', function () {
 test('livewire prevents duplicate schedule for same user and date', function () {
     $this->seed(\Database\Seeders\PermissionSeeder::class);
 
-    $user = User::factory()->create();
+    $user = User::factory()->create(['status' => 'active']);
     $user->givePermissionTo(['catera:quota_scheduling:view_any', 'catera:quota_scheduling:create']);
     $this->actingAs($user);
 
+    $group = \App\Models\MdGroup::firstOrCreate(['nama_group' => 'merah']);
     $authorized = Authorized::create([
         'user_id' => $user->id,
         'uuid' => (string) Str::uuid(),
-        'group' => 'merah',
+        'group_id' => $group->id,
         'quota' => 1,
-        'is_active' => true,
     ]);
 
     QuotaSchedule::create([
@@ -214,16 +215,16 @@ test('livewire prevents duplicate schedule for same user and date', function () 
 test('livewire allows schedule creation if previous schedule failed', function () {
     $this->seed(\Database\Seeders\PermissionSeeder::class);
 
-    $user = User::factory()->create();
+    $user = User::factory()->create(['status' => 'active']);
     $user->givePermissionTo(['catera:quota_scheduling:view_any', 'catera:quota_scheduling:create']);
     $this->actingAs($user);
 
+    $group = \App\Models\MdGroup::firstOrCreate(['nama_group' => 'merah']);
     $authorized = Authorized::create([
         'user_id' => $user->id,
         'uuid' => (string) Str::uuid(),
-        'group' => 'merah',
+        'group_id' => $group->id,
         'quota' => 1,
-        'is_active' => true,
     ]);
 
     QuotaSchedule::create([
@@ -246,16 +247,16 @@ test('livewire allows schedule creation if previous schedule failed', function (
 test('livewire allows schedule creation for different dates', function () {
     $this->seed(\Database\Seeders\PermissionSeeder::class);
 
-    $user = User::factory()->create();
+    $user = User::factory()->create(['status' => 'active']);
     $user->givePermissionTo(['catera:quota_scheduling:view_any', 'catera:quota_scheduling:create']);
     $this->actingAs($user);
 
+    $group = \App\Models\MdGroup::firstOrCreate(['nama_group' => 'merah']);
     $authorized = Authorized::create([
         'user_id' => $user->id,
         'uuid' => (string) Str::uuid(),
-        'group' => 'merah',
+        'group_id' => $group->id,
         'quota' => 1,
-        'is_active' => true,
     ]);
 
     QuotaSchedule::create([

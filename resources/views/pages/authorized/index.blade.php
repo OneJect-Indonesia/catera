@@ -4,6 +4,7 @@ use App\Http\Requests\StoreAuthorizedRequest;
 use App\Http\Requests\UpdateAuthorizedRequest;
 use App\Models\Authorized;
 use App\Models\User;
+use App\Models\MdGroup;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Gate;
 use Livewire\Component;
@@ -23,11 +24,9 @@ new class extends Component
 
     public string $editUuid = '';
 
-    public string $editGroup = '';
+    public ?int $editGroupId = null;
 
     public string $editQuota = '';
-
-    public bool $editIsActive = false;
 
     // Read-only display fields for the edit modal (sourced from relationship)
     public string $editDisplayName = '';
@@ -46,11 +45,9 @@ new class extends Component
 
     public string $addUserSearch = '';
 
-    public string $addGroup = '';
+    public ?int $addGroupId = null;
 
     public string $addQuota = '';
-
-    public bool $addIsActive = true;
 
     public string $addUuid = '';
 
@@ -62,11 +59,13 @@ new class extends Component
 
         return [
             'authorizeds' => Authorized::query()
-                ->with('user')
+                ->with(['user', 'mdGroup'])
                 ->when($this->search, function ($query) {
                     $query->where(function ($q) {
                         $q->where('uuid', 'ilike', $this->search . '%')
-                          ->orWhere('group', 'ilike', $this->search . '%')
+                          ->orWhereHas('mdGroup', function ($gQuery) {
+                              $gQuery->where('nama_group', 'ilike', $this->search . '%');
+                          })
                           ->orWhereHas('user', function ($userQuery) {
                               $userQuery->where('first_name', 'ilike', $this->search . '%')
                                         ->orWhere('last_name', 'ilike', $this->search . '%')
@@ -74,10 +73,15 @@ new class extends Component
                           });
                     });
                 })
-                ->when($this->activeOnly, fn ($query) => $query->where('is_active', true))
+                ->when($this->activeOnly, function ($query) {
+                    $query->whereHas('user', function ($q) {
+                        $q->where('status', 'active');
+                    });
+                })
                 ->paginate(10),
 
             'portalUsers' => $this->showAddModal ? $this->getPortalUsers() : [],
+            'groups' => MdGroup::all(),
         ];
     }
 
@@ -107,15 +111,14 @@ new class extends Component
 
     public function edit($id): void
     {
-        $authorized = Authorized::with('user')->findOrFail($id);
+        $authorized = Authorized::with(['user', 'mdGroup'])->findOrFail($id);
 
         Gate::authorize('update', $authorized);
 
         $this->editingAuthorizedId = $id;
         $this->editUuid = $authorized->uuid;
-        $this->editGroup = $authorized->group;
+        $this->editGroupId = $authorized->group_id;
         $this->editQuota = $authorized->quota;
-        $this->editIsActive = $authorized->is_active;
         $this->editDisplayName = $authorized->user?->first_name . ' ' . $authorized->user?->last_name;
         $this->editDisplayNik = $authorized->user?->nik ?? '-';
         $this->showEditModal = true;
@@ -137,9 +140,8 @@ new class extends Component
 
         try {
             $authorized->update([
-                'group' => $this->editGroup,
+                'group_id' => $this->editGroupId,
                 'quota' => $this->editQuota,
-                'is_active' => $this->editIsActive,
             ]);
 
             $this->closeEditModal();
@@ -194,8 +196,7 @@ new class extends Component
     {
         Gate::authorize('create', Authorized::class);
 
-        $this->reset(['addUuid', 'addUserId', 'addUserSearch', 'addGroup', 'addQuota', 'addUuidSearch']);
-        $this->addIsActive = true;
+        $this->reset(['addUuid', 'addUserId', 'addUserSearch', 'addGroupId', 'addQuota', 'addUuidSearch']);
 
         $this->showAddModal = true;
     }
@@ -218,15 +219,13 @@ new class extends Component
                 Authorized::create([
                     'uuid' => $this->addUuid,
                     'user_id' => $this->addUserId,
-                    'group' => $this->addGroup,
+                    'group_id' => $this->addGroupId,
                     'quota' => $this->addQuota,
-                    'is_active' => $this->addIsActive,
                 ]);
             });
 
             $this->closeAddModal();
-            $this->reset(['addUuid', 'addUserId', 'addUserSearch', 'addGroup', 'addQuota']);
-            $this->addIsActive = true;
+            $this->reset(['addUuid', 'addUserId', 'addUserSearch', 'addGroupId', 'addQuota']);
             $this->dispatch('notify', message: 'Authorized record created successfully.', variant: 'success');
         } catch (\Exception $e) {
             \Illuminate\Support\Facades\Log::error('Failed to create authorized record', [
@@ -295,8 +294,8 @@ new class extends Component
                                 <span class="text-sm font-medium text-zinc-800 dark:text-zinc-200">{{ $authorized->user?->nik ?? '-' }}</span>
                             </td>
                             <td class="px-4 py-3.5 text-center">
-                                <flux:badge size="sm" :color="$authorized->group === 'merah' ? 'red' : 'blue'" inset="top bottom" class="w-20 justify-center">
-                                    {{ ucfirst($authorized->group) }}
+                                <flux:badge size="sm" :color="($authorized->mdGroup?->nama_group === 'merah') ? 'red' : 'blue'" inset="top bottom" class="w-20 justify-center">
+                                    {{ ucfirst($authorized->mdGroup?->nama_group ?? '-') }}
                                 </flux:badge>
                             </td>
                             <td class="px-4 py-3.5 text-center">
@@ -381,20 +380,13 @@ new class extends Component
                 />
             </div>
 
-            <flux:radio.group wire:model="editGroup" label="Group" variant="cards" class="flex">
-                <flux:radio value="merah" label="Merah" description="Group Merah" />
-                <flux:radio value="biru" label="Biru" description="Group Biru" />
-            </flux:radio.group>
+            <flux:select wire:model="editGroupId" label="Group">
+                @foreach($groups as $group)
+                    <flux:select.option value="{{ $group->id }}">{{ ucfirst($group->nama_group) }}</flux:select.option>
+                @endforeach
+            </flux:select>
 
             <flux:input wire:model="editQuota" label="Quota" type="number" />
-
-            <div class="flex items-center justify-between rounded-lg border border-zinc-200 p-3 dark:border-zinc-700">
-                <div>
-                    <p class="text-sm font-medium text-zinc-700 dark:text-zinc-300">Active Status</p>
-                    <p class="text-xs text-zinc-400">Toggle whether this UUID is active.</p>
-                </div>
-                <flux:switch wire:model="editIsActive" />
-            </div>
 
             <div class="flex justify-end gap-2 border-t border-zinc-100 pt-4 dark:border-zinc-800">
                 <flux:button wire:click="closeEditModal">Cancel</flux:button>
@@ -429,20 +421,13 @@ new class extends Component
                 :options="$portalUsers"
             />
 
-            <flux:radio.group wire:model="addGroup" label="Group" variant="cards" class="flex">
-                <flux:radio value="merah" label="Merah" description="Group Merah" />
-                <flux:radio value="biru" label="Biru" description="Group Biru" />
-            </flux:radio.group>
+            <flux:select wire:model="addGroupId" label="Group" placeholder="Select a group...">
+                @foreach($groups as $group)
+                    <flux:select.option value="{{ $group->id }}">{{ ucfirst($group->nama_group) }}</flux:select.option>
+                @endforeach
+            </flux:select>
 
             <flux:input wire:model="addQuota" label="Quota" type="number" />
-
-            <div class="flex items-center justify-between rounded-lg border border-zinc-200 p-3 dark:border-zinc-700">
-                <div>
-                    <p class="text-sm font-medium text-zinc-700 dark:text-zinc-300">Active Status</p>
-                    <p class="text-xs text-zinc-400">Toggle whether this UUID is active.</p>
-                </div>
-                <flux:switch wire:model="addIsActive" />
-            </div>
 
             <div class="flex justify-end gap-2 border-t border-zinc-100 pt-4 dark:border-zinc-800">
                 <flux:button type="button" wire:click="closeAddModal">Cancel</flux:button>

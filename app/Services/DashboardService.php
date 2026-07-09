@@ -37,16 +37,24 @@ class DashboardService
 
     protected function fetchStats(): array
     {
+        // Join with portal_application.md_users to get the user status
         $authorizedStats = Authorized::query()
+            ->join('portal_application.md_users', 'catera.authorizeds.user_id', '=', 'portal_application.md_users.id')
             ->selectRaw(
                 'COUNT(*) as total,
-                SUM(CASE WHEN is_active = true THEN 1 ELSE 0 END) as active_count,
-                SUM(CASE WHEN is_active = false THEN 1 ELSE 0 END) as inactive_count,
-                SUM(CASE WHEN "group" = ? THEN 1 ELSE 0 END) as merah_count,
-                SUM(CASE WHEN "group" = ? THEN 1 ELSE 0 END) as biru_count',
-                ['merah', 'biru']
+                SUM(CASE WHEN portal_application.md_users.status = \'active\' THEN 1 ELSE 0 END) as active_count,
+                SUM(CASE WHEN portal_application.md_users.status != \'active\' OR portal_application.md_users.status IS NULL THEN 1 ELSE 0 END) as inactive_count'
             )
             ->first();
+
+        // Get count per group dynamically
+        $groupsData = \App\Models\MdGroup::withCount('authorizeds')->get();
+        $groupLabels = [];
+        $groupSeries = [];
+        foreach ($groupsData as $g) {
+            $groupLabels[] = ucfirst($g->nama_group);
+            $groupSeries[] = (int) $g->authorizeds_count;
+        }
 
         $totalQuota = QuotaSchedule::query()
             ->currentMonth()
@@ -57,8 +65,13 @@ class DashboardService
             'total_quota' => (int) $totalQuota,
             'active_count' => (int) $authorizedStats->active_count,
             'inactive_count' => (int) $authorizedStats->inactive_count,
-            'merah_count' => (int) $authorizedStats->merah_count,
-            'biru_count' => (int) $authorizedStats->biru_count,
+            'group_labels' => $groupLabels,
+            'group_series' => $groupSeries,
+            'groups_info' => $groupsData->map(fn ($g) => [
+                'nama_group' => $g->nama_group,
+                'short_description' => $g->short_description ?? '-',
+                'authorizeds_count' => $g->authorizeds_count,
+            ])->toArray(),
         ];
     }
 

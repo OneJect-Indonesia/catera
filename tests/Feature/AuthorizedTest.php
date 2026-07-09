@@ -38,17 +38,18 @@ test('authorized list loads with pagination', function () {
 });
 
 test('search filters by uuid', function () {
-    $user = User::factory()->create();
+    $user = User::factory()->create(['status' => 'active']);
     $user->givePermissionTo('catera:authorized:view_any');
     $this->actingAs($user);
+
+    $group = \App\Models\MdGroup::firstOrCreate(['nama_group' => 'merah']);
 
     $testUuid = 'test-uuid-'.Str::random(8);
     Authorized::create([
         'user_id' => $user->id,
         'uuid' => $testUuid,
-        'group' => 'merah',
+        'group_id' => $group->id,
         'quota' => 10,
-        'is_active' => true,
     ]);
 
     Livewire::test('pages::authorized.index')
@@ -60,53 +61,55 @@ test('search filters by uuid', function () {
 });
 
 test('search filters by group', function () {
-    $user = User::factory()->create();
+    $user = User::factory()->create(['status' => 'active']);
     $user->givePermissionTo('catera:authorized:view_any');
     $this->actingAs($user);
+
+    $groupMerah = \App\Models\MdGroup::firstOrCreate(['nama_group' => 'merah']);
+    $groupBiru = \App\Models\MdGroup::firstOrCreate(['nama_group' => 'biru']);
 
     Authorized::create([
         'user_id' => $user->id,
         'uuid' => (string) Str::uuid(),
-        'group' => 'merah',
+        'group_id' => $groupMerah->id,
         'quota' => 10,
-        'is_active' => true,
     ]);
 
     Authorized::create([
         'user_id' => $user->id,
         'uuid' => (string) Str::uuid(),
-        'group' => 'biru',
+        'group_id' => $groupBiru->id,
         'quota' => 5,
-        'is_active' => true,
     ]);
 
     Livewire::test('pages::authorized.index')
         ->set('search', 'merah')
         ->assertViewHas('authorizeds', function ($authorizeds) {
             return $authorizeds->count() === 1
-                && $authorizeds->first()->group === 'merah';
+                && $authorizeds->first()->mdGroup->nama_group === 'merah';
         });
 });
 
 test('active filter works', function () {
-    $user = User::factory()->create();
+    $user = User::factory()->create(['status' => 'active']);
+    $userInactive = User::factory()->create(['status' => 'inactive']);
     $user->givePermissionTo('catera:authorized:view_any');
     $this->actingAs($user);
 
-    Authorized::create([
-        'user_id' => $user->id,
-        'uuid' => (string) Str::uuid(),
-        'group' => 'merah',
-        'quota' => 10,
-        'is_active' => true,
-    ]);
+    $group = \App\Models\MdGroup::firstOrCreate(['nama_group' => 'merah']);
 
     Authorized::create([
         'user_id' => $user->id,
         'uuid' => (string) Str::uuid(),
-        'group' => 'biru',
+        'group_id' => $group->id,
+        'quota' => 10,
+    ]);
+
+    Authorized::create([
+        'user_id' => $userInactive->id,
+        'uuid' => (string) Str::uuid(),
+        'group_id' => $group->id,
         'quota' => 5,
-        'is_active' => false,
     ]);
 
     Livewire::test('pages::authorized.index')
@@ -118,9 +121,11 @@ test('active filter works', function () {
 });
 
 test('create authorized record with valid data', function () {
-    $user = User::factory()->create();
+    $user = User::factory()->create(['status' => 'active']);
     $user->givePermissionTo(['catera:authorized:view_any', 'catera:authorized:create']);
     $this->actingAs($user);
+
+    $group = \App\Models\MdGroup::firstOrCreate(['nama_group' => 'merah']);
 
     $newUuid = (string) Str::uuid();
 
@@ -129,9 +134,8 @@ test('create authorized record with valid data', function () {
         ->assertSet('showAddModal', true)
         ->set('addUuid', $newUuid)
         ->set('addUserId', $user->id)
-        ->set('addGroup', 'merah')
+        ->set('addGroupId', $group->id)
         ->set('addQuota', '10')
-        ->set('addIsActive', true)
         ->call('store')
         ->assertHasNoErrors()
         ->assertSet('showAddModal', false);
@@ -139,99 +143,99 @@ test('create authorized record with valid data', function () {
     $this->assertDatabaseHas('authorizeds', [
         'uuid' => $newUuid,
         'user_id' => $user->id,
-        'group' => 'merah',
+        'group_id' => $group->id,
         'quota' => 10,
-        'is_active' => true,
     ]);
 });
 
 test('create authorized fails with duplicate uuid', function () {
-    $user = User::factory()->create();
+    $user = User::factory()->create(['status' => 'active']);
     $user->givePermissionTo(['catera:authorized:view_any', 'catera:authorized:create']);
     $this->actingAs($user);
+
+    $group = \App\Models\MdGroup::firstOrCreate(['nama_group' => 'merah']);
 
     $existing = Authorized::create([
         'user_id' => $user->id,
         'uuid' => (string) Str::uuid(),
-        'group' => 'merah',
+        'group_id' => $group->id,
         'quota' => 10,
-        'is_active' => true,
     ]);
 
     Livewire::test('pages::authorized.index')
         ->set('addUuid', $existing->uuid)
         ->set('addUserId', $user->id)
-        ->set('addGroup', 'merah')
+        ->set('addGroupId', $group->id)
         ->set('addQuota', '10')
-        ->set('addIsActive', true)
         ->call('store')
         ->assertHasErrors(['addUuid']);
 });
 
 test('create authorized fails with duplicate user_id', function () {
-    $user = User::factory()->create();
+    $user = User::factory()->create(['status' => 'active']);
     $user->givePermissionTo(['catera:authorized:view_any', 'catera:authorized:create']);
     $this->actingAs($user);
+
+    $group = \App\Models\MdGroup::firstOrCreate(['nama_group' => 'merah']);
 
     $existing = Authorized::create([
         'user_id' => $user->id,
         'uuid' => (string) Str::uuid(),
-        'group' => 'merah',
+        'group_id' => $group->id,
         'quota' => 10,
-        'is_active' => true,
     ]);
 
     Livewire::test('pages::authorized.index')
         ->set('addUuid', (string) Str::uuid())
         ->set('addUserId', $user->id)
-        ->set('addGroup', 'merah')
+        ->set('addGroupId', $group->id)
         ->set('addQuota', '10')
-        ->set('addIsActive', true)
         ->call('store')
         ->assertHasErrors(['addUserId']);
 });
 
 test('update authorized record', function () {
-    $user = User::factory()->create();
+    $user = User::factory()->create(['status' => 'active']);
     $user->givePermissionTo(['catera:authorized:view_any', 'catera:authorized:update']);
     $this->actingAs($user);
+
+    $groupMerah = \App\Models\MdGroup::firstOrCreate(['nama_group' => 'merah']);
+    $groupBiru = \App\Models\MdGroup::firstOrCreate(['nama_group' => 'biru']);
 
     $authorized = Authorized::create([
         'user_id' => $user->id,
         'uuid' => (string) Str::uuid(),
-        'group' => 'merah',
+        'group_id' => $groupMerah->id,
         'quota' => 10,
-        'is_active' => true,
     ]);
 
     Livewire::test('pages::authorized.index')
         ->call('edit', $authorized->id)
         ->assertSet('showEditModal', true)
         ->assertSet('editUuid', $authorized->uuid)
-        ->set('editGroup', 'biru')
+        ->set('editGroupId', $groupBiru->id)
         ->set('editQuota', '20')
-        ->set('editIsActive', false)
         ->call('update')
         ->assertHasNoErrors()
         ->assertSet('showEditModal', false);
 
     $authorized->refresh();
-    expect($authorized->group)->toBe('biru');
+    expect($authorized->group_id)->toBe($groupBiru->id);
     expect($authorized->quota)->toBe(20);
-    expect($authorized->is_active)->toBeFalse();
 });
 
 test('delete authorized record', function () {
-    $user = User::factory()->create();
+    $user = User::factory()->create(['status' => 'active']);
     $user->givePermissionTo(['catera:authorized:view_any', 'catera:authorized:delete']);
     $this->actingAs($user);
+
+    $group = \App\Models\MdGroup::firstOrCreate(['nama_group' => 'merah']);
 
     $authorized = Authorized::create([
         'user_id' => $user->id,
         'uuid' => (string) Str::uuid(),
-        'group' => 'merah',
+        'group_id' => $group->id,
         'quota' => 10,
-        'is_active' => true,
     ]);
 
     Livewire::test('pages::authorized.index')

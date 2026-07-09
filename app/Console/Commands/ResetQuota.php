@@ -29,13 +29,24 @@ class ResetQuota extends Command
         $this->info('Start daily reset system');
 
         DB::transaction(function () {
-            DB::table('authorizeds')->update([
-                'quota' => DB::raw('CASE
-                    WHEN is_active = true THEN 1
-                    ELSE 0
-                END'),
-                'updated_at' => now(),
-            ]);
+            // Since we deleted is_active from authorizeds, we join with portal_application.md_users to get the user status
+            $activeUserIds = DB::table('portal_application.md_users')
+                ->where('status', 'active')
+                ->pluck('id');
+
+            DB::table('catera.authorizeds')
+                ->whereIn('user_id', $activeUserIds)
+                ->update([
+                    'quota' => 1,
+                    'updated_at' => now(),
+                ]);
+
+            DB::table('catera.authorizeds')
+                ->whereNotIn('user_id', $activeUserIds)
+                ->update([
+                    'quota' => 0,
+                    'updated_at' => now(),
+                ]);
         });
 
         $this->info('Daily reset system completed');

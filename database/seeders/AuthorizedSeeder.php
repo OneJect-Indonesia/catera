@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\Authorized;
 use Illuminate\Database\Seeder;
 
 class AuthorizedSeeder extends Seeder
@@ -24,29 +23,33 @@ class AuthorizedSeeder extends Seeder
         $data = [];
         $now = now();
 
+        $groups = \App\Models\MdGroup::pluck('id', 'nama_group');
+
         while (($row = fgetcsv($file)) !== false) {
             if (count($row) < 6) {
                 continue;
             }
 
-            $data[] = [
-                'uuid' => $row[1],
-                'user_id' => (int) $row[2],
-                'group' => $row[3],
-                'quota' => (int) $row[4],
-                'is_active' => strtolower($row[5]) === 'true',
-                'created_at' => $now,
-                'updated_at' => $now,
-            ];
+            $groupName = $row[3];
+            $groupId = $groups[$groupName] ?? null;
 
-            if (count($data) >= 500) {
-                Authorized::insert($data);
-                $data = [];
-            }
-        }
+            // Also update portal user's status to active/inactive since we dropped is_active column from authorizeds
+            $isActive = strtolower($row[5]) === 'true';
+            \Illuminate\Support\Facades\DB::table('portal_application.md_users')
+                ->where('id', (int) $row[2])
+                ->update(['status' => $isActive ? 'active' : 'inactive']);
 
-        if (count($data) > 0) {
-            Authorized::insert($data);
+            // Directly run updateOrInsert to avoid duplicate UUID unique constraints or bulk issues in Postgres
+            \Illuminate\Support\Facades\DB::table('catera.authorizeds')->updateOrInsert(
+                ['uuid' => $row[1]],
+                [
+                    'user_id' => (int) $row[2],
+                    'group_id' => $groupId,
+                    'quota' => (int) $row[4],
+                    'created_at' => $now,
+                    'updated_at' => $now,
+                ]
+            );
         }
 
         fclose($file);

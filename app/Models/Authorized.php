@@ -17,21 +17,33 @@ class Authorized extends Model
     protected $fillable = [
         'user_id',
         'uuid',
-        'group',
+        'group_id',
         'quota',
-        'is_active',
     ];
 
     protected function casts(): array
     {
-        return [
-            'is_active' => 'boolean',
-        ];
+        return [];
     }
 
     public function scopeActive(\Illuminate\Database\Eloquent\Builder $query): \Illuminate\Database\Eloquent\Builder
     {
-        return $query->where('is_active', true);
+        return $query->whereHas('user', function ($q) {
+            $q->where('status', 'active');
+        });
+    }
+
+    public function getIsActiveAttribute(): bool
+    {
+        return $this->user?->status === 'active';
+    }
+
+    /**
+     * Get the group associated with this authorized record.
+     */
+    public function mdGroup(): BelongsTo
+    {
+        return $this->belongsTo(MdGroup::class, 'group_id');
     }
 
     /**

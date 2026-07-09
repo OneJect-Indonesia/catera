@@ -21,23 +21,25 @@ test('authenticated users can visit the dashboard', function () {
 });
 
 test('authenticated users can view dashboard stats', function () {
-    $user = User::factory()->create();
+    $user = User::factory()->create(['status' => 'active']);
+    $userInactive = User::factory()->create(['status' => 'inactive']);
     $this->actingAs($user);
+
+    $groupMerah = \App\Models\MdGroup::firstOrCreate(['nama_group' => 'merah'], ['short_description' => 'Group Merah']);
+    $groupBiru = \App\Models\MdGroup::firstOrCreate(['nama_group' => 'biru'], ['short_description' => 'Group Biru']);
 
     $auth1 = Authorized::create([
         'user_id' => $user->id,
         'uuid' => (string) Str::uuid(),
-        'group' => 'merah',
+        'group_id' => $groupMerah->id,
         'quota' => 10,
-        'is_active' => true,
     ]);
 
     $auth2 = Authorized::create([
-        'user_id' => $user->id,
+        'user_id' => $userInactive->id,
         'uuid' => (string) Str::uuid(),
-        'group' => 'biru',
+        'group_id' => $groupBiru->id,
         'quota' => 5,
-        'is_active' => false,
     ]);
 
     QuotaSchedule::create([
@@ -72,8 +74,8 @@ test('authenticated users can view dashboard stats', function () {
         ->assertOk()
         ->assertViewHas('stats', function ($stats) {
             return $stats['total_authorized'] === 2
-                && $stats['merah_count'] === 1
-                && $stats['biru_count'] === 1
+                && in_array('Merah', $stats['group_labels'])
+                && in_array('Biru', $stats['group_labels'])
                 && $stats['active_count'] === 1
                 && $stats['inactive_count'] === 1
                 && $stats['total_quota'] === 50

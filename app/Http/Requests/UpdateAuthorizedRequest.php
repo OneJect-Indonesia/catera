@@ -14,9 +14,8 @@ class UpdateAuthorizedRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'editGroup' => 'required|in:merah,biru',
+            'editGroupId' => 'required|integer|exists:md_groups,id',
             'editQuota' => 'required|numeric',
-            'editIsActive' => 'boolean',
         ];
     }
 }
