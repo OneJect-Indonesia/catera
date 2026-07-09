@@ -51,9 +51,28 @@ class DashboardService
         $groupsData = \App\Models\MdGroup::withCount('authorizeds')->get();
         $groupLabels = [];
         $groupSeries = [];
+        $groupColors = [];
+
+        // Color name to hex mapping (Tailwind 500 shades)
+        $colorMap = [
+            'zinc' => '#71717A',
+            'red' => '#EF4444',
+            'blue' => '#3B82F6',
+            'green' => '#10B981',
+            'yellow' => '#EAB308',
+            'orange' => '#F97316',
+            'purple' => '#A855F7',
+            'pink' => '#EC4899',
+            'indigo' => '#6366F1',
+        ];
+
         foreach ($groupsData as $g) {
             $groupLabels[] = ucfirst($g->nama_group);
             $groupSeries[] = (int) $g->authorizeds_count;
+
+            // Map color name to hex, fallback to zinc if not found
+            $colorName = $g->color ?? 'zinc';
+            $groupColors[] = $colorMap[$colorName] ?? $colorMap['zinc'];
         }
 
         $totalQuota = QuotaSchedule::query()
@@ -67,6 +86,7 @@ class DashboardService
             'inactive_count' => (int) $authorizedStats->inactive_count,
             'group_labels' => $groupLabels,
             'group_series' => $groupSeries,
+            'group_colors' => $groupColors,
             'groups_info' => $groupsData->map(fn ($g) => [
                 'nama_group' => $g->nama_group,
                 'short_description' => $g->short_description ?? '-',

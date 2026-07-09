@@ -105,7 +105,7 @@ new class extends Component {
             },
             series: this.stats.group_series || [],
             labels: this.stats.group_labels || [],
-            colors: ['#EF4444', '#3B82F6', '#10B981', '#F59E0B', '#6366F1', '#EC4899'],
+            colors: this.stats.group_colors || [],
             legend: { position: 'bottom', fontSize: '14px' },
             dataLabels: { enabled: true, dropShadow: { enabled: false } },
             plotOptions: {
