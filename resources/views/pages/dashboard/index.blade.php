@@ -8,6 +8,7 @@ new class extends Component {
     public string $endDate = '';
     public array $stats = [];
     public array $trends = [];
+    public array $weeklyAccessLogStats = [];
 
     public function mount(): void
     {
@@ -21,15 +22,19 @@ new class extends Component {
 
         $this->trends = $service->getTrends($this->startDate, $this->endDate);
 
+        $categoryStats = $service->getCategoryStats();
+        $this->weeklyAccessLogStats = $service->getWeeklyAccessLogStats(12);
+
         $this->stats = array_merge(
             $service->getStats(),
-            $service->getTodayStats(),
-            $service->getCategoryStats()
+            $service->getYesterdayStats(),
+            $categoryStats
         );
 
         return [
             'stats' => $this->stats,
             'trends' => $this->trends,
+            'weeklyAccessLogStats' => $this->weeklyAccessLogStats,
         ];
     }
 }; ?>
@@ -39,10 +44,12 @@ new class extends Component {
 <div class="flex h-full w-full flex-1 flex-col gap-6" x-data="{
     stats: @js($stats),
     trends: @js($trends),
+    weeklyAccessLogStats: @js($weeklyAccessLogStats),
     groupChartInstance: null,
     statusChartInstance: null,
     trendChartInstance: null,
     categoryChartInstance: null,
+    weeklyChartInstance: null,
     init() {
         if (typeof window.ApexCharts === 'undefined') {
             const script = document.createElement('script');
@@ -60,6 +67,26 @@ new class extends Component {
                     name: 'Quota Added',
                     data: value
                 }]);
+            }
+        });
+
+        this.$watch('$wire.weeklyAccessLogStats', value => {
+            if (this.weeklyChartInstance) {
+                this.weeklyChartInstance.updateOptions({
+                    xaxis: {
+                        categories: value.labels || []
+                    }
+                });
+                this.weeklyChartInstance.updateSeries([
+                    {
+                        name: 'Authorized',
+                        data: value.success || []
+                    },
+                    {
+                        name: 'Non Authorized',
+                        data: value.failed || []
+                    }
+                ]);
             }
         });
 
@@ -95,6 +122,7 @@ new class extends Component {
         this.$refs.statusChart.innerHTML = '';
         this.$refs.categoryChart.innerHTML = '';
         this.$refs.trendChart.innerHTML = '';
+        this.$refs.weeklyChart.innerHTML = '';
 
         this.groupChartInstance = new ApexCharts(this.$refs.groupChart, {
             chart: {
@@ -233,6 +261,45 @@ new class extends Component {
             grid: { borderColor: '#e2e8f0' }
         });
         this.trendChartInstance.render();
+
+        this.weeklyChartInstance = new ApexCharts(this.$refs.weeklyChart, {
+            chart: {
+                type: 'line',
+                height: 320,
+                fontFamily: 'inherit',
+                toolbar: { show: false },
+                zoom: { enabled: false }
+            },
+            series: [
+                {
+                    name: 'Authorized',
+                    data: this.weeklyAccessLogStats.success || []
+                },
+                {
+                    name: 'Non Authorized',
+                    data: this.weeklyAccessLogStats.failed || []
+                }
+            ],
+            xaxis: {
+                type: 'category',
+                categories: this.weeklyAccessLogStats.labels || []
+            },
+            yaxis: {
+                title: { text: 'Logs Count' }
+            },
+            colors: ['#22C55E', '#EF4444'],
+            stroke: {
+                curve: 'smooth',
+                width: 3
+            },
+            markers: {
+                size: 4
+            },
+            grid: {
+                borderColor: '#e2e8f0'
+            }
+        });
+        this.weeklyChartInstance.render();
     }
 }">
     {{-- Header --}}
@@ -265,7 +332,7 @@ new class extends Component {
                 <div class="p-2 rounded-lg bg-violet-500/10 text-violet-500 group-hover:bg-violet-500 group-hover:text-white transition-colors">
                     <flux:icon name="document-text" variant="mini" />
                 </div>
-                <flux:text size="sm" font="medium">Access Logs (Today)</flux:text>
+                <flux:text size="sm" font="medium">Access Logs (Yesterday)</flux:text>
             </div>
             <div class="flex items-baseline gap-2 flex-wrap">
                 <flux:heading size="xl" class="group-hover:text-violet-500 transition-colors">{{ number_format($stats['total_access_logs']) }}</flux:heading>
@@ -362,4 +429,13 @@ new class extends Component {
             </div>
         </flux:card>
     </div>
+
+    {{-- Weekly Access Log Chart Section --}}
+    <flux:card class="flex flex-col gap-4 w-full">
+        <div>
+            <flux:heading size="lg">Weekly Access Logs</flux:heading>
+            <flux:subheading>Authorized (Green) vs Non Authorized (Red) weekly access logs over past year.</flux:subheading>
+        </div>
+        <div class="h-80 w-full" x-ref="weeklyChart" wire:ignore></div>
+    </flux:card>
 </div>

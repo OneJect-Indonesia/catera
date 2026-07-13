@@ -23,16 +23,16 @@ class DashboardService
         );
     }
 
-    public function getTodayStats(): array
+    public function getYesterdayStats(): array
     {
-        $dateKey = now()->toDateString();
+        $dateKey = now()->subDay()->toDateString();
 
-        return Cache::remember("dashboard.today.{$dateKey}", 60, fn () => $this->fetchTodayStats());
+        return Cache::remember("dashboard.yesterday.{$dateKey}", 60, fn () => $this->fetchYesterdayStats());
     }
 
-    public function getCategoryStats(): array
+    public function getCategoryStats(?int $months = null): array
     {
-        return Cache::remember('dashboard.categories', 300, fn () => $this->fetchCategoryStats());
+        return Cache::remember('dashboard.categories.'.($months ?? 'all'), 300, fn () => $this->fetchCategoryStats($months));
     }
 
     protected function fetchStats(): array
@@ -111,10 +111,13 @@ class DashboardService
             ->toArray();
     }
 
-    protected function fetchTodayStats(): array
+    protected function fetchYesterdayStats(): array
     {
         $stats = AccessLog::query()
-            ->today()
+            ->whereBetween('scanned_at', [
+                now()->subDay()->startOfDay(),
+                now()->subDay()->endOfDay(),
+            ])
             ->selectRaw('status, COUNT(*) as count')
             ->groupBy('status')
             ->pluck('count', 'status');
@@ -129,10 +132,13 @@ class DashboardService
         ];
     }
 
-    protected function fetchCategoryStats(): array
+    protected function fetchCategoryStats(?int $months = null): array
     {
-        $stats = AccessLog::query()
-            ->selectRaw('status, COUNT(*) as count')
+        $query = AccessLog::query();
+        if ($months) {
+            $query->where('scanned_at', '>=', now()->subMonths($months));
+        }
+        $stats = $query->selectRaw('status, COUNT(*) as count')
             ->groupBy('status')
             ->pluck('count', 'status');
 
@@ -142,6 +148,70 @@ class DashboardService
             'category_no_quota' => (int) ($stats->get('no quota') ?? 0),
             'category_inactive' => (int) ($stats->get('inactive') ?? 0),
             'category_not_registered' => (int) ($stats->get('not registered') ?? 0),
+        ];
+    }
+
+    public function getWeeklyAccessLogStats(int $months = 12): array
+    {
+        return Cache::remember('dashboard.weekly_access_logs.'.$months, 300, fn () => $this->fetchWeeklyAccessLogStats($months));
+    }
+
+    protected function fetchWeeklyAccessLogStats(int $months = 12): array
+    {
+        $startDate = now()->subMonths($months)->startOfWeek();
+        $endDate = now()->endOfWeek();
+
+        // Use database query to aggregate weekly stats directly in pgsql/mysql
+        $driver = config('database.connections.'.config('database.default').'.driver');
+
+        $query = AccessLog::query();
+        if ($driver === 'pgsql') {
+            $query->selectRaw("
+                date_trunc('week', scanned_at)::date as week_date,
+                SUM(CASE WHEN status = 'authorized' THEN 1 ELSE 0 END) as success_count,
+                SUM(CASE WHEN status != 'authorized' THEN 1 ELSE 0 END) as failed_count
+            ");
+        } else {
+            $query->selectRaw("
+                DATE_FORMAT(DATE_SUB(scanned_at, INTERVAL WEEKDAY(scanned_at) DAY), '%Y-%m-%d') as week_date,
+                SUM(CASE WHEN status = 'authorized' THEN 1 ELSE 0 END) as success_count,
+                SUM(CASE WHEN status != 'authorized' THEN 1 ELSE 0 END) as failed_count
+            ");
+        }
+
+        $results = $query->where('scanned_at', '>=', $startDate->toDateTimeString())
+            ->groupBy('week_date')
+            ->orderBy('week_date', 'asc')
+            ->get()
+            ->keyBy(fn ($item) => \Carbon\Carbon::parse($item->week_date)->toDateString());
+
+        $labels = [];
+        $successData = [];
+        $failedData = [];
+
+        $current = clone $startDate;
+        while ($current->lte($endDate)) {
+            $weekKey = $current->toDateString();
+            $item = $results->get($weekKey);
+
+            $successCount = $item ? (int) $item->success_count : 0;
+            $failedCount = $item ? (int) $item->failed_count : 0;
+
+            $day = $current->day;
+            $weekOfMonth = (int) ceil($day / 7);
+            $monthName = strtolower($current->format('M'));
+
+            $labels[] = "{$monthName} {$weekOfMonth}";
+            $successData[] = $successCount;
+            $failedData[] = $failedCount;
+
+            $current = $current->addWeek();
+        }
+
+        return [
+            'labels' => $labels,
+            'success' => $successData,
+            'failed' => $failedData,
         ];
     }
 }

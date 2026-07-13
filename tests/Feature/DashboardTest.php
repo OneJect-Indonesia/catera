@@ -60,7 +60,7 @@ test('authenticated users can view dashboard stats', function () {
         'uuid' => (string) Str::uuid(),
         'group' => 'merah',
         'status' => 'authorized',
-        'scanned_at' => now(),
+        'scanned_at' => now()->subDay(),
     ]);
 
     AccessLog::create([
@@ -79,8 +79,11 @@ test('authenticated users can view dashboard stats', function () {
                 && $stats['active_count'] === 1
                 && $stats['inactive_count'] === 1
                 && $stats['total_quota'] === 50
-                && $stats['total_access_logs'] === 1
+                && $stats['total_access_logs'] === 2
                 && $stats['access_success_count'] === 1
-                && $stats['access_failed_count'] === 0;
+                && $stats['access_failed_count'] === 1;
+        })
+        ->assertViewHas('weeklyAccessLogStats', function ($weeklyAccessLogStats) {
+            return isset($weeklyAccessLogStats['labels']) && isset($weeklyAccessLogStats['success']) && isset($weeklyAccessLogStats['failed']);
         });
 });
