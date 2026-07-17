@@ -23,7 +23,7 @@ new class extends Component {
         $this->trends = $service->getTrends($this->startDate, $this->endDate);
 
         $categoryStats = $service->getCategoryStats();
-        $this->weeklyAccessLogStats = $service->getWeeklyAccessLogStats(12);
+        $this->weeklyAccessLogStats = $service->getWeeklyAccessLogStats(3);
 
         $this->stats = array_merge(
             $service->getStats(),
@@ -63,10 +63,36 @@ new class extends Component {
 
         this.$watch('$wire.trends', value => {
             if (this.trendChartInstance) {
+                this.trendChartInstance.updateOptions({
+                    xaxis: {
+                        min: new Date(this.$wire.startDate).getTime(),
+                        max: new Date(this.$wire.endDate).getTime()
+                    }
+                });
                 this.trendChartInstance.updateSeries([{
                     name: 'Quota Added',
                     data: value
                 }]);
+            }
+        });
+
+        this.$watch('$wire.startDate', value => {
+            if (this.trendChartInstance) {
+                this.trendChartInstance.updateOptions({
+                    xaxis: {
+                        min: new Date(value).getTime()
+                    }
+                });
+            }
+        });
+
+        this.$watch('$wire.endDate', value => {
+            if (this.trendChartInstance) {
+                this.trendChartInstance.updateOptions({
+                    xaxis: {
+                        max: new Date(value).getTime()
+                    }
+                });
             }
         });
 
@@ -237,13 +263,18 @@ new class extends Component {
                 toolbar: { show: false },
                 zoom: { enabled: false }
             },
+            dataLabels: {
+                enabled: false
+            },
             series: [{
                 name: 'Quota Added',
                 data: this.trends
             }],
             xaxis: {
                 type: 'datetime',
-                labels: { datetimeUTC: false }
+                labels: { datetimeUTC: false },
+                min: new Date(this.$wire.startDate).getTime(),
+                max: new Date(this.$wire.endDate).getTime()
             },
             yaxis: { title: { text: 'Quota' } },
             colors: ['#3B82F6'],
@@ -434,7 +465,7 @@ new class extends Component {
     <flux:card class="flex flex-col gap-4 w-full">
         <div>
             <flux:heading size="lg">Weekly Access Logs</flux:heading>
-            <flux:subheading>Authorized (Green) vs Non Authorized (Red) weekly access logs over past year.</flux:subheading>
+            <flux:subheading>Authorized (Green) vs Non Authorized (Red) weekly access logs over past 3 months.</flux:subheading>
         </div>
         <div class="h-80 w-full" x-ref="weeklyChart" wire:ignore></div>
     </flux:card>

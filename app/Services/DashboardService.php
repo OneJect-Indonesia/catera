@@ -97,18 +97,36 @@ class DashboardService
 
     protected function fetchTrends(?string $startDate, ?string $endDate): array
     {
-        return QuotaSchedule::query()
+        $startDateStr = $startDate ?: now()->subMonth()->toDateString();
+        $endDateStr = $endDate ?: now()->addMonth()->toDateString();
+
+        $start = \Carbon\Carbon::parse($startDateStr);
+        $end = \Carbon\Carbon::parse($endDateStr);
+
+        if ($start->gt($end)) {
+            return [];
+        }
+
+        $data = QuotaSchedule::query()
             ->selectRaw('target_date as date, SUM(add_quota) as total')
             ->whereNotNull('target_date')
-            ->inDateRange($startDate, $endDate)
+            ->inDateRange($startDateStr, $endDateStr)
             ->groupBy('target_date')
-            ->orderBy('target_date', 'asc')
-            ->get()
-            ->map(fn ($item) => [
-                'x' => strtotime((string) $item->date) * 1000,
-                'y' => (int) $item->total,
-            ])
-            ->toArray();
+            ->pluck('total', 'date')
+            ->map(fn ($total) => (int) $total);
+
+        $period = \Carbon\CarbonPeriod::create($start, $end);
+        $trends = [];
+
+        foreach ($period as $date) {
+            $dateStr = $date->toDateString();
+            $trends[] = [
+                'x' => $date->timestamp * 1000,
+                'y' => $data->get($dateStr) ?? 0,
+            ];
+        }
+
+        return $trends;
     }
 
     protected function fetchYesterdayStats(): array
@@ -151,12 +169,12 @@ class DashboardService
         ];
     }
 
-    public function getWeeklyAccessLogStats(int $months = 12): array
+    public function getWeeklyAccessLogStats(int $months = 3): array
     {
         return Cache::remember('dashboard.weekly_access_logs.'.$months, 300, fn () => $this->fetchWeeklyAccessLogStats($months));
     }
 
-    protected function fetchWeeklyAccessLogStats(int $months = 12): array
+    protected function fetchWeeklyAccessLogStats(int $months = 3): array
     {
         $startDate = now()->subMonths($months)->startOfWeek();
         $endDate = now()->endOfWeek();

@@ -18,6 +18,9 @@ new class extends Component
     public string $tempStartDate = '';
     public string $tempEndDate = '';
     public bool $showFilterModal = false;
+    public bool $showExportModal = false;
+    public string $exportStartDate = '';
+    public string $exportEndDate = '';
 
     public function updated($property): void
     {
@@ -51,6 +54,92 @@ new class extends Component
                       'tempFilterGroup', 'tempFilterStatus', 'tempStartDate', 'tempEndDate']);
         $this->resetPage();
         $this->showFilterModal = false;
+    }
+
+    public function openExportModal(): void
+    {
+        $this->exportStartDate = now()->subWeek()->toDateString();
+        $this->exportEndDate = now()->toDateString();
+        $this->showExportModal = true;
+    }
+
+    public function export()
+    {
+        $this->authorize('viewAny', AccessLog::class);
+
+        $this->validate([
+            'exportStartDate' => 'required|date',
+            'exportEndDate' => 'required|date|after_or_equal:exportStartDate',
+        ]);
+
+        $startDate = \Carbon\Carbon::parse($this->exportStartDate)->startOfDay();
+        $endDate = \Carbon\Carbon::parse($this->exportEndDate)->endOfDay();
+
+        $logs = AccessLog::query()
+            ->with(['authorized.user'])
+            ->whereBetween('scanned_at', [$startDate, $endDate])
+            ->orderBy('scanned_at', 'asc')
+            ->get();
+
+        $totalBiruAuthorized = 0;
+        $totalMerahAuthorized = 0;
+        $totalFail = 0;
+
+        foreach ($logs as $log) {
+            $status = strtolower($log->status ?? '');
+            $group = strtolower($log->group ?? '');
+            if ($status === 'authorized') {
+                if ($group === 'biru') {
+                    $totalBiruAuthorized++;
+                } elseif ($group === 'merah') {
+                    $totalMerahAuthorized++;
+                }
+            } else {
+                $totalFail++;
+            }
+        }
+
+        $filename = 'access_logs_export_' . $startDate->format('Y-m-d') . '_to_' . $endDate->format('Y-m-d') . '.csv';
+
+        $callback = function () use ($logs, $totalBiruAuthorized, $totalMerahAuthorized, $totalFail) {
+            $file = fopen('php://output', 'w');
+
+            // Header
+            fputcsv($file, ['Full Name', 'Group', 'Status', 'Scanned At']);
+
+            // Data Rows
+            foreach ($logs as $log) {
+                $fullName = trim(($log->authorized?->user?->first_name ?? '') . ' ' . ($log->authorized?->user?->last_name ?? ''));
+                if (empty($fullName)) {
+                    $fullName = '-';
+                }
+
+                fputcsv($file, [
+                    $fullName,
+                    ucfirst($log->group ?? '-'),
+                    ucfirst($log->status ?? '-'),
+                    $log->scanned_at ? $log->scanned_at->format('Y-m-d H:i:s') : '-',
+                ]);
+            }
+
+            // Summary Spacer
+            fputcsv($file, []);
+            fputcsv($file, ['Summary']);
+            fputcsv($file, ['Total Authorized Biru', $totalBiruAuthorized]);
+            fputcsv($file, ['Total Authorized Merah', $totalMerahAuthorized]);
+            fputcsv($file, ['Total Fail (Selain Authorized)', $totalFail]);
+
+            fclose($file);
+        };
+
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+        ];
+
+        $this->showExportModal = false;
+
+        return response()->streamDownload($callback, $filename, $headers);
     }
 
     public function with(): array
@@ -103,12 +192,17 @@ new class extends Component
             placeholder="Search by UUID, group, status, or user..."
             class="w-full sm:max-w-xs"
         />
-        @php
-            $activeFilterCount = collect([$filterGroup, $filterStatus, $startDate, $endDate])->filter()->count();
-        @endphp
-        <flux:button wire:click="openFilterModal" icon="funnel" :variant="$activeFilterCount > 0 ? 'primary' : 'filled'">
-            Filters
-        </flux:button>
+        <div class="flex gap-2">
+            @php
+                $activeFilterCount = collect([$filterGroup, $filterStatus, $startDate, $endDate])->filter()->count();
+            @endphp
+            <flux:button wire:click="openFilterModal" icon="funnel" :variant="$activeFilterCount > 0 ? 'primary' : 'filled'">
+                Filters
+            </flux:button>
+            <flux:button wire:click="openExportModal" icon="arrow-down-tray">
+                Export
+            </flux:button>
+        </div>
     </div>
 
     {{-- Table Card --}}
@@ -210,6 +304,25 @@ new class extends Component
                 <flux:button variant="primary" wire:click="applyFilters">Apply Filters</flux:button>
             </div>
         </div>
+    </flux:modal>
+
+    {{-- Export Modal --}}
+    <flux:modal name="access-logs-export" wire:model.live="showExportModal" variant="floating" class="md:w-120">
+        <form wire:submit="export" class="space-y-5">
+            <div class="border-b border-zinc-100 pb-4 dark:border-zinc-800">
+                <flux:heading size="lg">Export Access Logs</flux:heading>
+                <flux:subheading>Choose a date range to export access logs to CSV.</flux:subheading>
+            </div>
+
+            <flux:input type="date" wire:model="exportStartDate" label="Start Date" required />
+
+            <flux:input type="date" wire:model="exportEndDate" label="End Date" required />
+
+            <div class="flex justify-end gap-2 border-t border-zinc-100 pt-4 dark:border-zinc-800">
+                <flux:button type="button" x-on:click="$flux.modal('access-logs-export').close()">Cancel</flux:button>
+                <flux:button type="submit" variant="primary">Export</flux:button>
+            </div>
+        </form>
     </flux:modal>
 
 </div>

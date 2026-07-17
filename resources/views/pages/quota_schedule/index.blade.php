@@ -134,7 +134,9 @@ new class extends Component
                 ->when($this->addAuthorizedUuidSearch, function ($query) {
                     $query->where(function ($q) {
                         $q->where('catera.authorizeds.uuid', 'ilike', "{$this->addAuthorizedUuidSearch}%")
-                          ->orWhere('catera.authorizeds.group', 'ilike', "{$this->addAuthorizedUuidSearch}%")
+                          ->orWhereHas('mdGroup', function ($gQuery) {
+                              $gQuery->where('nama_group', 'ilike', "{$this->addAuthorizedUuidSearch}%");
+                          })
                           ->orWhere('portal_application.md_users.first_name', 'ilike', "{$this->addAuthorizedUuidSearch}%")
                           ->orWhere('portal_application.md_users.last_name', 'ilike', "{$this->addAuthorizedUuidSearch}%");
                     });

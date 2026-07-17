@@ -13,7 +13,7 @@ Artisan::command('inspire', function () {
 })->purpose('Display an inspiring quote');
 
 // * weekly access logs export (Mondays at 00:00)
-Schedule::command(ExportWeeklyAccessLogs::class)->dailyAt('14:40')->timezone('Asia/Jakarta')->withoutOverlapping();
+// Schedule::command(ExportWeeklyAccessLogs::class)->dailyAt('14:40')->timezone('Asia/Jakarta')->withoutOverlapping();
 // Schedule::command(ExportWeeklyAccessLogs::class)->weeklyOn(1, '00:00')->timezone('Asia/Jakarta')->withoutOverlapping();
 
 // * daily quota reset scheduler

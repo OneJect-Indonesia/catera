@@ -15,7 +15,7 @@
         search: '',
         selectedIndex: 0,
         options: [],
-        wireModelValue: @entangle($wireModel),
+        wireModelValue: @entangle($wireModel).live,
         _cachedSelectedLabel: null,
 
         init() {
