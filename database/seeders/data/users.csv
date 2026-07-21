@@ -1,0 +1,779 @@
+id,nik,email,password,first_name,last_name,department_id,status,created_at,updated_at
+1,2111424,,password,Dede,Yusuf,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+2,210056,,password,Niken,Permatasari,8,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+3,200264,,password,Surya,Firman Anggara,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+4,220045,,password,Yosua,Kurniawan,8,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+5,2107005,,password,Supriyanto,,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+6,2107006,,password,Parid,Rizwan,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+7,2108011,,password,Endang,Kurniawan,2,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+8,2111090,,password,Achmad,Taopik,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+9,2111435,,password,Andrian,Irfan Furnama,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+10,2111437,,password,Sudarmono,,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+11,230145,,password,Muhammad,Eko Yulianto,18,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+12,2108034,,password,Yuyun,Rengganingsih,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+13,2112428,,password,Rizky,Maulana,11,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+14,2108029,,password,Diana,Permatasari,11,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+15,210505,,password,Saeful,Ahyar,18,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+16,210547,,password,Amir,Muhtadin,13,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+17,210548,,password,Dwi,Putra Dharmawan Subiyanto,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+18,230146,,password,Anna,Fauziah,5,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+19,210580,,password,Linda,Budiarti,4,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+20,220025,,password,Septi,Winarni,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+21,220030,,password,Yoga,Prayoga,18,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+22,220029,,password,Alam,Jenuin Dipratama,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+23,2108010,,password,Erik,Januar Maulana,2,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+24,2106003,,password,Salbiyah,,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+25,220122,,password,Nur,Mohamad Juliyadi,2,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+26,220123,,password,Aprilian,Ferdy,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+27,230147,,password,Juliana,Margaretta,4,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+28,230148,,password,Ika,Rentina,4,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+29,220145,,password,Ega,Irawan,18,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+30,230130,,password,Naufal,Hafizalwan,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+31,220157,,password,Willy,Andrian,18,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+32,2208294,,password,Hendro,Jatmiko,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+33,220228,,password,Randi,Rahmatulloh,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+34,220284,,password,Agus,Prasetyo Dwi Jaya W,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+35,2108027,,password,Sunarya,,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+36,220227,,password,Nur,Utami Setianingsih,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+37,220470,,password,P.Damiani,Tosan Aji,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+38,220471,,password,Foren,Axela Nangin,10,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+39,220229,,password,Heru,Setiadi,2,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+40,230014,,password,Joi,Rikardo Siahaan,4,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+41,230046,,password,Nurul,Fatia Jannah,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+42,2302017,,password,Ira,Rahmawati,18,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+43,230112,,password,Dipta,Rukmana,13,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+44,230171,,password,Vania,Lorrayne Pamuji,4,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+45,220469,,password,Zharalin,Surya Putri,13,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+46,2212533,,password,Bima,Agus Arachman,16,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+47,230232,,password,Desriana,Rosya,15,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+48,2201004,,password,Anisa,Della,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+49,2301001,,password,Aldifa,Julian,16,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+50,2201076,,password,Duwa,Nanda Brenade,5,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+51,230274,,password,F.,Hilarius Simbolon,7,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+52,230275,,password,Andi,Suhendi,2,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+53,230082,,password,Irvan,Riansa,16,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+54,230462,,password,Khairudin,,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+55,2304056,,password,Rizki,Ramandha,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+56,230493,,password,Muhammad,Robby Akbar Romadhon,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+57,230511,,password,Muhammad,Nur Syabana,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+58,230510,,password,Asrariandy,Masda,18,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+59,240057,,password,Vijai,Kumar Sharma,8,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+60,2204176,,password,Deni,Amaluddin,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+61,230420,,password,Henry,Harto,11,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+62,2108017,,password,Feriansyah,,2,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+63,2109412,,password,Endro,Wardoyo,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+64,2202086,,password,Baitul,Ahyar,2,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+65,2204167,,password,Andi,Saputro,2,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+66,2201036,,password,Dinda,Larasati Wijaya,4,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+67,2110056,,password,Agus,Sugiharto,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+68,230479,,password,Anggun,Pratiwi,10,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+69,240042,,password,Savira,Permata Sari,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+70,240072,,password,Faisal,Abdulah,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+71,240088,,password,Taufan,Krismanto Suwarno,10,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+72,240101,,password,Romy,Loice,17,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+73,2207254,,password,Kuswandi,,2,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+74,2401002,,password,Hibatul,Ilahiyah,10,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+75,2308130,,password,Andre,Bima Taqwa,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+76,2402027,,password,Azkia,Maulida Khanifan,9,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+77,2111207,,password,Adinda,Ramadhani,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+78,2404051,,password,Asep,Mulyana,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+79,240089,,password,Deanna,,10,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+80,240317,,password,Jonathan,Alvin,13,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+81,230355,,password,Erik,Saeful Bahri,4,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+82,240360,,password,Yohana,Briliant Christanti,6,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+83,2404055,,password,Riskitama,Adityawan,2,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+84,2301004,,password,Assyifa,Ratina Hanum,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+85,2302015,,password,Nada,Trashtya Ibaneza,4,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+86,240500,,password,Weismann,Immanuel Sigalingging,3,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+87,2108016,,password,Dyla,Velia,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+88,2212535,,password,Alfien,Dwi Setyawan,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+89,2205198,,password,Rizki,Ramadon,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+90,2212523,,password,Agnes,Devi Maha Cahyani,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+91,2208283,,password,Wowo,Waswan,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+92,240253,,password,Adila,Safa Suseno,17,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+93,2409099,,password,Fauziah,Intan Trihapsari,15,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+94,2207253,,password,Endas,Darsono,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+95,2207252,,password,Rakha,Hauzan Kamal,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+96,2209383,,password,Triya,Bagus Setyawan,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+97,2305083,,password,Wahyu,Eko Saputro,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+98,2404046,,password,Ilham,Enggardiarto,16,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+99,2404047,,password,Hammam,Yutri,16,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+100,2410105,,password,Dian,Iryuliani,7,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+101,240616,,password,Refinaldi,Sande,11,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+102,240455,,password,Jeanne,Kalonica Fielo,18,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+103,240668,,password,Salma,Nusaibah,3,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+104,240669,,password,Aldiva,Indra Pratama,18,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+105,2411118,,password,Ananda,Genta Pitaloka,11,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+106,240458,,password,Dimas,Hendi Wingdinarko,18,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+107,2412129,,password,Zalfa,Hasna Raniah,15,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+108,2205196,,password,Inna,Yudianingsih,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+109,240695,,password,Andi,Rahim,1,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+110,240719,,password,Juson,,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+111,2504096,,password,Legi,Alfirando,11,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+112,2107007,,password,Mustofa,Nawawi,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+113,240716,,password,Novita,Septiyana,18,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+114,240717,,password,Eni,Mulyati Ningsih,18,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+115,240615,,password,Bryan,Nathanael,18,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+116,2411113,,password,Sugih,Pratama Nugraha,17,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+117,2403034,,password,Muhammad,Luthfi Nur Fathoni,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+118,240696,,password,Muhammad,Aditya Prawira,18,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+119,250100,,password,Era,Kurnializa,13,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+120,2201001,,password,Melisa,,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+121,240714,,password,Willy,Gunawan,10,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+122,240599,,password,Yovita,Evaristi Harefa,11,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+123,250129,,password,Jennifer,,13,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+124,250130,,password,Rendi,Mahardika Pinem,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+125,2209308,,password,Rizky,Fatmawati,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+126,2205219,,password,Gusniar,Auvina Berty,1,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+127,2205222,,password,Khorida,Fitriana,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+128,2112301,,password,Stevany,Febrina Putri,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+129,250173,,password,Krisma,Nugrahandi,18,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+130,2502054,,password,Francesco,Wilson Theno,13,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+131,2407059,,password,Rifqi,Muhaiminul Aziz,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+132,250174,,password,Melies,Saktiyani,10,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+133,250296,,password,Samsudin,,18,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+134,2507145,,password,Yusup,Budiman,11,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+135,2501004,,password,Alfisah,Amanda,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+136,250325,,password,Rubono,,10,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+137,250137,,password,Ardi,Marvianto,13,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+138,250297,,password,Dianing,Sri Astuti,1,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+139,2501026,,password,Syamsul,Arifin,16,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+140,2305090,,password,Yahya,Fachri Hidayat,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+141,250298,,password,Margaretha,Agnes Gunawan,18,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+142,2408073,,password,Lidia,Ruliastiniwa Barus,10,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+143,2111092,,password,Rian,Septian,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+144,250384,,password,Pradipta,Mahatidana,11,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+145,2408080,,password,Dinda,Syaqila Andryani,16,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+146,250383,,password,Weni,Rosita Wiratmadiredja,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+147,250210,,password,Muhammad,Fadhel Maulana,13,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+148,2505113,,password,Sitha,Fitri Ramadhani,11,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+149,250419,,password,Dimas,Muhammad Fauzan,4,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+150,250420,,password,Galih,Supriadi,6,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+151,250421,,password,Widya,Nur Pratama,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+152,250424,,password,Dwi,Yanti Anggraini,10,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+153,250214,,password,Dhiya,Haniifa Putri,11,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+154,2506116,,password,Izzah,Marisa Tasallia,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+155,250425,,password,Irfan,Nizam Masjidi,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+156,250426,,password,Yunda,Dewi Agustin,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+157,250427,,password,Muhammad,Afif Gariza Edyel,10,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+158,240697,,password,Retnaning,Setyorini,9,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+159,2506134,,password,Rafli,Akhmad Baihaqi,17,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+160,250430,,password,Fortuna,Evans Simarmata,18,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+161,250429,,password,Surya,Mandala,10,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+162,250458,,password,Riko,Widya Kristanto,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+163,2507142,,password,Nicola,Yanni Alivant,17,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+164,250496,,password,Samuel,Kopong Sabon,4,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+165,250497,,password,Tubagus,Muchammad Akmal Megantara Sutalaksana,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+166,250499,,password,Fredy,Arief Senjaya,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+167,250500,,password,Ni,Putu Pebriyantika Suri,15,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+168,250501,,password,Pia,Devina,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+169,250502,,password,Witanto,Heru Basuki,2,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+170,2501023,,password,Andini,Salsabila Mustofa,4,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+171,2501024,,password,Stanis,Laus Samuel Yakob,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+172,250556,,password,Rosdina,Napitupulu,10,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+173,2508218,,password,Ahmad,Rifa'i,16,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+174,250091,,password,Raymond,Renaldi Tisna,4,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+175,250233,,password,Hastuti,M.Airlangga,10,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+176,250588,,password,Bani,Utomo,8,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+177,2509237,,password,Feela,Faridhotul Faizah,15,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+178,2406057,,password,Catur,Retno Pangestu,4,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+179,2108036,,password,Muhammad,Ridwan,2,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+180,250589,,password,Zaenab,,11,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+181,250215,,password,Hakim,Mustaqim,13,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+182,2509241,,password,Muhammad,Nur Satrio Maryanto,11,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+183,2403044,,password,Rheka,Restu Alina,9,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+184,250648,,password,Andreas,Kurniawan,3,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+185,260020,,password,Tazyinul,Qoriah Alfauziah,15,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+186,2203123,,password,Riza,Afriansyah,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+187,2204189,,password,Ilham,Fahmi Akbar,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+188,260021,,password,Euodia,Gebyar Mahanani,1,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+189,250649,,password,Ahmad,Faishal Mufadhol,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+190,2511273,,password,Prisca,Dian Putri Sefira,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+191,250559,,password,Romadhona,Akbar Subakti,5,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+192,240688,,password,Patricia,Yasmin Krisdianti,6,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+193,250423,,password,Putra,Christianto Yunior,10,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+194,260041,,password,Josia,Nathanael Wibisono,10,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+195,260085,,password,Nanda,Mediatama,4,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+196,250587,,password,M.,Fachri Salim,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+197,250644,,password,Sherlando,Hanantyas Adela Nandita,13,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+198,2106004,,password,M,Gilang Dwi Purnama,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+199,2106396,,password,Cartim,Maulana,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+200,2108037,,password,Dianah,Farahiyah,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+201,2107400,,password,Siti,Mapruhah,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+202,2109040,,password,Dani,Hamdani,18,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+203,2112373,,password,Muhamad,Ridwan Alfiana,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+204,2108018,,password,Abdul,Kodir Jaelani,2,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+205,2108020,,password,Bayu,Herdiyanto,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+206,2108022,,password,Riska,Ersaviani,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+207,2108025,,password,Khusnul,Khotimah,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+208,2108026,,password,Siska,Putri Utami,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+209,2108021,,password,Mega,Febrianti,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+210,2108032,,password,Ahmad,Tridafimansyah,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+211,2108031,,password,Heriyanto,,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+212,2108030,,password,Muhamad,Rendy Irawan,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+213,2108033,,password,Isak,Abdul Malik,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+214,2108013,,password,Rafi,Aulia Rahman,18,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+215,2110411,,password,Andri,,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+216,2110053,,password,Adinda,Fitriani H.,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+217,2110048,,password,Wildan,Nugraha,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+218,2110052,,password,Sumadi,,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+219,2110434,,password,Novi,Ahiriyanti,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+220,2110057,,password,Jihan,Cantikasari,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+221,2111063,,password,Citra,Nabilah,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+222,2111066,,password,Sri,Winasih,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+223,2111071,,password,Surya,Hartono,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+224,2111079,,password,Muhammad,Fatah,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+225,2111081,,password,Ramadan,Hidayat,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+226,2111086,,password,Hermawan,,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+227,2111089,,password,Suyatna,Septian,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+228,2111098,,password,Mukhammad,Nasrun Amri,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+229,2111436,,password,Taufiqurrohman,,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+230,2111110,,password,Sania,Athaeni,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+231,2111108,,password,Novanda,Dwi Ramadhani,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+232,2111111,,password,Mega,Aniska,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+233,2111118,,password,Ratna,Artika,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+234,2111124,,password,Sri,Handayani,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+235,2111130,,password,Puji,Pajar Bahari,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+236,2111131,,password,Indriani,,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+237,2111132,,password,Mayang,Sukaesih,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+238,2111135,,password,Dea,Intan Permatasari,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+239,2111140,,password,Uswatun,Widia Indah,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+240,2111145,,password,Melati,Oktapiani,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+241,2111146,,password,Amelia,Devianti,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+242,2111147,,password,Iis,Nuraeni,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+243,2111148,,password,Fitroh,Isnaeniyah,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+244,2111152,,password,Yani,Safitri,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+245,2111170,,password,Indah,Sundari,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+246,2111174,,password,Alfi,Maulidia,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+247,2111177,,password,Raafi,Adien Haqqi,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+248,2111180,,password,Ramdani,Putra,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+249,2111192,,password,Dita,Widiya,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+250,2111197,,password,Ovperana,Tri Wijayanti,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+251,2111199,,password,Rini,Ridiawanti,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+252,2111202,,password,Siti,Julaeha,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+253,2111209,,password,Dwi,Prasetya Ningrum,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+254,2111216,,password,Hasanudin,,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+255,2111218,,password,Lea,Gusti Lestarika Ananda,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+256,2111226,,password,Asep,Pepen Bustomil Arifin,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+257,2111230,,password,Dewi,Fortuna,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+258,2111231,,password,Dimas,Adi Pangestu,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+259,2111238,,password,Irwan,Setiawan,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+260,2111239,,password,Jamil,Sidik,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+261,2111240,,password,Joko,Yuliyanto,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+262,2111248,,password,Maulana,Iqbal,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+263,2111261,,password,Riyan,Dana Bahtiar Rukmana,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+264,2111264,,password,Saepuloh,,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+265,2111268,,password,Shinta,Ayu Karina,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+266,2111274,,password,Wahyu,Juanda,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+267,2111279,,password,Aang,Kunaefi,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+268,2111280,,password,Ari,Nugroho,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+269,2111282,,password,Kevin,Ramadhani Noviansyah,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+270,2111284,,password,Muhammad,Alfandy Ramadhan,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+271,2111287,,password,Rafa,Aulia Rahman,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+272,2111387,,password,Tasya,Putri Hernanda,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+273,2111438,,password,Hasanudin,,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+274,2111095,,password,Fera,Andriyani,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+275,2111097,,password,Robby,Sofyan,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+276,2112307,,password,Rifka,Rizky Azizah,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+277,2112311,,password,Umi,Hani,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+278,2112305,,password,Mochammad,Fuad Hasan,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+279,2112312,,password,Diki,Silfian,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+280,2112331,,password,Inez,Drey Gra Gina,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+281,2112430,,password,Benny,Firdiansyah,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+282,2112432,,password,Ignatius,Thahir,4,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+283,2112338,,password,Muhammad,Zain Dzikronnudin,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+284,2112341,,password,Ratmita,Insani Rahayu,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+285,2112344,,password,Abdul,Nana Mulyana,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+286,2112350,,password,Hendri,Andriansyah,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+287,2112352,,password,Ritno,Agus Setianto,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+288,2112368,,password,Hari,Suryo Saputro,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+289,2112369,,password,Argiansyah,Aryanda Putra,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+290,2112378,,password,Wita,Gilangati,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+291,2112383,,password,Agus,Purwanto,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+292,2201008,,password,Deta,Sulistiani,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+293,2201016,,password,Elga,Anggun Puspita,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+294,2201018,,password,Noviyani,,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+295,2201028,,password,Teguh,Krismanto,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+296,2201037,,password,Amalia,Putri,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+297,2201052,,password,Ridho,Ilahi,18,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+298,2201060,,password,Herlina,Hermawan,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+299,2201063,,password,Lulu,Herliana Herawati,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+300,2201069,,password,Syamila,Harningtias,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+301,2201075,,password,Nasywa,Nur Fadila,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+302,2202087,,password,Agus,Sumarna,18,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+303,2202106,,password,Santi,Putri Yana,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+304,2202096,,password,Dila,Yuristia,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+305,2202089,,password,Kameliawati,,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+306,2202098,,password,Riska,Umami,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+307,2202100,,password,Nurhayati,,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+308,2202101,,password,Novi,Novitasari,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+309,2203112,,password,Agnes,Levia Anggreany,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+310,2203117,,password,Wahyuni,Ike Handayani,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+311,2203126,,password,Nanang,Fakhru Rohman,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+312,2203131,,password,Agus,Salim,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+313,2203133,,password,Deliana,,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+314,2203135,,password,Kiki,Anggi,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+315,2203139,,password,Mas,Ayu Nur Rohani,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+316,2203143,,password,Diene,Istiqomah,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+317,2203147,,password,Dwi,Riyanto,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+318,2203148,,password,Nurpiah,,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+319,2203150,,password,Bayu,Krisandi,4,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+320,2203153,,password,Bagas,Apriyana,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+321,2203158,,password,Jamaludin,,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+322,2203161,,password,Rizqi,Arumsari,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+323,2204181,,password,Siti,Fitria,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+324,2204184,,password,Arif,Saputro,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+325,2204188,,password,Ferdiyansyah,,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+326,2205197,,password,Moh,Hansyah Derio,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+327,2205199,,password,Mansyur,,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+328,2205201,,password,Mohammad,Fahmy Idries,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+329,2205220,,password,Dede,Aris Munandar,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+330,2206225,,password,Astha,Rithmita,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+331,2207229,,password,Ariefky,Priyatna,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+332,2207230,,password,Muhamad,Syahrul Romadon,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+333,2207236,,password,Andika,Kurniawan,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+334,2207239,,password,Reza,Andika Febrianto,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+335,2207242,,password,Nunung,Wulan Asih,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+336,2207244,,password,M.,Iqbal Fauzan,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+337,2207248,,password,Nareska,,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+338,2207250,,password,Abdur,Rohim,18,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+339,2208256,,password,Febrina,Asabti Sephia,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+340,2208259,,password,Silvi,Susilawati,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+341,2208265,,password,Ana,Sukmawati,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+342,2208267,,password,Hanas,Agnia,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+343,2208270,,password,Restu,Septi Ana,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+344,2208273,,password,Alexander,Parlindungan Butar Butar,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+345,2208274,,password,Bagas,Slamet Raharjo,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+346,2208275,,password,Herdin,Eriyanto,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+347,2208278,,password,Novita,Sari,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+348,2208287,,password,Dhelya,Fitri Pramesti,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+349,2208288,,password,Mariasih,,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+350,2208290,,password,Muhamad,Putra Anam,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+351,2208291,,password,Muhammad,Adi Putra Senoaji,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+352,2208295,,password,Muhamad,Septian Abiasah,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+353,2209324,,password,Putra,Kusuma Pranata,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+354,2209330,,password,Arif,Prasetyo,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+355,2209372,,password,Ganip,Marwanto,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+356,2209375,,password,Ilham,Gusti Hadiandsyah,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+357,2209396,,password,Krismon,Sujaki,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+358,2209398,,password,Rendi,Faridzy,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+359,2209409,,password,Danang,Effendi,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+360,2209418,,password,Reni,Nuraeni,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+361,2210446,,password,Kis,Tri Hartono,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+362,2210447,,password,Muhamad,Abdul Aziz,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+363,2210466,,password,Suranto,,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+364,2210478,,password,Hanafi,Fadilah Rahman,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+365,2210491,,password,Miftahul,Irzan Hakim,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+366,2211503,,password,Agus,Kosasi,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+367,2211508,,password,Sri,Lestari,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+368,2211521,,password,Muhamad,Nur Fadli,18,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+369,2301007,,password,Eka,Gartiwa,4,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+370,2301012,,password,M,Yusup Ibrahim,18,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+371,2305079,,password,Aziz,Pajar,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+372,2306113,,password,Noki,Arangga,18,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+373,2306116,,password,Choirul,Anam,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+374,2306118,,password,Hendriana,,4,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+375,2307126,,password,Hasan,Hariri,2,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+376,2308127,,password,Didin,Hambali,4,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+377,2309132,,password,Khaerul,Anwar,18,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+378,2309136,,password,Jihan,Azyuari Azra,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+379,2309137,,password,Muhamad,Sahrial Wandani,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+380,2310144,,password,Fatkhul,Muis,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+381,2310145,,password,Ikhsan,Maulana,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+382,2310146,,password,Anna,Prasasti,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+383,2311149,,password,Melviana,Hermawan,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+384,2311151,,password,Devista,Maharani,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+385,2311153,,password,Aryanto,,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+386,2311154,,password,Mugi,Sugiono,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+387,2311155,,password,Ari,Widodo,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+388,2311156,,password,Kaspian,Andop,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+389,2311157,,password,Jesica,Dwi Edyfia,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+390,2311158,,password,Novia,Nurazizah Warman,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+391,2311159,,password,Selfi,Rusmuinah,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+392,2312161,,password,Novi,Nurfadhilah,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+393,2312164,,password,Krisna,Dwita Sari,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+394,2312168,,password,Parhan,Maulana,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+395,2312171,,password,Ridi,Kartono Bin Undri,18,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+396,2312174,,password,Reza,Dega Mahendra,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+397,2312175,,password,Moh.,Asrirrozi Syah,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+398,2312176,,password,Saipul,Pirdaus,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+399,2312177,,password,Indra,Royani,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+400,2312178,,password,Iran,Folan,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+401,2401003,,password,Deni,Safutra Irawan,2,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+402,2401015,,password,Ujang,Heri,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+403,250436,,password,Andrian,Andaya Lestari,16,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+404,2401016,,password,Dede,Sukana Nurazis,18,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+405,2401017,,password,Citra,Adystia,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+406,2401018,,password,Putri,Erdina,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+407,2402023,,password,Eri,Irawan,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+408,2402025,,password,Billy,Rinaldy,6,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+409,2402029,,password,Zidan,Akbar Alhafis,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+410,2403033,,password,Miftah,Nashrullah Wicaksono,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+411,2403035,,password,Raka,Thareq Azis Pohan,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+412,2403036,,password,Syamsuddin,,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+413,2403037,,password,Teguh,Wibowo,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+414,2403038,,password,Nisfisya'ban,Azhari,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+415,2404048,,password,Aan,Nasrudin,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+416,2404054,,password,Agus,Maulana,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+417,2404056,,password,Vian,Ramdhana,9,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+418,160016,,password,Ir,Asep Rahman Hidayat,20,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+419,2407061,,password,Anita,Febrianti,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+420,2407062,,password,Farahdita,Maulida Sopia,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+421,2407064,,password,Mulyadi,,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+422,2407065,,password,Neneng,Icha Annisa,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+423,2407066,,password,Sarmila,,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+424,2407067,,password,Tessa,Marliana,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+425,2407070,,password,Wildan,Taufik Dwi Nurcahyo,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+426,2408076,,password,Annisa,Siti Nur Jannah,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+427,2408078,,password,Aripal,Munandar,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+428,2408079,,password,Irsyadu,Zaki,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+429,2408081,,password,Novleza,Kurnia Putra,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+430,2408082,,password,Dika,Darmawan,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+431,2409090,,password,Riana,Noviyanti,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+432,2409092,,password,Dani,Eka Kurnia,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+433,2409095,,password,Ganang,Wahyu Widayat,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+434,2409100,,password,Tubagus,Muhammad Mufti Ajhari,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+435,2409101,,password,Tiara,Puspa,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+436,2410103,,password,Nadya,Febyola,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+437,2410104,,password,Kasusanto,Simanjuntak,4,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+438,2410106,,password,Rizka,Dwi Cahyanti,1,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+439,2410107,,password,Ida,Wati,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+440,2411108,,password,Kevin,Yosua Simatupang,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+441,2411109,,password,Muhammad,Saviq Zamzami,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+442,2411110,,password,Didi,Purnawan,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+443,2411112,,password,Vina,Dwi Lestari,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+444,2411114,,password,Irpan,Siswanto,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+445,2412122,,password,Nurcholis,,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+446,2412123,,password,Firnanda,Dwi Tiara,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+447,2412127,,password,Elza,Hadi Setiawan,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+448,2412128,,password,Noor,Isna Al Ashlah,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+449,2412130,,password,Agung,Cahya Ardi,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+450,2412132,,password,Ina,Azizah Hasanah,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+451,2412136,,password,Solihah,,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+452,2412137,,password,Nila,Hasanatunnisa,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+453,2412138,,password,Tati,Lutfiyah,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+454,2412140,,password,Dewi,Fortuna Hikmatiar Fauzi,18,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+455,2412141,,password,Sahida,Rahmatia,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+456,2412142,,password,Anisa,Ayu Safitri,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+457,2412144,,password,Muhamad,Gunawan,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+458,2501001,,password,Nanda,Kamiko,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+459,2501003,,password,Abdurozy,Gamestya Muchlis,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+460,2501006,,password,Iqbal,Ahmad Fauzi,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+461,2501007,,password,Jeni,,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+462,2501008,,password,Arifin,Eko Susilo,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+463,2501011,,password,Vina,Afianty,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+464,2501012,,password,Rifqi,Gilang Saputra,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+465,2501016,,password,Jaiz,Mufasil,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+466,2501017,,password,Muhamad,Hamdani,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+467,2501019,,password,Julian,Yunus,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+468,2501020,,password,Rido,Tujana,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+469,2501022,,password,Arzu,Landa Saputra,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+470,2501027,,password,Firman,Ardiansyah,18,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+471,2501032,,password,Yudi,Bagus Wibowo,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+472,2501033,,password,Ridwan,Novianto,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+473,2501034,,password,Ngainur,Rohmah,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+474,2501039,,password,Zulfa,Tussuroya,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+475,2501042,,password,Yuli,Budin Saputro,18,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+476,2501045,,password,Guntur,Bimantara,18,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+477,2502047,,password,Ahmad,Budianto,18,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+478,2502048,,password,Al,Kahfi Zaka Permana,18,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+479,2502051,,password,Adi,Nugroho,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+480,2502052,,password,Aris,Suyanto,18,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+481,2502053,,password,Ayu,Rizki Apriani,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+482,2502055,,password,Gendhys,Lintang Ayu,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+483,2502060,,password,Saputra,Ananda Suhenda,18,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+484,2503062,,password,Muhamad,Ilham Fuadi,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+485,2503064,,password,Anida,Maura Valerina,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+486,2503065,,password,Shabrina,Alvie Aditya,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+487,2503066,,password,Fahmi,Ilyas,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+488,2503067,,password,Indra,Gunawan,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+489,2503068,,password,Amelia,Nurul Aini,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+490,2503069,,password,Diana,Fadhillah,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+491,2503071,,password,Tasya,Raisma Rizal,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+492,2503075,,password,Bissma,Arjuanda,5,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+493,2503077,,password,Oktafia,Ferina,18,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+494,2503078,,password,Indra,Nurdiansyah,18,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+495,2503079,,password,Faisal,Akbar,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+496,2503082,,password,Elly,Cahyani,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+497,2503083,,password,Diki,Adisaputra,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+498,2503084,,password,Ngadiman,,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+499,2503085,,password,Andri,Wibowo,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+500,2503088,,password,Khairan,Afrizal Pratama,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+501,2503089,,password,Dede,Ahmad Sofyan,18,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+502,2504091,,password,Davito,Miguel Eduardo Yotana,5,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+503,2504093,,password,Maulidina,Infan,18,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+504,2504092,,password,Galuh,Al' Iffah Mulya,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+505,2504100,,password,Rheynaldi,Irawan,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+506,2504101,,password,Libna,Urbani Sabela,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+507,2504104,,password,Ridho,Al Sidiq,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+508,2504106,,password,Abu,Rizal Aji Saputra,6,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+509,2505107,,password,Wahyu,Handoko,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+510,2505109,,password,Muhamad,Ambar Alvian Eshar,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+511,2506114,,password,Naufal,Hadi Filanda,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+512,2401001,,password,Sri,Wulan,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+513,2506118,,password,Novita,Dwiyana Sari,10,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+514,2506122,,password,Aziz,Candra Gunawan,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+515,2506123,,password,Asep,Pahru Jaman,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+516,2506125,,password,Erlan,Stiawan,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+517,2506126,,password,Zaenah,,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+518,2506127,,password,Ahmad,Saipul Hajat,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+519,2506128,,password,Idris,Rukmana,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+520,2506130,,password,Raena,Apriani,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+521,2506131,,password,Setia,Putri,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+522,2506132,,password,Siti,Rahmawati,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+523,2506133,,password,Pajar,,18,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+524,2506138,,password,Jahri,Asa Afriyadi,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+525,2506139,,password,Riski,Rismawan,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+526,2506140,,password,Indah,Nurjulianti,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+527,2506141,,password,Nan,Saskia Yunia Maulidina,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+528,2507144,,password,Restra,Dova Audora,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+529,2507146,,password,Andrian,Maulana Wibisono,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+530,2507147,,password,Raihan,Dyas Syauqi,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+531,2507148,,password,Rachman,Kurniadi,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+532,2507149,,password,Didit,Prabowo,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+533,2507150,,password,Mohammad,Alfan Ramadhani,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+534,2507151,,password,Muhammad,Fadil Baihaqi,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+535,2507152,,password,Ronal,Febianto,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+536,2507153,,password,Farhan,Henmansyah,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+537,2507155,,password,Kharisma,Nurul Khotimah,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+538,2507156,,password,Buyung,Sugma Wijaya,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+539,2507157,,password,Syawaludin,Syihab Nasution,18,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+540,2507159,,password,Adittya,Riski Ramadhan,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+541,2507160,,password,Alfian,Ramadan Marzuki,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+542,2507161,,password,Alief,Prasetyo Alam,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+543,2507162,,password,Edo,Kurniadi,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+544,2507163,,password,Sunanda,Faladika,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+545,2507166,,password,Siti,Lasry Rachmafitri,10,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+546,2507167,,password,Fika,Septi Lestari,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+547,2507169,,password,Dodi,Dewana Putra,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+548,2507170,,password,Yendra,Auda Maulana,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+549,2507175,,password,Elvina,Putri Ayu Kurnianingrum,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+550,2507176,,password,Lailatul,Jennah,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+551,2507177,,password,Asri,Maharani,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+552,2507178,,password,Nesabila,,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+553,2507179,,password,Maelinda,Caningrum,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+554,2507182,,password,Eka,Febriani,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+555,2507184,,password,Aurel,Mindia Pratama,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+556,2507186,,password,Akhiriyyah,Shiyami,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+557,2507187,,password,Bibit,Lestari,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+558,2507189,,password,Hasna,Sakinah,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+559,2507190,,password,Selvi,Aulia Azzahra,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+560,2507191,,password,Zesy,Irmanuari,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+561,2507192,,password,Muhamad,Rifki Fauzi,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+562,2507193,,password,Muhammad,Farid Ibrahim,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+563,2507194,,password,Mochamad,Rais Rahadiansyah,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+564,2507195,,password,Diki,Mahendra,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+565,2507197,,password,Merycius,Christyanto,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+566,2507198,,password,Rizki,Ramadhan,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+567,2507199,,password,Annisa,,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+568,2507200,,password,Febri,Anjar Wati,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+569,2507203,,password,Lili,Suryani,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+570,2507205,,password,Zanuba,Qotrotun Nada,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+571,2507207,,password,Eki,Dwi Astuti,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+572,2507208,,password,Indah,Syaputri,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+573,2507209,,password,Yuli,Siti Nurhalizah,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+574,2508210,,password,Sharla,Nandita,10,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+575,2508212,,password,Dimah,Yusnika,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+576,2508213,,password,Rahayu,Dwi Kartika,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+577,2508214,,password,Reni,Rahmawati,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+578,2508215,,password,Selsi,April Renata,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+579,2508216,,password,Rafsanzani,Arsyad Paradista Rodes,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+580,2508217,,password,Zhahira,Mazaya Fathin,4,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+581,2508220,,password,Nur,Asikin,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+582,2508225,,password,Siti,Nur Afifah,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+583,2509226,,password,Muhammad,Afrizal Yogaswara,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+584,2509230,,password,Risky,Ingrid Nur Chandra,2,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+585,2509231,,password,Muhammad,Fery Maulana,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+586,250428,,password,Deni,Setiawan,10,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+587,2509233,,password,Ramli,Krisna Irawan,10,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+588,2509234,,password,Galantandra,Jabbarul Ahmad,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+589,2509235,,password,Ivan,Maulana,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+590,2509238,,password,Suci,Makrifah,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+591,2509239,,password,Alya,Destia Ramadhani,1,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+592,2510243,,password,Rendy,Rizky Pradana,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+593,2510244,,password,Risnandi,,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+594,2510246,,password,Muhammad,Maula Rizqotul Ramadhan,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+595,2510247,,password,Sidiq,Dwi Mukti,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+596,2510248,,password,Galih,Satrio Jati,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+597,2510249,,password,Muhammad,Audy Rahman Fairuzzi,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+598,2510252,,password,Robi,Ardiansyah,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+599,2510253,,password,Tegar,Wisnu Aji,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+600,2510255,,password,Nanda,Faturachman,6,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+601,2510256,,password,Meliza,Konggoasa,4,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+602,2510257,,password,Bagus,Iqbal Hakim,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+603,2510258,,password,Dwi,Sasongko,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+604,2510259,,password,Reza,Alfreda Rahma Sandy,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+605,2510260,,password,Dewi,Lestari,18,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+606,2112325,,password,Deviana,Mulia Pratiwi,18,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+607,2511261,,password,Angel,Theresa,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+608,2511262,,password,Muthia,Azizah,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+609,2511267,,password,Muhammad,Hisyam Abdillah,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+610,2511269,,password,Aliya,Rashida Bagraff,10,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+611,2511270,,password,Siti,Nurzanah,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+612,250553,,password,Rezki,Fadillah Maufi,10,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+613,250554,,password,Tony,Pratama,10,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+614,250555,,password,Dimas,Aryo Pratomo,10,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+615,2511274,,password,Nana,Nuryanah,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+616,2511275,,password,Vina,Nur Dwi Khotimah,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+617,2511277,,password,Imam,Firdaus Utomo,10,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+618,2511280,,password,Rahman,Ardianto,18,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+619,2512281,,password,Rani,Alpriyani,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+620,2512282,,password,Novlita,Z. Alhazizah,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+621,2512283,,password,Meyta,Febriyani,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+622,2512284,,password,Fitri,Oktaviani,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+623,2512285,,password,Mutmainnah,,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+624,2512286,,password,Sarah,Widiarti,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+625,2512288,,password,Sa'diah,Rahmadini,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+626,2512290,,password,Lariza,Della,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+627,2512292,,password,Dery,Stiawan,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+628,250615,,password,Ardiansyah,Azizu,10,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+629,2512294,,password,Fina,Rofatus Sakinah,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+630,2512295,,password,Ayu,Wulandari,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+631,2512296,,password,Alfi,Nur Arief,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+632,2512297,,password,Wahid,Afifudin,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+633,2512298,,password,Deni,Kurniawan,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+634,2512299,,password,Septian,Alwan Navis Lutfiansah,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+635,2512301,,password,Yulfrida,Kurnia Lahay,10,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+636,2512302,,password,Fitri,Qurrotin 'Ayun,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+637,2512303,,password,Echi,Pramudita,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+638,2512304,,password,Zahron,Zikri,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+639,2601001,,password,Alexander,Errent,17,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+640,250645,,password,Benny,Yulianto,10,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+641,2601004,,password,Andre,Maulana,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+642,2601006,,password,Shafira,Nur Halimah H,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+643,2601007,,password,Yuda,Hermansah,2,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+644,2601008,,password,Marheni,Eka Pratiwi,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+645,2601010,,password,Yuliana,Fachriyah Eka Pratiwi,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+646,2601011,,password,Ismy,Rekha Rahayu,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+647,2601012,,password,Annisa,Nurfadilah,15,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+648,260024,,password,Averous,Faraby Budiadji,10,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+649,2601013,,password,Tessya,Widya Novianti,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+650,2601014,,password,Ade,Purwanto,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+651,2601015,,password,Nadira,Putri Assyifa,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+652,2601016,,password,Ivo,Heni Pratama,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+653,2601017,,password,Saepul,Bahri,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+654,2602018,,password,Dewi,Puji Astuti,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+655,2602019,,password,Helma,Kurnia Putri,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+656,2602021,,password,Latiffah,Nur Hasanah,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+657,2602022,,password,Yusron,Ilman Maulana,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+658,2602023,,password,Rully,Teguh Firmansyah,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+659,2602026,,password,Lisa,Yunitasari,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+660,2602027,,password,Siti,Nurmia,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+661,2602030,,password,Sri,Rahayu,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+662,2602031,,password,Tiara,Putri Widyaningrum,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+663,2602032,,password,Hifzhi,Azhami,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+664,2602033,,password,Anggi,Wahyu Saputra,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+665,2602034,,password,Novita,Prihapsari,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+666,2602035,,password,Nur,Aeni,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+667,2602036,,password,Sherly,Savirah Pratiwi,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+668,2603040,,password,Aditya,Prakasa,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+669,2603041,,password,Melki,Andreas Habeahan,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+670,2603043,,password,Lusi,Almahpira,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+671,2603044,,password,Fery,Wahyu Widodo,18,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+672,2603045,,password,Wiwied,Widyana Danastri,18,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+673,2603046,,password,Arip,Hidayatullah,2,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+674,2603048,,password,Putri,Dian Ramadhanti,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+675,2603049,,password,Syifa,Ul Huda,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+676,2603050,,password,Irawan,Ari Susanto,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+677,2603053,,password,Supratman,Nugroho Pratama,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+678,2603054,,password,Rafly,Eka Roseptianto,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+679,2603056,,password,Muhammad,Reza Afrizal,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+680,2603057,,password,Mega,Utami,18,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+681,2603058,,password,Risha,Destianggi Nasan,4,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+682,2603059,,password,Sintia,Yuliani,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+683,2603060,,password,Raista,Nusantara Puteri,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+684,2603061,,password,Muhammad,Akbar Sandra Wijaya,7,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+685,240710,,password,Dedi,Pribadi,10,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+686,250018,,password,Wahib,,10,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+687,250022,,password,Latief,Hidayat,10,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+688,250058,,password,Reza,Firman Ade Prihantoro,10,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+689,250060,,password,Dede,Supriatna,10,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+690,250248,,password,Andre,Asman,10,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+691,250447,,password,Mikael,Hero,10,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+692,250463,,password,Angga,Syarifuddin,10,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+693,210427,,password,Raisa,Nur Aziza,10,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+694,250021,,password,Meli,Safitri,10,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+695,260112,,password,Deddy,Rifandi Laurens,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+696,260113,,password,Yayan,Heriyana Arifin,19,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+697,260116,,password,Yudi,Purnama Hadi,10,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+698,2604061,,password,Jemi,Andri,10,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+699,2604062,,password,Audrey,Clara Prisilla,10,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+700,2604063,,password,Rima,Kurniasari,11,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+701,2604064,,password,Deny,Wahyudi,2,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+702,2604066,,password,Ana,Sopyana,4,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+703,260114,,password,Vina,Ratna Gustiani,4,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+704,260115,,password,Indriana,Agustin Claradila Frinda,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+705,260155,,password,Edy,Surya Sitanggang,10,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+706,2604067,,password,Novalendra,Artyana Putra,10,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+707,2604068,,password,Nandini,Pratista Maheswari,4,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+708,2604070,,password,Muhammad,Haikal Azfar Sulaiman,4,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+709,2604071,,password,Aji,Budiono,4,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+710,2604072,,password,Destiana,Elysa Putri,4,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+711,2604073,,password,Muhammad,Kevin Hardiansyah,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+712,2604074,,password,Moch.,Akbar Ilhamsyah,16,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+713,2604075,,password,Muhammad,Ridwan,2,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+714,2604076,,password,Arief,Ardhana,10,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+715,2604077,,password,Deny,Hardyanto,10,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+716,2604078,,password,Muhammad,Gian Lendra,10,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+717,2604079,,password,Shakira,Diva Rahman,4,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+718,2604080,,password,Anwar,Maulana,18,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+719,2604081,,password,Imron,Maulana,18,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+720,2604082,,password,Wiwit,Riyanti,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+721,2604083,,password,Mohamad,Dikhi Cahyadi,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+722,2605084,,password,Khusni,Alfiyan,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+723,2605085,,password,Tri,Suharjito,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+724,260180,,password,Christopher,Tantis,10,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+725,260178,,password,Akhmad,Ngafif,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+726,260179,,password,Nabila,Tidara Poetri,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+727,260222,,password,Rachmat,Prayogi Pradana,8,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+728,2605086,,password,Joe,Galang Eka Saputra,10,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+729,2605087,,password,Maria,Kristian Ningsih,10,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+730,2605088,,password,Rosanna,Adelia Setyaningrum,18,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+731,2605089,,password,Muhammad,Faiz Almujaddid,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+732,2605090,,password,Lasminar,Midauli Marpaung,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+733,2605092,,password,Tati,Nurhayati,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+734,2605093,,password,Fikramsyah,Kurniawan,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+735,2605094,,password,Suhendro,Prasetyo Anwar,18,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+736,2605095,,password,Frans,Hanez Artama Saragih,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+737,2605096,,password,Yesi,Rohayati,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+738,260181,,password,Antoni,Rendragraha,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+739,260182,,password,Wildan,Adji Nugroho,6,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+740,260183,,password,Ricky,Achmadi,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+741,2605097,,password,Aldestri,Annisa Tifany,13,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+742,2605098,,password,Akhmad,Nur Rahhim,10,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+743,2605099,,password,Wahyu,Edi Santoso,10,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+744,2605100,,password,Muhamad,Iqbal Ramadhan,10,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+745,2605101,,password,Wahyu,Nur Rizki,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+746,2605102,,password,Raihan,Dzikri Priyanto,18,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+747,2605103,,password,Arya,Firman Semistama,4,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+748,2605104,,password,Adelia,Kusumawati,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+749,2606105,,password,Alfia,Asia Putri Is Hiola,11,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+750,2606106,,password,Delya,Putri Novendri,9,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+751,2606107,,password,Saniyah,Emmy Puspitasari,18,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+752,2606108,,password,Nurul,Septiani Gunadi,18,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+753,2606109,,password,Rifqi,Falih,18,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+754,2606110,,password,Endra,Sri Cahyanto,18,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+755,2606111,,password,Shidiq,Akbar,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+756,2606112,,password,Puput,Shafri Syafaah,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+757,2606113,,password,Noviana,Fitria,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+758,260242,,password,Muhammad,Fauzan Syahputra,18,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+759,260241,,password,Arsyadi,Nugroho,10,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+760,2606114,,password,Haidir,,1,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+761,2606115,,password,Mohammad,Al Fahreza,2,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+762,2606116,,password,Gerla,Indraprasta,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+763,2606118,,password,Diva,Zakia Rahmadani,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+764,2606119,,password,Kartika,Putri Cahyana,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+765,2606120,,password,Syahrul,Amara Zulkarnaen,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+766,2606121,,password,Oke,Tri Ananda,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+767,2606122,,password,Muhamad,Bintang Arya Tangguh,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+768,2606123,,password,Nur,Arifin,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+769,2606124,,password,Khaerunnisa,Zaeni,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+770,2606125,,password,Fadel,Muhammad Eskobar,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+771,2606126,,password,Kurnianto,Muchtar Natawijaya,14,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+772,2606127,,password,Azahra,Soleha,10,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+773,2606128,,password,Nicky,Mardhia Tsani,10,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+774,2606129,,password,Ahmad,Sururi,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+775,2606130,,password,Agustyas,Sekar Kinasih,12,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+776,260243,,password,Ariyanto,,10,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+777,260290,,password,Ma'ruf,Wahyu Purnomo,11,active,2026-07-08 10:29:12,2026-07-08 10:29:12
+778,160012,,password,Albert,Liongson,4,active,2026-07-08 10:29:12,2026-07-08 10:29:12
